@@ -1,0 +1,120 @@
+.loginWrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* LEFT SIDE */
+.leftPanel {
+  width: 40%;
+  background: #e4475d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 30px;
+  overflow: hidden;
+}
+
+/* ✅ Frame Border Image Overlay */
+.borderFrame {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+
+  background-image: url("/images/login-frame.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+
+  z-index: 1;
+  pointer-events: none; /* ✅ allows clicking */
+}
+
+/* ✅ Card center */
+.loginCard {
+  width: 100%;
+  max-width: 430px;
+  text-align: center;
+  color: white;
+
+  position: relative; /* ✅ IMPORTANT */
+  z-index: 10; /* ✅ above border */
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ✅ Inputs like figma */
+.input {
+  width: 78%;
+  padding: 10px 12px;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+
+  background: #fff;
+  color: #111; /* ✅ text visible */
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ Placeholder styling */
+.input::placeholder {
+  color: #333; /* ✅ visible placeholder */
+  font-size: 12px;
+}
+
+/* ✅ Button clickable + pointer */
+.loginBtn {
+  width: 110px;
+  padding: 9px 0;
+  background: #0b8b84;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+
+  margin-top: 4px;
+  position: relative;
+  z-index: 20; /* ✅ force above everything */
+}
+
+.loginBtn:hover {
+  opacity: 0.92;
+}
+
+.forgotText {
+  margin-top: 12px;
+  font-size: 13px;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.dots {
+  margin-top: 22px;
+  letter-spacing: 3px;
+  opacity: 0.8;
+}
+
+/* RIGHT SIDE IMAGE */
+.rightPanel {
+  width: 60%;
+  background-image: url("/images/login-bg.png");
+  background-size: cover;
+  background-position: center;
+}

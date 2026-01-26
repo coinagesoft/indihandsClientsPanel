@@ -1,26 +1,53 @@
-@import "tailwindcss";
-
+/* ✅ THEME VARIABLES (Colors + Fonts) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fonts */
+  --font-family: "Poppins", sans-serif;
+
+  /* Brand Colors */
+  --color-primary: #9c2c2c;     /* maroon heading */
+  --color-accent: #0b8b84;      /* button green */
+  --color-bg-left: #e4475d;     /* login left bg */
+  --color-light-bg: #f7e7d8;    /* cards light cream */
+  --color-white: #ffffff;
+  --color-black: #111111;
+  --color-gray: #666666;
+
+  /* Font sizes */
+  --fs-xl: 22px;
+  --fs-lg: 18px;
+  --fs-md: 14px;
+  --fs-sm: 12px;
+
+  /* Border radius */
+  --radius-sm: 2px;
+  --radius-md: 6px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ✅ Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  font-family: var(--font-family);
+  background: #fff;
+}
+
+/* ✅ common headings */
+h1 {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+
+h2 {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+}
+
+p {
+  font-size: var(--fs-md);
 }

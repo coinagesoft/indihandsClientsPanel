@@ -1,0 +1,69 @@
+.statCard {
+  background: #f7e7d8;
+  border-radius: 6px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statText {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #222;
+  text-transform: uppercase;
+}
+
+.recentBox {
+  background: #f7e7d8;
+  border-radius: 8px;
+}
+
+.recentTitle {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+}
+
+.tableBox {
+  background: #f9efe3;
+  border-radius: 8px;
+  width: 95%;
+  margin: auto;
+}
+
+.tableCustom {
+  margin-bottom: 0;
+}
+
+.tableCustom thead tr {
+  background: #efd7c0;
+}
+
+.tableCustom th {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+}
+
+.tableCustom td {
+  text-align: center;
+  font-size: 14px;
+  border: none;
+}
+
+.lines {
+  margin-top: 10px;
+}
+
+.line {
+  height: 2px;
+  width: 100%;
+  background: rgba(180, 90, 40, 0.4);
+  margin: 22px 0;
+}

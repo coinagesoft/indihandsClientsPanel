@@ -1,0 +1,57 @@
+.sidebar {
+  width: 260px;
+  background: #f7efe5;
+  padding: 25px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logoBox {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.logo {
+  width: 140px;
+  object-fit: contain;
+}
+
+/* Menu */
+.menu {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link {
+  text-decoration: none;
+  color: #000;
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 2px;
+  text-align: center;
+  border-bottom: 1px solid #ddbfa6;
+}
+
+.active {
+  background: #9c2c2c;
+  color: white;
+  font-weight: 500;
+}
+
+/* Footer */
+.footerLogo {
+  text-align: center;
+  padding-top: 25px;
+}
+
+.footerImg {
+  width: 120px;
+  object-fit: contain;
+  opacity: 0.85;
+}
+.sidebar {
+  height: 100%;
+}
