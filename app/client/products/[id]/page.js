@@ -1,27 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./productDetails.module.css";
-
 import { useParams } from "next/navigation";
+import styles from "./productDetails.module.css";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
+  const [qty, setQty] = useState(1);
 
-
-  // dummy data (API later)
   const product = {
     id,
-    title: "Shaniwar Wada, Pune:",
+    title: "Shaniwar Wada, Pune",
     subtitle: "Handmade Paper Journal",
     breadcrumb:
-      "Dashboard  >  Product Catalog  >  indiHands-The Stationery Edition  >  Shaniwar Wada, Pune: Handmade Paper Journal",
+      "Dashboard  >  Product Catalog  >  indiHands – The Stationery Edition  >  Shaniwar Wada Journal",
     description:
-      "This premium handmade paper diary honours the timeless grandeur of Shaniwar Wada, built in 1732 as the seat of the Peshwas. Once a centre of authority, artistry, and ceremony, its mighty gates and intricate carvings still speak of Maratha power and resilience despite the fire of 1828. Crafted with artisanal care, the diary’s handmade texture reflects the fort’s enduring strength, making it a treasured canvas for your own ideas. Each page turns like a chapter of history, blending heritage with creativity. Let this diary inspire you to record thoughts with the same permanence as Pune’s regal legacy.",
+      "This premium handmade paper diary honours the timeless grandeur of Shaniwar Wada, built in 1732 as the seat of the Peshwas. Crafted with artisanal care, its textured pages echo the strength and elegance of Pune’s regal legacy. Each page invites reflection, creativity, and permanence — making it ideal for thoughtful gifting or personal journaling.",
     details: {
       code: "1906",
-      size: '6" W X 9" H',
-      cost: "Rs. 849.00",
+      size: '6" W × 9" H',
+      cost: "₹ 849.00",
       weight: "625 GM",
       hsn: "48021010",
     },
@@ -33,84 +31,88 @@ export default function ProductDetailsPage() {
     ],
   };
 
-  const [qty, setQty] = useState(1);
-
   return (
     <div className="container-fluid">
-      {/* ✅ Title */}
+      {/* ===== TITLE ===== */}
       <div className="row mt-3">
         <div className="col-12">
           <h4 className={styles.titleMain}>
             {product.title}
-            <br />
-            {product.subtitle}
+            <span className={styles.subTitle}>{product.subtitle}</span>
           </h4>
         </div>
       </div>
 
-      {/* ✅ Breadcrumb */}
+      {/* ===== BREADCRUMB ===== */}
       <div className="row mt-2">
         <div className="col-12">
           <div className={styles.breadcrumbBox}>
-            <p className={styles.breadcrumbText}>{product.breadcrumb}</p>
+            {product.breadcrumb}
           </div>
         </div>
       </div>
 
-      {/* ✅ Content Row */}
-      <div className="row mt-4">
-        {/* LEFT IMAGES */}
-        <div className="col-lg-6 col-md-12">
+      {/* ===== MAIN CONTENT ===== */}
+      <div className="row mt-4 g-4">
+        {/* LEFT : IMAGES */}
+        <div className="col-lg-6">
           <div className="row g-3">
             {product.images.map((img, index) => (
               <div key={index} className="col-6">
                 <div className={styles.imageCard}>
-                  <img src={img} alt="product" className={styles.productImg} />
+                  <img src={img} alt="product" />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT DETAILS */}
-        <div className="col-lg-6 col-md-12">
+        {/* RIGHT : DETAILS */}
+        <div className="col-lg-6">
           <div className={styles.rightBox}>
-            <p className={styles.descText}>
-              <span className={styles.redLabel}>Description:</span>{" "}
-              {product.description}
-            </p>
-
-            <div className={styles.detailsBox}>
-              <p className={styles.redLabel}>Details:</p>
-
-              <p className={styles.detailsText}>
-                Code: {product.details.code} | Size: {product.details.size} |
-                Cost: {product.details.cost}
-              </p>
-
-              <p className={styles.detailsText}>
-                Weight: {product.details.weight} | HSN: {product.details.hsn}
-              </p>
+            {/* DESCRIPTION */}
+            <div className={styles.section}>
+              <h6 className={styles.sectionTitle}>Description</h6>
+              <p className={styles.descText}>{product.description}</p>
             </div>
 
-            {/* ✅ Quantity */}
-            <div className={styles.qtyRow}>
-              <input
-                type="number"
-                min="1"
-                value={qty}
-                onChange={(e) => setQty(Number(e.target.value))}
-                className={styles.qtyInput}
-              />
+            {/* SPECS */}
+            <div className={styles.section}>
+              <h6 className={styles.sectionTitle}>Product Details</h6>
+
+              <div className="row">
+                <div className="col-6">
+                  <p><b>Code:</b> {product.details.code}</p>
+                  <p><b>Size:</b> {product.details.size}</p>
+                  <p><b>Weight:</b> {product.details.weight}</p>
+                </div>
+
+                <div className="col-6">
+                  <p><b>Price:</b> {product.details.cost}</p>
+                  <p><b>HSN:</b> {product.details.hsn}</p>
+                </div>
+              </div>
             </div>
 
-            {/* ✅ Button */}
-            <button
-              className={styles.addBtn}
-              onClick={() => alert(`Added Qty: ${qty}`)}
-            >
-              Add to Quote
-            </button>
+            {/* ACTION */}
+            <div className={styles.actionBox}>
+              <div className={styles.qtyBox}>
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={qty}
+                  onChange={(e) => setQty(Number(e.target.value))}
+                />
+              </div>
+
+              <button
+                className={styles.addBtn}
+                onClick={() => alert(`Added Qty: ${qty}`)}
+              >
+                Add to Quote
+              </button>
+            </div>
           </div>
         </div>
       </div>

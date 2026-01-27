@@ -1,0 +1,65 @@
+/* ================= PAGE TITLE ================= */
+
+.pageTitle {
+ color: var(--color-primary);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.subTitle {
+  font-size: var(--fs-sm);
+  opacity: 0.85;
+  color: var(--color-gray);
+}
+
+/* ================= STEP CARDS ================= */
+
+.stepCard {
+  background: #faecd9; /* keep exact theme */
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  height: 100%;
+}
+
+/* Step number circle */
+.stepNumber {
+  width: 36px;
+  height: 36px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Step title */
+.stepTitle {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-gray-dark);
+}
+
+/* Step description */
+.stepDesc {
+  font-size: var(--fs-sm);
+  opacity: 0.9;
+  color: var(--color-gray);
+  line-height: 1.6;
+}
+
+/* ================= BOTTOM NOTE ================= */
+
+.noteBox {
+  background: #f3e2cf; /* keep theme */
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  color: var(--color-gray-dark);
+  line-height: 1.6;
+}

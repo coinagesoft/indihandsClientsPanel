@@ -1,0 +1,74 @@
+/* ================= PAGE TITLE ================= */
+
+.pageTitle {
+ color: var(--color-primary);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ================= PROFILE BOX ================= */
+
+.profileBox {
+  background: #faecd9; /* keep theme */
+  padding: 22px;
+  border-radius: var(--radius-lg);
+}
+
+/* ================= SECTION TITLES ================= */
+
+.sectionTitle {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin: 18px 0 10px;
+  color: var(--color-gray-dark);
+}
+
+/* ================= LABELS ================= */
+
+.label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--color-gray);
+}
+
+/* ================= INPUTS ================= */
+
+.input {
+  font-size: var(--fs-md);
+  border-radius: var(--radius-md);
+  border: none;
+}
+
+/* ================= ADD ADDRESS ================= */
+
+.addAddressBtn {
+  font-size: var(--fs-sm);
+  background: #f3e2cf; /* keep theme */
+  border: 1px dashed #c8a27a;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+/* ================= BUTTONS ================= */
+
+.saveBtn {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 7px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  margin-right: 10px;
+}
+
+.logoutBtn {
+  background: #5a5a5a;
+  color: var(--color-white);
+  border: none;
+  padding: 7px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+}

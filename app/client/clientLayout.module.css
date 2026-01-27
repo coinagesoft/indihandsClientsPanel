@@ -1,26 +1,17 @@
 .wrapper {
   display: flex;
-  min-height: 100vh;
-  width: 100%;
+  margin:10px 10px;
 }
 
-/* ✅ Sidebar fixed & sticky */
-.sidebarFixed {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
-  flex-shrink: 0;
-
-  position: sticky;
-  top: 0;
-  height: 100vh; /* ✅ full height */
-  overflow-y: auto; /* ✅ sidebar scroll if menu is long */
-}
-
-/* ✅ Content scroll only */
+/* MAIN CONTENT */
 .pageContent {
-  flex: 1;
-  padding: 30px 40px;
-  background: #fff;
-  overflow-x: hidden;
+  margin-left: 240px;
+  transition: margin-left 0.25s ease;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+/* WHEN SIDEBAR IS COLLAPSED */
+.collapsedContent {
+  margin-left: 64px;
 }

@@ -1,0 +1,102 @@
+/* ================= PAGE TITLE ================= */
+
+.pageTitle {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+}
+
+.subTitle {
+  font-size: var(--fs-md);
+  color: #444;
+}
+
+/* ================= STATUS ================= */
+
+.statusBox {
+  background: #faecd9;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: var(--fs-md);
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+/* Status variants */
+.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* ================= TABLE ================= */
+
+.tableBox {
+  background: #faecd9;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.customTable th {
+  background: #f3dcc4;
+  border: none;
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.customTable td {
+  border: none;
+  font-size: var(--fs-md);
+}
+
+.productName {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ================= SUMMARY ================= */
+
+.summaryBox {
+  background: #faecd9;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* ================= ACTION BUTTON ================= */
+
+.actionBtn {
+  width: 100%;
+  padding: 10px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--fs-md);
+}
+
+.actionBtn:hover {
+  opacity: 0.9;
+}

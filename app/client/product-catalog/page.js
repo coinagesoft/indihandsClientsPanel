@@ -1,65 +1,84 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./productCatalog.module.css";
 
 export default function ProductCatalogPage() {
-  // Dummy categories (API later)
-  const categories = [
-    {
-      title: "indiHands—The Stationery Edition",
-      desc: "Art-led desk essentials for thoughtful gifting.",
-    },
-    {
-      title: "The Thoughtful Edition (Up to ₹1,000)",
-      desc: "Gifts that feel personal and refined.",
-    },
-    {
-      title: "The Executive Edition (₹1,000 — ₹2,000)",
-      desc: "Premium gifts for corporate moments.",
-    },
-    {
-      title: "The Signature Edition (₹2,000 — ₹5,000)",
-      desc: "Distinctive gifts to stand out.",
-    },
-    {
-      title: "The Prestige Edition (₹5,000 — ₹8,000)",
-      desc: "Impressive gifting for senior leadership.",
-    },
-    {
-      title: "The Legacy Edition (₹8,000 & Above)",
-      desc: "Heirloom-level gifting experiences.",
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  fetch("/api/client/catalogs")
+    .then(res => res.json())
+    .then(data => {
+      // 🔐 always normalize to array
+      setCategories(Array.isArray(data) ? data : data.data || []);
+    })
+    .catch(err => {
+      console.error("Catalog fetch error:", err);
+      setCategories([]);
+    })
+    .finally(() => {
+      setLoading(false); // ✅ stop loader
+    });
+}, []);
+
+
 
   return (
     <div className="container-fluid">
-      <div className="row mt-2">
+
+      {/* TITLE */}
+      <div className="row mt-3">
         <div className="col-12">
-          <h3 className={styles.pageTitle}>Product Catalog</h3>
+          <h4 className={styles.pageTitle}>Product Catalog</h4>
         </div>
       </div>
 
-      {/* ✅ Cards Grid */}
-      <div className="row g-4 mt-2">
-        {categories.map((cat, index) => (
-          <div key={index} className="col-lg-4 col-md-6 col-sm-12">
-            <div className={`${styles.cardBox} p-3`}>
-              {/* Image box placeholder */}
-              <div className={styles.imageBox}></div>
+      {/* LOADER */}
+      {loading && (
+        <div className="text-center mt-4">Loading catalogs...</div>
+      )}
 
-              <h6 className={styles.cardTitle}>{cat.title}</h6>
-              <p className={styles.cardDesc}>{cat.desc}</p>
+    {/* CATALOG GRID */}
+<div className="row g-4 mt-1">
+  {!loading && categories.length === 0 ? (
+    <div className="col-12 text-center mt-4">
+      No catalogs available
+    </div>
+  ) : (
+    categories.map(cat => (
+      <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6">
+        <div className={`${styles.cardBox} p-3 h-100`}>
 
-            <Link
-  href={`/client/products?category=${encodeURIComponent(cat.title)}`}
-  className={styles.viewBtnLink}
->
-  View Products
-</Link>
-            </div>
-          </div>
-        ))}
+          {/* IMAGE PLACEHOLDER */}
+          <div className={styles.imageBox} />
+
+          {/* BADGE */}
+          <span className={styles.badge}>
+            {cat.productCount} Products
+          </span>
+
+          {/* CONTENT */}
+          <h6 className={styles.cardTitle}>{cat.title}</h6>
+          <p className={styles.cardDesc}>{cat.desc}</p>
+
+          {/* CTA */}
+          <Link
+            href={`/client/products?catalogId=${cat.id}`}
+            className={`${styles.viewBtnLink} d-flex align-items-center justify-content-center gap-1`}
+          >
+            View Products
+            <i className="ri-arrow-right-line"></i>
+          </Link>
+
+        </div>
       </div>
+    ))
+  )}
+</div>
+
     </div>
   );
 }

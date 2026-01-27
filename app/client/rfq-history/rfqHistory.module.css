@@ -1,0 +1,64 @@
+/* ================= PAGE TITLE ================= */
+
+.pageTitle {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+}
+
+/* ================= TABLE WRAPPER ================= */
+
+.tableBox {
+  background: #faecd9; /* keep theme */
+  padding: 18px;
+  border-radius: 12px;
+}
+
+/* ================= TABLE ================= */
+
+.customTable th {
+  background: #f3dcc4;
+  color: var(--color-gray-dark);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  border: none;
+}
+
+.customTable td {
+  font-size: var(--fs-md);
+  border: none;
+  vertical-align: middle;
+  color: var(--color-gray-dark);
+}
+
+/* ================= RFQ ID ================= */
+
+.rfqId {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ================= STATUS BADGES ================= */
+
+.status {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+/* Status states */
+.open {
+  background: #ffe8c2;
+  color: #a86a00;
+}
+
+.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.approved {
+  background: #d4edda;
+  color: #155724;
+}

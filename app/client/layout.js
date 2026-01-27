@@ -1,14 +1,26 @@
+"use client";
+
+import { useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
 
 export default function ClientLayout({ children }) {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.sidebarFixed}>
-        <ClientSidebar />
-      </div>
+      <ClientSidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
-      <div className={styles.pageContent}>{children}</div>
+      <main
+        className={`${styles.pageContent} ${
+          collapsed ? styles.collapsedContent : ""
+        }`}
+      >
+        {children}
+      </main>
     </div>
   );
 }

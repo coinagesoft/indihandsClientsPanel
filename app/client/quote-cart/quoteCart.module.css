@@ -1,0 +1,64 @@
+/* ================= PAGE TITLE ================= */
+
+.pageTitle {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+}
+
+/* ================= CART TABLE BOX ================= */
+
+.cartBox {
+  background: #faecd9; /* keep theme */
+  padding: 16px;
+  border-radius: 12px;
+}
+
+/* ================= PRODUCT NAME ================= */
+
+.productName {
+  color: var(--color-primary);
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+/* ================= SUMMARY BOX ================= */
+
+.summaryBox {
+  background: #faecd9;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.summaryBox h6 {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-md);
+  margin-bottom: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: var(--fs-md);
+  color: var(--color-gray-dark);
+}
+
+/* ================= SUBMIT BUTTON ================= */
+
+.submitBtn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.submitBtn:hover {
+  opacity: 0.9;
+}

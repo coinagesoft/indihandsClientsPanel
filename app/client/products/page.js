@@ -1,109 +1,149 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./products.module.css";
 import { useSearchParams } from "next/navigation";
 
 export default function ProductListingPage() {
-    const searchParams = useSearchParams();
-const category = searchParams.get("category");
+const searchParams = useSearchParams();
+  const catalogId = searchParams.get("catalogId");
 
-  // Dummy products (API later)
-  const products = [
-    { id: 1, name: "Kalpavruksha: Handmade A5 Size Jute Diary", price: "₹ 1,343.00" },
-    { id: 2, name: "Khaki: Hand-Made Cotton Silk A5 Size Folder", price: "₹ 1,119.00" },
-    { id: 3, name: "Dainandini: The Handmade Paper Journal", price: "₹ 1,007.00" },
-    { id: 4, name: "Handmade Paper Bag", price: "₹ 223.00" },
-    { id: 5, name: "Pierre Cardin Roller Pen", price: "₹ 799.00" },
-    { id: 6, name: "Carmin: Premium Leatherette Folder", price: "₹ 1,399.00" },
-    { id: 7, name: "Pakshi: The Hand-Painted Kalamkari Folder", price: "₹ 1,299.00" },
-    { id: 8, name: "Shaniwar Wada, Pune: Handmade Paper Journal", price: "₹ 849.00" },
-  ];
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState(catalogId || "");
+  const [stock, setStock] = useState("");
+  const [sort, setSort] = useState("latest");
+
+  /* FETCH CATEGORIES */
+  useEffect(() => {
+    fetch("/api/client/categories")
+      .then(res => res.json())
+      .then(setCategories);
+  }, []);
+
+  /* FETCH PRODUCTS */
+  useEffect(() => {
+    const params = new URLSearchParams({
+      search,
+      catalogId: category,
+      stock,
+      sort,
+    });
+
+    fetch(`/api/client/products?${params.toString()}`)
+      .then(res => res.json())
+      .then(setProducts);
+  }, [search, category, stock, sort]);
 
   return (
     <div className="container-fluid">
-      {/* ✅ Top Header Row */}
-      <div className="row align-items-center mt-2">
-        <div className="col-lg-6 col-md-12">
-<h4 className={styles.pageTitle}>
-  {category ? category : "Products"}
-</h4>
+
+      {/* HEADER */}
+      <div className="row mt-2">
+        <div className="col-md-6">
+          <h4 className={styles.pageTitle}>Products</h4>
           <p className={styles.pageSubTitle}>
-            Art-led desk essential for leadership spaces
+            Art-led desk essentials for leadership spaces
           </p>
-        </div>
-
-        {/* Right Filters */}
-        <div className="col-lg-6 col-md-12">
-          <div className={`row g-3 justify-content-end ${styles.topFiltersRow}`}>
-            <div className="col-md-5 col-sm-6">
-              <select className={`form-select ${styles.selectBox}`}>
-                <option>Search Product</option>
-                <option>Diary</option>
-                <option>Folder</option>
-                <option>Pen</option>
-              </select>
-            </div>
-
-            <div className="col-md-5 col-sm-6">
-              <select className={`form-select ${styles.selectBox}`}>
-                <option>Sort</option>
-                <option>Price Low to High</option>
-                <option>Price High to Low</option>
-                <option>Latest</option>
-              </select>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* ✅ Search + Stock Filter */}
-      <div className="row mt-3 g-3">
-        <div className="col-lg-8 col-md-12">
+      {/* FILTER BAR */}
+      <div className={`${styles.filterBar} row g-3 mt-3`}>
+
+        {/* SEARCH */}
+        <div className="col-lg-4 col-md-6">
+          <label className={styles.label}>Search Product</label>
           <input
-            type="text"
-            placeholder="Search Product"
-            className={`form-control ${styles.searchInput}`}
+            className={`form-control ${styles.input}`}
+            placeholder="Type product name"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
         </div>
 
-        <div className="col-lg-4 col-md-12">
-          <select className={`form-select ${styles.selectBox}`}>
-            <option>Stock Availability</option>
-            <option>In Stock</option>
-            <option>Out of Stock</option>
+        {/* CATEGORY */}
+        <div className="col-lg-3 col-md-6">
+          <label className={styles.label}>Category</label>
+          <select
+            className={`form-select ${styles.select}`}
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* STOCK */}
+        <div className="col-lg-3 col-md-6">
+          <label className={styles.label}>Availability</label>
+          <select
+            className={`form-select ${styles.select}`}
+            value={stock}
+            onChange={e => setStock(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="in">In Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </div>
+
+        {/* SORT */}
+        <div className="col-lg-2 col-md-6">
+          <label className={styles.label}>Sort By</label>
+          <select
+            className={`form-select ${styles.select}`}
+            value={sort}
+            onChange={e => setSort(e.target.value)}
+          >
+            <option value="latest">Latest</option>
+            <option value="price_asc">Price: Low → High</option>
+            <option value="price_desc">Price: High → Low</option>
           </select>
         </div>
       </div>
 
-      {/* ✅ Products Grid */}
+      {/* PRODUCTS GRID */}
       <div className="row mt-4 g-4">
-      {products.map((p) => (
-  <div key={p.id} className="col-lg-3 col-md-4 col-sm-6">
-    <Link href={`/client/products/${p.id}`} className={styles.productLink}>
-      <div className={`${styles.productCard} p-2`}>
-        <div className={styles.productImageBox}></div>
+        {products.length === 0 ? (
+          <div className="text-center">No products found</div>
+        ) : (
+          products.map(p => (
+            <div key={p.id} className="col-lg-3 col-md-4 col-sm-6">
+              <Link href={`/client/products/${p.id}`} className={styles.productLink}>
+                <div className={styles.productCard}>
+                  <div className={styles.productImageBox}></div>
 
-        <p className={styles.productName}>{p.name}</p>
+                  <p className={styles.productName}>{p.product_name}</p>
 
-        <div className={styles.bottomRow}>
-          <span className={styles.price}>{p.price}</span>
+                  <div className={styles.bottomRow}>
+                    <span className={styles.price}>
+                      ₹ {Number(p.base_price).toFixed(2)}
+                    </span>
 
-          <button
-            className={styles.addBtn}
-            onClick={(e) => {
-              e.preventDefault(); // ✅ stop opening details page
-              alert("Added to Quote ✅");
-            }}
-          >
-            Add to Quote
-          </button>
-        </div>
+                    <button
+                      className={styles.addBtn}
+                      onClick={e => {
+                        e.preventDefault();
+                        alert("Added to Quote ✅");
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))
+        )}
       </div>
-    </Link>
-  </div>
-))}
 
-      </div>
     </div>
   );
 }
