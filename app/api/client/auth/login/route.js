@@ -36,7 +36,6 @@ export async function POST(req) {
       );
     }
 
-    /* ================= JWT ================= */
     const token = jwt.sign(
       {
         branchId: branch.id,
@@ -49,9 +48,9 @@ export async function POST(req) {
       }
     );
 
-    /* ================= RESPONSE ================= */
-    const res = NextResponse.json({
+    return NextResponse.json({
       success: true,
+      token, // ✅ TOKEN RETURN
       user: {
         branchId: branch.id,
         companyId: branch.company_id,
@@ -60,19 +59,8 @@ export async function POST(req) {
       },
     });
 
-    /* ================= COOKIE (PRODUCTION SAFE) ================= */
-    res.cookies.set("client_token", token, {
-      httpOnly: true,
-      secure: true, 
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24, // 1 day
-    });
-
-    return res;
-
-  } catch (error) {
-    console.error("LOGIN ERROR:", error);
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

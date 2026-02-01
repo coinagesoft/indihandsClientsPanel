@@ -28,7 +28,6 @@ export default function ClientLoginPage() {
     const res = await fetch("/api/client/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
@@ -39,7 +38,8 @@ export default function ClientLoginPage() {
       return;
     }
 
-
+localStorage.setItem("client_token", data.token);
+localStorage.setItem("client_user", JSON.stringify(data.user));
 
     /* ✅ REDIRECT */
     router.push("/client/dashboard");
