@@ -4,43 +4,53 @@ import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const { email, password } = await req.json();
+  try {
+    const { email, password } = await req.json();
 
-  const [[branch]] = await db.query(
-    `SELECT id, company_id, branch_name, login_email, password_hash
-     FROM company_branches
-     WHERE login_email = ? LIMIT 1`,
-    [email]
-  );
+    if (!email || !password) {
+      return NextResponse.json(
+        { message: "Email and password are required" },
+        { status: 400 }
+      );
+    }
 
-  if (!branch) {
-    return NextResponse.json(
-      { message: "Invalid email or password" },
-      { status: 401 }
+    const [[branch]] = await db.query(
+      `SELECT id, company_id, branch_name, login_email, password_hash
+       FROM company_branches
+       WHERE login_email = ? LIMIT 1`,
+      [email]
     );
-  }
 
-  const isValid = await bcrypt.compare(password, branch.password_hash);
-  if (!isValid) {
-    return NextResponse.json(
-      { message: "Invalid email or password" },
-      { status: 401 }
+    if (!branch) {
+      return NextResponse.json(
+        { message: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    const isValid = await bcrypt.compare(password, branch.password_hash);
+    if (!isValid) {
+      return NextResponse.json(
+        { message: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    /* ================= JWT ================= */
+    const token = jwt.sign(
+      {
+        branchId: branch.id,
+        companyId: branch.company_id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+        issuer: "indihands",
+      }
     );
-  }
 
-  /* ✅ CREATE JWT */
-  const token = jwt.sign(
-    {
-      branchId: branch.id,
-      companyId: branch.company_id,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
-
-  /* ✅ MANUAL COOKIE (THIS FIXES IT) */
-  return new NextResponse(
-    JSON.stringify({
+    /* ================= RESPONSE ================= */
+    const res = NextResponse.json({
       success: true,
       user: {
         branchId: branch.id,
@@ -48,16 +58,24 @@ export async function POST(req) {
         branchName: branch.branch_name,
         email: branch.login_email,
       },
-      
-    }),
-    
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Set-Cookie": `client_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`,
-      },
-      
-    }
-  );
+    });
+
+    /* ================= COOKIE (PRODUCTION SAFE) ================= */
+    res.cookies.set("client_token", token, {
+      httpOnly: true,
+      secure: true, 
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24, // 1 day
+    });
+
+    return res;
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
