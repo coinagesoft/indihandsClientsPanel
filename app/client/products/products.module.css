@@ -13,13 +13,7 @@
   font-style: italic;
 }
 
-/* ================= FILTER BAR ================= */
 
-.filterBar {
-  background: var(--color-light-bg);
-  border-radius: 10px;
-  padding: 14px;
-}
 
 /* ================= LABEL ================= */
 
@@ -63,30 +57,133 @@
   box-shadow: 0 0 0 0.15rem rgba(156, 44, 44, 0.15);
 }
 
-/* ================= PRODUCT CARD ================= */
+/* ================= FILTER BAR ================= */
 
-.productCard {
-  background: var(--color-light-bg);
-  border-radius: 8px;
-  padding: 10px;
-  min-height: 220px;
+
+.filterBar {
+  background: #f8eadc;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+/* Each filter block */
+.filterItem {
   display: flex;
   flex-direction: column;
 }
 
-.productImageBox {
-  height: 95px;
-  background: #ddd;
-  border-radius: 6px;
+/* Label */
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a6a5f;
+  margin-bottom: 6px;
 }
 
+/* Input + Select (same height) */
+.input,
+.select {
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid #d6cfc7;
+  font-size: 14px;
+  padding: 0 12px;
+  background: #fff;
+}
+
+/* Select background */
+.select {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Disabled subcategory */
+.select:disabled {
+  background: #eceff1;
+  cursor: not-allowed;
+  color: #999;
+}
+
+/* Focus */
+.input:focus,
+.select:focus {
+  border-color: #9c2c2c;
+  box-shadow: 0 0 0 2px rgba(156, 44, 44, 0.15);
+}
+
+/* Mobile spacing */
+@media (max-width: 768px) {
+  .filterBar {
+    padding: 16px;
+  }
+}
+
+
+/* ================= PRODUCT CARD ================= */
+
+.productCard {
+  background: var(--color-light-bg);
+  border-radius: 12px;
+  padding: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* IMAGE FIX */
+.productImageBox {
+  width: 100%;
+  height: 160px;           /* 🔥 KEY FIX */
+  background: #f1f1f1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* 🔥 KEY FIX */
+}
+
+/* NAME */
 .productName {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--color-primary);
-  margin-top: 8px;
+  margin-top: 10px;
   line-height: 1.3;
 }
+
+/* BOTTOM */
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+/* BUTTON */
+.addBtn {
+  background: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* LINK */
+.productLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 
 /* ================= BOTTOM ================= */
 

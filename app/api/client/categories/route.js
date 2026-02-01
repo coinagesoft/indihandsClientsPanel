@@ -5,16 +5,15 @@ export async function GET() {
   try {
     const [rows] = await db.query(`
       SELECT id, name
-      FROM catalogs
-      ORDER BY id ASC
+      FROM categories
+      ORDER BY name ASC
     `);
 
-    return NextResponse.json(rows);
-
+    return NextResponse.json(rows); // ✅ return array ONLY
   } catch (error) {
     console.error("Categories API Error:", error);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Failed to fetch categories" },
       { status: 500 }
     );
   }

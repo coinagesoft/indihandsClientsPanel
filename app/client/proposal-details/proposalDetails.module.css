@@ -1,102 +1,210 @@
-/* ================= PAGE TITLE ================= */
-
 .pageTitle {
   color: var(--color-primary);
-  font-weight: 600;
   font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .subTitle {
-  font-size: var(--fs-md);
-  color: #444;
+  font-size: 14px;
+  color: #666;
 }
 
-/* ================= STATUS ================= */
-
+/* STATUS */
 .statusBox {
-  background: #faecd9;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: var(--fs-md);
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .status {
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: var(--fs-sm);
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-/* Status variants */
-.approved {
-  background: #d4edda;
-  color: #155724;
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
+
+.approved {
+  background: linear-gradient(135deg, #e0f6e9, #c8efd7);
+  color: #1e7e34;
+}
+.approved .statusDot { background: #1e7e34; }
 
 .pending {
-  background: #fff3cd;
+  background: linear-gradient(135deg, #fff4cc, #ffe8a3);
   color: #856404;
 }
+.pending .statusDot { background: #856404; }
 
 .rejected {
-  background: #f8d7da;
-  color: #721c24;
+  background: linear-gradient(135deg, #fde2e2, #f9caca);
+  color: #a71d2a;
 }
+.rejected .statusDot { background: #a71d2a; }
 
-/* ================= TABLE ================= */
-
+/* TABLE */
 .tableBox {
   background: #faecd9;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 18px;
+  border-radius: 16px;
 }
 
 .customTable th {
   background: #f3dcc4;
   border: none;
-  font-size: var(--fs-md);
   font-weight: 600;
 }
 
 .customTable td {
   border: none;
-  font-size: var(--fs-md);
 }
 
 .productName {
-  color: var(--color-primary);
   font-weight: 500;
 }
 
-/* ================= SUMMARY ================= */
-
+/* SUMMARY */
 .summaryBox {
-  background: #faecd9;
-  padding: 16px;
-  border-radius: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
 }
 
 .summaryRow {
   display: flex;
   justify-content: space-between;
-  font-size: var(--fs-md);
-  font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
-/* ================= ACTION BUTTON ================= */
+.grand {
+  font-weight: 600;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
 
+/* BUTTON */
 .actionBtn {
   width: 100%;
-  padding: 10px;
+  margin-top: 14px;
   background: var(--color-primary);
   color: #fff;
+  padding: 10px;
+  border-radius: 10px;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: var(--fs-md);
+  font-weight: 400;
 }
 
-.actionBtn:hover {
-  opacity: 0.9;
+/* EMPTY / LOADING */
+.emptyState,
+.loading {
+  text-align: center;
+  margin-top: 80px;
+  color: #666;
+}
+.divider {
+  margin: 10px 0;
+  border-top: 1px dashed #e0cdb8;
+}
+
+.headerCard {
+  background: #fff;
+  padding: 18px 20px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.proposalNo {
+  margin: 0;
+  font-weight: 600;
+}
+
+.metaLine {
+  font-size: 13px;
+  color: #777;
+  margin-top: 2px;
+}
+
+.infoCard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  height: 100%;
+}
+
+.infoTitle {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.infoText {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+.productImg {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e7d5c0;
+  background: #fff;
+}
+
+.noImg {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #f3dcc4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 12px;
+}
+
+.productName {
+  font-weight: 600;
+}
+
+.productCode {
+  font-size: 12px;
+  color: #777;
+}
+.actionRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.approveBtn {
+  flex: 1;
+  background: #1e7e34;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 400;
+}
+
+.rejectBtn {
+  flex: 1;
+  background: #a71d2a;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
 }

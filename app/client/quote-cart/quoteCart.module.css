@@ -1,64 +1,262 @@
 /* ================= PAGE TITLE ================= */
-
 .pageTitle {
   color: var(--color-primary);
   font-weight: 600;
-  font-size: var(--fs-lg);
+  font-size: 20px;
 }
 
-/* ================= CART TABLE BOX ================= */
+/* ================= CENTER WRAPPER ================= */
+.centerWrapper {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+/* ================= SUCCESS CARD ================= */
+.successCard {
+  background: #faecd9;
+  padding: 40px 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: #28a745;
+  color: white;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successTitle {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.successText {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+/* ================= EMPTY CARD ================= */
+.emptyCard {
+  background: #faecd9;
+  padding: 32px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 420px;
+}
+
+.emptyCard h5 {
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.emptyCard p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* ================= ACTION BUTTONS ================= */
+.successActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primaryBtn:hover {
+  opacity: 0.9;
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.secondaryBtn:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ================= CART BOX ================= */
 .cartBox {
-  background: #faecd9; /* keep theme */
+  background: #faecd9;
   padding: 16px;
   border-radius: 12px;
 }
 
 /* ================= PRODUCT NAME ================= */
-
 .productName {
-  color: var(--color-primary);
-  font-size: var(--fs-md);
   font-weight: 500;
+  color: var(--color-primary);
 }
 
-/* ================= SUMMARY BOX ================= */
+/* ================= QTY CONTROL ================= */
+.qtyControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
+.qtyControl button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+/* ================= REMOVE BUTTON ================= */
+.removeBtn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+}
+
+.removeBtn:hover {
+  color: red;
+}
+
+/* ================= SUMMARY ================= */
 .summaryBox {
   background: #faecd9;
   padding: 16px;
   border-radius: 12px;
 }
 
-.summaryBox h6 {
-  color: var(--color-primary);
-  font-weight: 600;
-  font-size: var(--fs-md);
-  margin-bottom: 12px;
-}
-
 .summaryRow {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-  font-size: var(--fs-md);
-  color: var(--color-gray-dark);
 }
-
-/* ================= SUBMIT BUTTON ================= */
 
 .submitBtn {
   width: 100%;
   margin-top: 12px;
   padding: 10px;
   background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+
+/* ================= SUBMIT BUTTON ================= */
+
+.submitBtn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--color-primary);
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-md);
   font-size: var(--fs-md);
+  font-weight: 500;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .submitBtn:hover {
-  opacity: 0.9;
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= EMPTY STATE ================= */
+
+.emptyCart {
+  text-align: center;
+  margin-top: 60px;
+  color: var(--color-gray-dark);
+  font-size: var(--fs-md);
+}
+/* PRODUCT CELL */
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.productImg {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: zoom-in;
+  border: 1px solid #eee;
+}
+
+.productName {
+  font-weight: 500;
+}
+
+/* ZOOM MODAL */
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.zoomBox {
+  position: relative;
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.zoomBox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+}
+
+.zoomClose {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #9c2c2c;
+  color: #fff;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
 }

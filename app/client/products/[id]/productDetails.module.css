@@ -63,10 +63,17 @@
 }
 
 .descText {
-  font-size: var(--fs-sm);
-  line-height: 1.6;
-  color: var(--color-gray-dark);
+  font-size: 14px;
+  line-height: 1.7;
+  color: #4a3b2c;
+
+  /* ✅ IMPORTANT FIX */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  display: block;
 }
+
 
 /* ================= DETAILS ================= */
 

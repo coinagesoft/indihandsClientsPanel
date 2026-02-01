@@ -5,39 +5,45 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const companyId = 1; // TODO: from auth
-    const search = searchParams.get("search") || "";
+    const search = searchParams.get("search");
+    const categoryId = searchParams.get("categoryId");
+    const subcategoryId = searchParams.get("subcategoryId");
+    const stock = searchParams.get("stock");
+    const sort = searchParams.get("sort") || "latest";
     const catalogId = searchParams.get("catalogId");
-    const stock = searchParams.get("stock"); // in | out
-    const sort = searchParams.get("sort");   // price_asc | price_desc | latest
 
-    let where = `WHERE p.status = 'active'`;
-    const values = [];
+    const companyId = 1; // TODO: get from auth/session
 
-    /* 🔍 SEARCH */
+    if (!catalogId) {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    let where = `WHERE pcm.catalog_id = ?`;
+    const values = [catalogId];
+
     if (search) {
       where += ` AND p.product_name LIKE ?`;
       values.push(`%${search}%`);
     }
 
-    /* 📦 STOCK FILTER */
-    if (stock === "in") {
-      where += ` AND p.stock_qty > 0`;
-    }
-    if (stock === "out") {
-      where += ` AND p.stock_qty = 0`;
+    if (categoryId) {
+      where += ` AND c.id = ?`;
+      values.push(categoryId);
     }
 
-    /* 📚 CATALOG FILTER */
-    if (catalogId) {
-      where += ` AND pcm.catalog_id = ?`;
-      values.push(catalogId);
+    if (subcategoryId) {
+      where += ` AND sc.id = ?`;
+      values.push(subcategoryId);
     }
 
-    /* 🔃 SORTING */
-    let orderBy = "ORDER BY p.created_at DESC";
-    if (sort === "price_asc") orderBy = "ORDER BY p.base_price ASC";
-    if (sort === "price_desc") orderBy = "ORDER BY p.base_price DESC";
+    if (stock === "in") where += ` AND p.stock_qty > 0`;
+    if (stock === "out") where += ` AND p.stock_qty = 0`;
+
+    /* ================= SORT ================= */
+    let orderBy = `ORDER BY p.created_at DESC`;
+
+    if (sort === "price_asc") orderBy = `ORDER BY final_price ASC`;
+    if (sort === "price_desc") orderBy = `ORDER BY final_price DESC`;
 
     const [rows] = await db.query(
       `
@@ -45,14 +51,24 @@ export async function GET(req) {
         p.id,
         p.product_name,
         p.base_price,
+        COALESCE(cpp.custom_price, p.base_price) AS final_price,
         p.stock_qty,
         p.featured_image
-      FROM products p
-      LEFT JOIN product_catalog_map pcm ON pcm.product_id = p.id
+      FROM product_catalog_map pcm
+      INNER JOIN products p 
+        ON p.id = pcm.product_id
+      LEFT JOIN company_product_pricing cpp
+        ON cpp.product_id = p.id
+       AND cpp.company_id = ?
+      LEFT JOIN categories c 
+        ON c.name = p.category
+      LEFT JOIN subcategories sc 
+        ON sc.name = p.sub_category
       ${where}
+      GROUP BY p.id
       ${orderBy}
       `,
-      values
+      [companyId, ...values]
     );
 
     return NextResponse.json(rows);
@@ -60,7 +76,7 @@ export async function GET(req) {
   } catch (error) {
     console.error("Products API Error:", error);
     return NextResponse.json(
-      { error: "Server error" },
+      { error: "Failed to fetch products" },
       { status: 500 }
     );
   }

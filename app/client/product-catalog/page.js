@@ -14,6 +14,7 @@ useEffect(() => {
     .then(data => {
       // 🔐 always normalize to array
       setCategories(Array.isArray(data) ? data : data.data || []);
+      console.log("data",data)
     })
     .catch(err => {
       console.error("Catalog fetch error:", err);
@@ -53,7 +54,13 @@ useEffect(() => {
         <div className={`${styles.cardBox} p-3 h-100`}>
 
           {/* IMAGE PLACEHOLDER */}
-          <div className={styles.imageBox} />
+<img
+  src={cat.image}
+  alt={cat.title}
+  className={styles.imageBox}
+/>
+
+
 
           {/* BADGE */}
           <span className={styles.badge}>

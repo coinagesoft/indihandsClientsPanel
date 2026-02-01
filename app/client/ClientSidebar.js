@@ -24,7 +24,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
       {/* LOGO + ARROW */}
       <div className={styles.logoRow}>
         {!collapsed && (
-           <a href="/admin/dashboard" className="app-brand-link d-flex align-items-center justify-content-center text-center">
+           <a href="/client/dashboard" className="app-brand-link d-flex align-items-center justify-content-center text-center">
     {/* PNG Logo */}
    <div className='d-flex justify-content-center'>
      <img

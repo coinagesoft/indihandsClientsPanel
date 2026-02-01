@@ -1,0 +1,106 @@
+import { NextResponse } from "next/server";
+import { db } from "@/app/db";
+
+export async function GET(req, { params }) {
+  try {
+const { id: productId } = await params;
+
+    if (!productId) {
+      return NextResponse.json(
+        { error: "Product ID missing" },
+        { status: 400 }
+      );
+    }
+
+    const companyId = 1; // TODO: get from auth/session
+
+    /* ================= PRODUCT (BASE + COMPANY PRICE) ================= */
+    const [[product]] = await db.query(
+      `
+      SELECT 
+        p.id,
+        p.product_name,
+        p.description,
+        p.base_price,
+        COALESCE(cpp.custom_price, p.base_price) AS final_price,
+        p.featured_image,
+        p.hsn
+      FROM products p
+      LEFT JOIN company_product_pricing cpp
+        ON cpp.product_id = p.id
+       AND cpp.company_id = ?
+      WHERE p.id = ?
+      LIMIT 1
+      `,
+      [companyId, productId]
+    );
+
+    if (!product) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+    /* ================= CATALOG ================= */
+    const [[catalog]] = await db.query(
+      `
+      SELECT c.name
+      FROM product_catalog_map pcm
+      JOIN catalogs c ON c.id = pcm.catalog_id
+      WHERE pcm.product_id = ?
+      LIMIT 1
+      `,
+      [productId]
+    );
+
+    /* ================= GALLERY ================= */
+    const [images] = await db.query(
+      `
+      SELECT image_url
+      FROM product_gallery_images
+      WHERE product_id = ?
+      ORDER BY id ASC
+      `,
+      [productId]
+    );
+
+    return NextResponse.json({
+      id: product.id,
+      title: product.product_name,
+      subtitle: "",
+
+      breadcrumb: {
+        dashboard: "Dashboard",
+        catalog: "Product Catalog",
+        catalogName: catalog?.name || "Catalog",
+        productName: product.product_name,
+      },
+
+      description: product.description || "No description available",
+
+      /* ⭐ THIS IS IMPORTANT ⭐ */
+      price: product.final_price,   // company price OR base price
+      base_price: product.base_price, // optional (for admin/debug)
+
+      hsn: product.hsn,
+
+      images: images.length
+        ? images.map(i => i.image_url)
+        : [product.featured_image],
+
+      details: {
+        code: product.id,
+        size: '6" W × 9" H',
+        weight: "625 GM",
+      }
+    });
+
+  } catch (error) {
+    console.error("Product Details API Error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch product details" },
+      { status: 500 }
+    );
+  }
+}

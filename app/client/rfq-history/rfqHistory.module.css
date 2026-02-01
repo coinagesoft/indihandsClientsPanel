@@ -1,4 +1,4 @@
-/* ================= PAGE TITLE ================= */
+/* ================= RFQ HISTORY ================= */
 
 .pageTitle {
   color: var(--color-primary);
@@ -6,59 +6,167 @@
   font-size: var(--fs-lg);
 }
 
-/* ================= TABLE WRAPPER ================= */
-
-.tableBox {
-  background: #faecd9; /* keep theme */
-  padding: 18px;
-  border-radius: 12px;
+.subtitle {
+  color: var(--color-gray-dark);
+  font-size: var(--fs-sm);
 }
 
-/* ================= TABLE ================= */
+/* TABLE BOX */
+.tableBox {
+  background: #faecd9;
+  padding: 18px;
+  border-radius: 16px;
+}
 
+/* TABLE */
 .customTable th {
   background: #f3dcc4;
-  color: var(--color-gray-dark);
-  font-size: var(--fs-md);
-  font-weight: 600;
   border: none;
+  font-weight: 600;
 }
 
 .customTable td {
-  font-size: var(--fs-md);
   border: none;
   vertical-align: middle;
-  color: var(--color-gray-dark);
 }
 
-/* ================= RFQ ID ================= */
-
-.rfqId {
-  color: var(--color-primary);
+/* RFQ BADGE */
+.rfqBadge {
+  background: #fff;
+  border: 1px solid #f0d5b8;
+  padding: 6px 12px;
+  border-radius: 8px;
   font-weight: 600;
+  color: var(--color-primary);
 }
 
-/* ================= STATUS BADGES ================= */
+/* ROW INTERACTION */
+.rowClickable {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-.status {
-  padding: 5px 12px;
-  border-radius: 12px;
-  font-size: var(--fs-sm);
+.rowClickable:hover {
+  background: rgba(0, 0, 0, 0.04);
+  box-shadow: inset 4px 0 0 var(--color-primary);
+}
+
+/* EXPAND ICON */
+.expandIcon {
+  width: 30px;
+  text-align: center;
+}
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.25s ease;
+  color: #777;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+/* EXPAND ROW */
+.expandRow td {
+  background: transparent;
+  padding: 10px;
+}
+
+.expandCell {
+  padding: 0;
+}
+
+.expandBox {
+  background: #fff6ea;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expandActions {
+  display: flex;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+/* BUTTONS */
+.primaryBtn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.secondaryBtn {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 8px 16px;
+  border-radius: 10px;
   font-weight: 500;
 }
 
-/* Status states */
-.open {
-  background: #ffe8c2;
-  color: #a86a00;
+/* STATUS */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-.pending {
-  background: #fff3cd;
-  color: #856404;
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 
-.approved {
-  background: #d4edda;
-  color: #155724;
+/* STATUS COLORS */
+.submitted {
+  background: linear-gradient(135deg, #e8eaff, #d9dcff);
+  color: #2f3ab2;
+}
+.submitted .statusDot {
+  background: #2f3ab2;
+}
+
+.underreview {
+  background: linear-gradient(135deg, #fff4cc, #ffe8a3);
+  color: #8a6d00;
+}
+.underreview .statusDot {
+  background: #8a6d00;
+}
+
+.accepted {
+  background: linear-gradient(135deg, #e0f6e9, #c8efd7);
+  color: #1e7e34;
+}
+.accepted .statusDot {
+  background: #1e7e34;
+}
+
+.rejected {
+  background: linear-gradient(135deg, #fde2e2, #f9caca);
+  color: #a71d2a;
+}
+.rejected .statusDot {
+  background: #a71d2a;
+}
+
+/* EMPTY / LOADING */
+.emptyState,
+.loading {
+  text-align: center;
+  margin-top: 80px;
+  color: #666;
 }

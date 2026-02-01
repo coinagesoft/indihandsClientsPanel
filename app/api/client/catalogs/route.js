@@ -7,34 +7,25 @@ export async function GET() {
       SELECT
         c.id,
         c.name AS title,
+        c.featured_image,
+        c.description,
         COUNT(pcm.product_id) AS productCount
       FROM catalogs c
       LEFT JOIN product_catalog_map pcm
         ON pcm.catalog_id = c.id
-      GROUP BY c.id
+      GROUP BY 
+        c.id,
+        c.name,
+        c.featured_image,
+        c.description
       ORDER BY c.id ASC
     `);
-
-    // Optional descriptions (can later move to DB)
-    const descriptionMap = {
-      "indiHands—The Stationery Edition":
-        "Art-led desk essentials for thoughtful gifting.",
-      "The Thoughtful Edition (Up to ₹1,000)":
-        "Gifts that feel personal and refined.",
-      "The Executive Edition (₹1,000 — ₹2,000)":
-        "Premium gifts for corporate moments.",
-      "The Signature Edition (₹2,000 — ₹5,000)":
-        "Distinctive gifts to stand out.",
-      "The Prestige Edition (₹5,000 — ₹8,000)":
-        "Impressive gifting for senior leadership.",
-      "The Legacy Edition (₹8,000 & Above)":
-        "Heirloom-level gifting experiences.",
-    };
 
     const data = rows.map(row => ({
       id: row.id,
       title: row.title,
-      desc: descriptionMap[row.title] || "Curated gifting collection.",
+      image: row.featured_image,
+      desc: row.description,          // ✅ FROM DB
       productCount: row.productCount,
     }));
 

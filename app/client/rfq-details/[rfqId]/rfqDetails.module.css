@@ -1,0 +1,142 @@
+/* ================= RFQ DETAILS ================= */
+
+.pageTitle {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.subText {
+  font-size: 13px;
+  color: #777;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 16px 18px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+/* STATUS */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* STATUS COLORS */
+.submitted {
+  background: linear-gradient(135deg, #e8eaff, #d9dcff);
+  color: #2f3ab2;
+}
+.submitted .statusDot {
+  background: #2f3ab2;
+}
+
+.open {
+  background: linear-gradient(135deg, #ffe8c2, #ffd89a);
+  color: #a86a00;
+}
+.open .statusDot {
+  background: #a86a00;
+}
+
+.pending {
+  background: linear-gradient(135deg, #fff4cc, #ffe8a3);
+  color: #856404;
+}
+.pending .statusDot {
+  background: #856404;
+}
+
+.approved {
+  background: linear-gradient(135deg, #e0f6e9, #c8efd7);
+  color: #155724;
+}
+.approved .statusDot {
+  background: #155724;
+}
+
+/* PRODUCT CARD */
+.card {
+  background: #faecd9;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 20px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* SUMMARY */
+.summaryCard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ACTIONS */
+.actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* BUTTONS */
+.primaryBtn {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.primaryBtn:hover {
+  background: #3e34d4;
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  background: #f2f2f2;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+}
+
+.secondaryBtn:hover {
+  background: #e6e6e6;
+}
+
+/* EMPTY / LOADING */
+.emptyState,
+.loading {
+  text-align: center;
+  margin-top: 80px;
+  color: #666;
+}
