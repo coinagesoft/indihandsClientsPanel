@@ -1,6 +1,6 @@
 /* ================= DASHBOARD CANVAS ================= */
 .dashboardCanvas {
-  position: absolute; /* changed from fixed */
+  position: absolute; /* relative to dashboardWrapper */
   top: 0;
   left: 0;
   width: 100%;
@@ -8,36 +8,50 @@
   z-index: 0;
   pointer-events: none;
 
-  /* Floating motifs like Figma design */
+  /* Floating motifs + logos */
   background-image:
-    url("/images/mandala-large-left.png"),
-    url("/images/motif-top-right.png"),
-    url("/images/bottom-right-mandala.png"),
-    url("/images/motif-bottom-left.png");
-      z-index: 9999;
-  background-repeat: no-repeat;
+    url("/images/mandala-large-left.png"),      /* top-left motif */
+    url("/images/motif-top-right.png"),         /* top-right motif */
+    url("/images/bottom-right-mandala.png"),   /* bottom-right motif */
+    url("/images/motif-bottom-left.png"),      /* bottom-left motif */
+    url("/images/trilogo.png");                 /* trilogo center-bottom */
+
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+
+  /* Background positions */
   background-position:
-    top 20px left 10px,
-    top 20px right 30px,
-    bottom -10px right 10px,
-    bottom 20px left 20px;
-  background-size: 120px, 70px, 220px, 70px;
+    top 20px left 10px,        /* top-left */
+    top 20px right 30px,       /* top-right */
+    bottom -10px right 10px,   /* bottom-right */
+    bottom 20px left 20px,     /* bottom-left */
+    bottom 60px left 50%;      /* trilogo centered */
+
+  /* Background sizes */
+  background-size:
+    120px auto,   /* top-left motif */
+    70px auto,    /* top-right motif */
+    220px auto,   /* bottom-right motif */
+    70px auto,    /* bottom-left motif */
+    280px auto;   /* trilogo */
+
   opacity: 1;
 }
 
-.dashboardCanvas::before {
+/* Footer text below trilogo */
+.dashboardCanvas::after {
   content: "©2026 | indiHands | www.indihands.com";
   position: absolute;
-  bottom: 40px; /* adjust vertical spacing from logos */
+  bottom: 30px;       /* adjust as needed */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  font-size: 12px; /* adjust to match design */
-  color: #000;     /* or a subtle gray to match your design */
+  font-size: 12px;
+  color: #000;        /* match your Figma design */
   z-index: 1;
   pointer-events: none;
-  font-family: "Times New Roman", serif; /* optional, match Figma font */
+  font-family: "Times New Roman", serif; /* optional */
 }
+
 
 /* ================= DASHBOARD WRAPPER ================= */
 .dashboardWrapper {
@@ -88,7 +102,8 @@
 .recentBox {
   position: relative;
   z-index: 5;
-
+  margin-top: 30px;
+margin-bottom: 150px;
   background: var(--color-light-bg);
   border-radius: var(--radius-lg);
   padding: 20px;

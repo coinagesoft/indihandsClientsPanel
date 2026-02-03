@@ -55,10 +55,10 @@ export default function DashboardPage() {
         </div>
 
         {/* RECENT RFQs TABLE */}
-        <div className={`${styles.recentBox} mt-5`}>
+        <div className={`${styles.recentBox} `}>
           <h4 className={styles.recentTitle}>Recent RFQs</h4>
 
-          <div className="table-responsive mt-3">
+          <div className="table-responsive mt-3 ">
             <table className={`table ${styles.tableCustom}`}>
               <thead>
                 <tr>
