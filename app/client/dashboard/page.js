@@ -3,16 +3,17 @@
 import { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
+
 export default function DashboardPage() {
-useAuthGuard();
+  useAuthGuard();
 
   const [stats, setStats] = useState([]);
   const [recentRFQs, setRecentRFQs] = useState([]);
 
   useEffect(() => {
     fetch("/api/client/dashboard/stats")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setStats([
           { label: "OPEN RFQs", value: data.openRFQs ?? 0 },
           { label: "ACCEPTED RFQs", value: data.acceptedRFQs ?? 0 },
@@ -24,8 +25,8 @@ useAuthGuard();
 
   useEffect(() => {
     fetch("/api/client/dashboard/recent-rfqs")
-      .then(res => res.json())
-      .then(data => setRecentRFQs(Array.isArray(data) ? data : []));
+      .then((res) => res.json())
+      .then((data) => setRecentRFQs(Array.isArray(data) ? data : []));
   }, []);
 
   const statusClassMap = {
@@ -37,12 +38,11 @@ useAuthGuard();
 
   return (
     <>
-      {/* ✅ BACKGROUND CANVAS (NO CHILDREN) */}
-      <div className="dashboard-canvas" />
 
-      {/* ✅ CONTENT LAYER */}
-      <div className={`${styles.dashboardWrapper} container-fluid`}>
-        {/* STATS */}
+      {/* MAIN DASHBOARD CONTENT */}
+      <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+      <div className={styles.dashboardCanvas} ></div>
+        {/* STATS CARDS */}
         <div className="row g-4 mt-2">
           {stats.map((item, index) => (
             <div key={index} className="col-xl-3 col-lg-4 col-md-6">
@@ -54,7 +54,7 @@ useAuthGuard();
           ))}
         </div>
 
-        {/* RECENT RFQs */}
+        {/* RECENT RFQs TABLE */}
         <div className={`${styles.recentBox} mt-5`}>
           <h4 className={styles.recentTitle}>Recent RFQs</h4>
 
@@ -71,7 +71,7 @@ useAuthGuard();
                 </tr>
               </thead>
               <tbody>
-                {recentRFQs.map(rfq => (
+                {recentRFQs.map((rfq) => (
                   <tr key={rfq.id}>
                     <td className={styles.rfqId}>RFQ-{rfq.id}</td>
                     <td>{rfq.branch}</td>

@@ -73,7 +73,9 @@ console.log("🟡 Add to Quote Payload:", payload);
   }
 
   return (
-    <div className="container-fluid">
+   <div className={`${styles.dashboardWrapper} container-fluid   `}>
+      <div className={styles.dashboardCanvas} ></div>
+
 
       {/* TITLE */}
       <div className="row mt-3">

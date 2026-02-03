@@ -107,7 +107,7 @@ const handleLogout = async () => {
   }
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid py-5">
 
       {/* ===== HEADER WITH LOGOUT ===== */}
       <div className="d-flex justify-content-between align-items-center mb-3">

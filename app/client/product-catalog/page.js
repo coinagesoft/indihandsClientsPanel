@@ -28,10 +28,10 @@ useEffect(() => {
 
 
   return (
-    <div className="container-fluid">
-
+  <div className={`${styles.dashboardWrapper} container-fluid   `}>
+      <div className={styles.dashboardCanvas} ></div>
       {/* TITLE */}
-      <div className="row mt-3">
+      <div className="row mt-3 ">
         <div className="col-12">
           <h4 className={styles.pageTitle}>Product Catalog</h4>
         </div>

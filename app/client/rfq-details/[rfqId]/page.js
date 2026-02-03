@@ -48,7 +48,8 @@ export default function RFQDetailsPage() {
   const totalAmount = items.reduce((s, i) => s + Number(i.total), 0);
 
   return (
-    <div className="container-fluid">
+    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+      <div className={styles.dashboardCanvas} ></div>
 
       {/* HEADER */}
       <div className={styles.header}>

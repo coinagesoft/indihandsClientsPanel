@@ -89,7 +89,8 @@ export default function ProposalDetailsPage() {
   };
 
   return (
-    <div className="container-fluid">
+   <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+      <div className={styles.dashboardCanvas} ></div>
 
       {/* TITLE */}
       <h4 className={styles.pageTitle}>Proposal Details</h4>

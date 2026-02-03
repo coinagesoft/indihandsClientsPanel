@@ -1,6 +1,5 @@
 .wrapper {
   display: flex;
-  margin:30px 10px;
 
 }
 
@@ -9,7 +8,7 @@
   margin-left: 240px;
   transition: margin-left 0.25s ease;
   width: 100%;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }
 
 /* WHEN SIDEBAR IS COLLAPSED */

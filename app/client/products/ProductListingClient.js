@@ -48,7 +48,7 @@ export default function ProductListingPage() {
     setLoading(true);
 
     const params = new URLSearchParams();
-        params.append("catalogId", catalogId); // ✅ REQUIRED
+        params.append("catalogId", catalogId); 
 
     if (search) params.append("search", search);
     if (categoryId) params.append("categoryId", categoryId);
@@ -65,7 +65,8 @@ export default function ProductListingPage() {
 
   /* ================= UI ================= */
   return (
-    <div className="container-fluid">
+     <div className={`${styles.dashboardWrapper} container-fluid   `}>
+      <div className={styles.dashboardCanvas} ></div>
 
       {/* HEADER */}
       <div className="row mt-2">
@@ -78,7 +79,7 @@ export default function ProductListingPage() {
       </div>
 
       {/* FILTER BAR */}
-      <div className={`${styles.filterBar} row g-4 mt-3`}>
+      <div className={`${styles.filterBar} row g-4 mt-3 mx-1`}>
 
         <div className="col-xl-3 col-md-6">
           <label className={styles.label}>Search</label>

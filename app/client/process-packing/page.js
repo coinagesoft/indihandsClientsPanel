@@ -27,7 +27,8 @@ export default function ProcessPackingPage() {
   ];
 
   return (
-    <div className="container-fluid">
+    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+      <div className={styles.dashboardCanvas} ></div>
       {/* Page Header */}
       <div className="row mt-3">
         <div className="col">
@@ -52,8 +53,8 @@ export default function ProcessPackingPage() {
       </div>
 
       {/* Bottom Note */}
-      <div className="row mt-5">
-        <div className="col-lg-10">
+      <div className="row mb-5 mt-2">
+        <div className="col-lg-10 mb-5">
           <div className={styles.noteBox}>
             Every IndiHands product is packed with care, respect for craftsmanship,
             and responsibility towards sustainability.

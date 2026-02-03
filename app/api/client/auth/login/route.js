@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { email, password } = await req.json();
-
+     console.log("email",email,"password",password)
     if (!email || !password) {
       return NextResponse.json(
         { message: "Email and password are required" },
