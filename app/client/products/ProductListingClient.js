@@ -9,11 +9,11 @@ export default function ProductListingPage() {
 
   /* ================= STATE ================= */
    const searchParams = useSearchParams();
-  const catalogId = searchParams.get("catalogId"); // ✅ IMPORTANT
+  const catalogId = searchParams.get("catalogId"); 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
-
+const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [subcategoryId, setSubcategoryId] = useState("");
@@ -62,6 +62,9 @@ export default function ProductListingPage() {
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
   }, [search, categoryId, subcategoryId, stock, sort]);
+
+
+
 
   /* ================= UI ================= */
   return (
@@ -184,12 +187,9 @@ export default function ProductListingPage() {
                   </span>
                   <button
                     className={styles.addBtn}
-                    onClick={e => {
-                      e.preventDefault();
-                      alert("Added to Quote ✅");
-                    }}
+                  
                   >
-                    Add
+                    Details
                   </button>
                 </div>
 
