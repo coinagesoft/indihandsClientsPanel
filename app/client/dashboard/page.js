@@ -52,10 +52,10 @@ export default function DashboardPage() {
    if (loading) {
     return (
       <div
-        className="d-flex align-items-center justify-content-center"
+        className=""
         style={{ minHeight: "70vh" }}
       >
-        <div className="text-muted">Loading dashboard...</div>
+        <div className="text-muted text-center mt-4">Loading dashboard...</div>
       </div>
     );
   }
