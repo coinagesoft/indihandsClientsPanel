@@ -1,14 +1,13 @@
-export const runtime = "nodejs";
-
-import puppeteer from "puppeteer";
+import PDFDocument from "pdfkit";
 import { db } from "../../../../db";
 import fs from "fs";
 import path from "path";
 
+export const runtime = "nodejs";
+
 export async function GET(req, { params }) {
   try {
-     const { rfqId } = await params;
-
+    const { rfqId } =await  params;
     if (!rfqId) {
       return Response.json({ message: "Invalid RFQ ID" }, { status: 400 });
     }
@@ -42,93 +41,110 @@ export async function GET(req, { params }) {
       [rfqId]
     );
 
+    /* ================= FONTS ================= */
+    const openSansRegular = path.join(
+      process.cwd(),
+      "public/fonts/OpenSans_Condensed-Regular.ttf"
+    );
+    const openSansBold = path.join(
+      process.cwd(),
+      "public/fonts/OpenSans_Condensed-Bold.ttf"
+    );
+
+    /* ================= PDF ================= */
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 40,
+      font: openSansRegular,
+    });
+
+    const buffers = [];
+    doc.on("data", buffers.push.bind(buffers));
+
     /* ================= LOGO ================= */
     const logoPath = path.join(
       process.cwd(),
       "public/images/favicon.png"
     );
-    const logoBase64 = fs.readFileSync(logoPath).toString("base64");
-    const logoSrc = `data:image/png;base64,${logoBase64}`;
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, 40, 40, { width: 55 });
+    }
 
-    /* ================= HTML ================= */
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <style>
-    body { font-family: Arial, sans-serif; font-size: 12px; padding: 20px; }
-    h2 { text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #ccc; padding: 6px; }
-    th { background: #f0f0f0; }
-    .right { text-align: right; }
-    .logo { height: 45px; }
-  </style>
-</head>
-<body>
+    /* ================= TITLE ================= */
+    doc.font(openSansBold)
+       .fontSize(14)
+       .text("REQUEST FOR QUOTATION", 0, 50, {
+         align: "center",
+       });
 
-  <img src="${logoSrc}" class="logo" />
+    /* ================= META ================= */
+    let y = 110;
+    doc.font(openSansRegular).fontSize(10);
 
-  <h2>REQUEST FOR QUOTATION</h2>
+    doc.text(`RFQ No: RFQ-${rfq.id}`, 40, y); y += 14;
+    doc.text(`Date: ${new Date(rfq.submitted_at).toLocaleDateString("en-IN")}`, 40, y); y += 14;
+    doc.text(`Status: ${rfq.status}`, 40, y); y += 14;
+    doc.text(`Customer: ${rfq.contact_person}`, 40, y); y += 14;
+    doc.text(`Company: ${rfq.company_name}`, 40, y);
 
-  <p><b>RFQ No:</b> RFQ-${rfq.id}</p>
-  <p><b>Date:</b> ${new Date(rfq.submitted_at).toLocaleDateString("en-IN")}</p>
-  <p><b>Status:</b> ${rfq.status}</p>
-  <p><b>Customer:</b> ${rfq.contact_person}</p>
-  <p><b>Company:</b> ${rfq.company_name}</p>
+    /* ================= TABLE ================= */
+    y += 30;
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Rate</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${items
-        .map((item, i) => {
-          const total = item.quantity * item.quoted_price;
-          return `
-            <tr>
-              <td>${i + 1}</td>
-              <td>${item.product_name}</td>
-              <td class="right">${item.quantity}</td>
-              <td class="right">₹ ${Number(item.quoted_price).toFixed(2)}</td>
-              <td class="right">₹ ${total.toFixed(2)}</td>
-            </tr>
-          `;
-        })
-        .join("")}
-    </tbody>
-  </table>
+    const colX = [40, 70, 380, 440, 510];
+    const colW = [30, 310, 60, 70, 70];
+    const headers = ["#", "Product", "Qty", "Rate", "Total"];
 
-  <p style="margin-top:30px; text-align:center; font-size:10px;">
-    This is a system generated RFQ and does not require signature.
-  </p>
+    doc.font(openSansBold).fontSize(9);
 
-</body>
-</html>
-`;
-
-    /* ================= PDF ================= */
- const browser = await puppeteer.launch({
-  headless: true, // headless browser
-  args: ["--no-sandbox", "--disable-setuid-sandbox"], // safe for production too
-});
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
-
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
+    headers.forEach((h, i) => {
+      doc.rect(colX[i], y, colW[i], 22).stroke();
+      doc.text(h, colX[i] + 4, y + 6, {
+        width: colW[i] - 8,
+        align: i === 1 ? "left" : "center",
+      });
     });
 
-    await browser.close();
+    y += 22;
+    doc.font(openSansRegular);
+
+    items.forEach((item, i) => {
+      const qty = Number(item.quantity);
+      const rate = Number(item.quoted_price);
+      const total = qty * rate; // ✅ numeric math only
+
+      const row = [
+        i + 1,
+        item.product_name,
+        qty,
+        `₹ ${rate.toFixed(2)}`,
+        `₹ ${total.toFixed(2)}`,
+      ];
+
+      row.forEach((val, c) => {
+        doc.rect(colX[c], y, colW[c], 22).stroke();
+        doc.text(String(val), colX[c] + 1, y + 6, {
+          width: colW[c] - 8,
+          align: c === 1 ? "left" : "right",
+        });
+      });
+
+      y += 22;
+    });
+
+    /* ================= FOOTER ================= */
+    y += 30;
+    doc.fontSize(9).text(
+      "This is a system generated RFQ and does not require signature.",
+      40,
+      y,
+      { width: 520, align: "center" }
+    );
+
+    doc.end();
+
+    const pdfBuffer = await new Promise(resolve =>
+      doc.on("end", () => resolve(Buffer.concat(buffers)))
+    );
 
     return new Response(pdfBuffer, {
       headers: {

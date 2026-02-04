@@ -87,9 +87,18 @@ export default function ProposalDetailsPage() {
       setActionLoading(false);
     }
   };
+  useEffect(() => {
+    if (data?.totals) {
+      console.log("UI Totals", {
+        subtotal: data.totals.subtotal,
+        totalTax: data.totals.totalTax,
+        grandTotal: data.totals.subtotal + data.totals.totalTax,
+      });
+    }
+  }, [data]);
 
   return (
-   <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
       <div className={styles.dashboardCanvas} ></div>
 
       {/* TITLE */}
@@ -254,8 +263,9 @@ export default function ProposalDetailsPage() {
                 <div className={`${styles.summaryRow} ${styles.grand}`}>
                   <span>Grand Total</span>
                   <span>
-                    ₹ {Number(data.totals.grandTotal).toLocaleString()}
+                    ₹ {(Number(data.totals.subtotal) + Number(data.totals.totalTax)).toLocaleString()}
                   </span>
+
                 </div>
 
                 {/* DOWNLOAD */}
@@ -287,7 +297,7 @@ export default function ProposalDetailsPage() {
                       disabled={actionLoading}
                       onClick={() => updateStatus("Rejected")}
                     >
-                     Reject Proposal
+                      Reject Proposal
                     </button>
                   </div>
                 )}

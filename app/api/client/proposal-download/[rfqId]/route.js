@@ -1,29 +1,22 @@
-import puppeteer from "puppeteer";
+import PDFDocument from "pdfkit";
 import { db } from "../../../../db";
 import fs from "fs";
 import path from "path";
 
 export async function GET(req, { params }) {
   try {
-    // ✅ Next.js dynamic params fix
     const { rfqId } = await params;
     const rfqid = Number(rfqId);
 
-    if (!rfqid) {
+    if (!rfqId || isNaN(rfqid)) {
       return Response.json({ message: "Invalid rfqId" }, { status: 400 });
     }
 
-    // ✅ Proposal data fetch
+    // Fetch proposal
     const [[proposal]] = await db.query(
-      `
-      SELECT 
-        p.id,
-        p.rfq_id,
-        p.proposal_number,
-        p.proposal_date,
-        p.billing_address,
-        p.shipping_address,
-        p.place,
+      `SELECT 
+        p.id, p.rfq_id, p.proposal_number, p.proposal_date,
+        p.billing_address, p.shipping_address, p.place,
         c.company_name AS company,
         cb.contact_person AS customerName,
         cb.gstin
@@ -32,54 +25,34 @@ export async function GET(req, { params }) {
       JOIN companies c ON c.id = r.company_id
       JOIN company_branches cb ON cb.id = r.branch_id
       WHERE p.rfq_id = ?
-      LIMIT 1
-      `,
+      LIMIT 1`,
       [rfqId]
     );
 
     if (!proposal) {
-      return Response.json(
-        { message: "Proposal not found for this RFQ" },
-        { status: 404 }
-      );
+      return Response.json({ message: "Proposal not found for this RFQ" }, { status: 404 });
     }
 
-    // ✅ Proposal Items fetch
+    // Fetch items
     const [items] = await db.query(
-      `
-      SELECT 
-        pi.quantity AS qty,
-        pi.rate,
-        pi.discount,
-        pi.cgst_rate AS cgst,
-        pi.sgst_rate AS sgst,
-        pi.igst_rate AS igst,
-        pr.product_name AS description,
-        pr.hsn
+      `SELECT 
+        pi.quantity AS qty, pi.rate, pi.discount,
+        pi.cgst_rate AS cgst, pi.sgst_rate AS sgst, pi.igst_rate AS igst,
+        pr.product_name AS description, pr.hsn
       FROM proposal_items pi
       JOIN products pr ON pr.id = pi.product_id
       WHERE pi.proposal_id = ?
-      ORDER BY pi.id ASC
-      `,
+      ORDER BY pi.id ASC`,
       [proposal.id]
     );
 
-    // ✅ calculations helpers
-    const calcAmount = (qty, rate, discount) => {
-      const base = Number(qty) * Number(rate);
-      const disc = (base * Number(discount || 0)) / 100;
-      return base - disc;
-    };
+    // Calculations
+    const calcAmount = (qty, rate, discount) => Number(qty) * Number(rate) - ((Number(qty) * Number(rate) * Number(discount || 0)) / 100);
+    const calcTax = (amount, percent) => (Number(amount) * Number(percent || 0)) / 100;
 
-    const calcTax = (amount, percent) =>
-      (Number(amount) * Number(percent || 0)) / 100;
+    let subtotal = 0, cgstTotal = 0, sgstTotal = 0, igstTotal = 0;
 
-    let subtotal = 0;
-    let cgstTotal = 0;
-    let sgstTotal = 0;
-    let igstTotal = 0;
-
-    const computedItems = items.map((it) => {
+    const computedItems = items.map(it => {
       const amount = calcAmount(it.qty, it.rate, it.discount);
       const cgst = calcTax(amount, it.cgst);
       const sgst = calcTax(amount, it.sgst);
@@ -96,161 +69,264 @@ export async function GET(req, { params }) {
 
     const totalTax = cgstTotal + sgstTotal + igstTotal;
     const grandTotal = subtotal + totalTax;
+    const formattedDate = new Date().toISOString().slice(0, 10);
 
-    // ✅ Date format same as UI (YYYY-MM-DD)
-const formattedDate = new Date().toISOString().slice(0, 10);
+    // Logo and fonts
+    const logoPath = path.join(process.cwd(), "public/materialize/assets/img/favicon/favicon.png");
+    const logoExists = fs.existsSync(logoPath);
 
+    const openSansRegular = path.join(process.cwd(), "public/fonts/OpenSans_Condensed-Regular.ttf");
+    const openSansBold = path.join(process.cwd(), "public/fonts/OpenSans_Condensed-Bold.ttf");
 
-    // ✅ LOGO as Base64 (100% works in PDF)
-    const logoPath = path.join(process.cwd(), "public/images/favicon.png");
-    const logoBase64 = fs.readFileSync(logoPath).toString("base64");
-    const logoSrc = `data:image/png;base64,${logoBase64}`;
+    // PDFKit doc
+    const doc = new PDFDocument({ size: "A4", margin: 40,font: openSansRegular });
+    const chunks = [];
+    doc.on("data", chunk => chunks.push(chunk));
 
-    // ✅ Exact UI-like HTML (no extra data)
-    const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8" />
-      <style>
-        body { font-family: Arial, sans-serif; padding: 20px; font-size: 12px; }
-        .headerBox { background:#f4f5f7; padding:15px; border-radius:10px; margin-bottom:15px; }
-        .row { display:flex; justify-content:space-between; align-items:flex-start; }
-        h3,h4,h5 { margin:4px 0; }
-        table { width:100%; border-collapse: collapse; margin-top:10px; }
-        th, td { border:1px solid #ccc; padding:6px; font-size:11px; }
-        th { background:#e7f1ff; }
-        .right { text-align:right; }
-        .bold { font-weight:bold; }
-        .terms li{ margin-bottom:4px; }
-        .logo { height:50px; margin-bottom:8px; }
-      </style>
-    </head>
-    <body>
+    // HEADER
+const headerTop = 40;
 
-      <div class="headerBox">
-        <div class="row">
-          <div style="width:65%">
-            <img class="logo" src="${logoSrc}" alt="Logo" />
-            <h5>Indihands – The Art Craft Nook</h5>
-            <div>Pune, Maharashtra, India</div>
-            <div>+91 98765 43210</div>
-            <div>support@indihands.com</div>
-          </div>
+// Logo (top-left)
+if (logoExists) {
+  doc.image(logoPath, 40, headerTop, { width: 55 });
+}
 
-          <div style="width:35%" class="right">
-            <h4>#${proposal.proposal_number}</h4>
-          </div>
-        </div>
-      </div>
+// Company info
+doc.font(openSansBold)
+  .fontSize(12)
+  .text("Indihands – The Art Craft Nook", 110, headerTop);
 
-      <div>
-        <div class="row">
-          <div style="width:70%">
-            <h3>Quotation</h3>
-            <div><b>Quotation No:</b> ${proposal.proposal_number}</div>
-            <div><b>To:</b> ${proposal.customerName || ""}</div>
-            <div>${proposal.company || ""}</div>
-            <div><b>GSTIN:</b> ${proposal.gstin || ""}</div>
-            <div><b>Place of Supply:</b> ${proposal.place || ""}</div>
+doc.font(openSansRegular)
+  .fontSize(10)
+  .text("Pune, Maharashtra, India", 110, headerTop + 16)
+  .text("+91 98765 43210", 110, headerTop + 30)
+  .text("support@indihands.com", 110, headerTop + 44);
 
-            <br/>
-            <div><b>Billing Address</b></div>
-            <div>${proposal.billing_address || ""}</div>
+// Quotation number (top-right)
+doc.font(openSansBold)
+  .fontSize(11)
+  .text(`#${proposal.proposal_number}`, 0, headerTop, {
+    align: "right",
+    width: 555
+  });
 
-            <br/>
-            <div><b>Shipping Address</b></div>
-            <div>${proposal.shipping_address || ""}</div>
-          </div>
+   // QUOTATION INFO
+const leftX = 40;
+const leftWidth = 350;
 
-          <div style="width:30%" class="right">
-            <div><b>Date:</b> ${formattedDate}</div>
-          </div>
-        </div>
-      </div>
+let y = 110;
 
-      <table>
-        <thead>
-          <tr>
-            <th>Sr No</th>
-            <th>Description</th>
-            <th>HSN/SAC</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>Discount</th>
-            <th>Amount</th>
-            <th>CGST</th>
-            <th>SGST</th>
-            <th>IGST</th>
-            <th>Total</th>
-          </tr>
-        </thead>
+// Title
+doc.font(openSansBold)
+   .fontSize(12)
+   .text("Quotation", leftX, y, { underline: true });
 
-        <tbody>
-          ${computedItems
-            .map(
-              (x, i) => `
-            <tr>
-              <td>${i + 1}</td>
-              <td>${x.description}</td>
-              <td>${x.hsn || ""}</td>
-              <td class="right">${x.qty}</td>
-              <td class="right">${Number(x.rate).toFixed(2)}</td>
-              <td class="right">${Number(x.discount || 0).toFixed(2)}</td>
-              <td class="right">${x.amount.toFixed(2)}</td>
-              <td class="right">${x.cgst.toFixed(2)}</td>
-              <td class="right">${x.sgst.toFixed(2)}</td>
-              <td class="right">${x.igst.toFixed(2)}</td>
-              <td class="right bold">${x.total.toFixed(2)}</td>
-            </tr>
-          `
-            )
-            .join("")}
-        </tbody>
-      </table>
+y += 18;
 
-      <br/>
+// Quotation No
+doc.font(openSansRegular)
+   .fontSize(10)
+   .text(`Quotation No: ${proposal.proposal_number}`, leftX, y, {
+     width: leftWidth
+   });
 
-      <table style="width:40%; margin-left:auto;">
-        <tr><td>Total Before Tax</td><td class="right">₹ ${subtotal.toFixed(2)}</td></tr>
-        <tr><td>CGST Total</td><td class="right">₹ ${cgstTotal.toFixed(2)}</td></tr>
-        <tr><td>SGST Total</td><td class="right">₹ ${sgstTotal.toFixed(2)}</td></tr>
-        <tr><td>IGST Total</td><td class="right">₹ ${igstTotal.toFixed(2)}</td></tr>
-        <tr><td>Total Tax</td><td class="right">₹ ${totalTax.toFixed(2)}</td></tr>
-        <tr class="bold"><td>GRAND TOTAL</td><td class="right">₹ ${grandTotal.toFixed(2)}</td></tr>
-      </table>
+y += 14;
 
-      <br/>
-      <h4>Terms & Conditions:</h4>
-      <ol class="terms">
-        <li>Payment within 15 days from invoice date.</li>
-        <li>Delivery within 7 working days from order confirmation.</li>
-        <li>Warranty as per manufacturer terms.</li>
-        <li>Goods once sold will not be taken back.</li>
-        <li>All disputes subject to Pune jurisdiction.</li>
-      </ol>
-
-    </body>
-    </html>
-    `;
-
-    // ✅ Puppeteer PDF
-  const browser = await puppeteer.launch({
-  headless: true, // headless browser
-  args: ["--no-sandbox", "--disable-setuid-sandbox"], // safe for production too
+// To
+doc.text(`To: ${proposal.customerName || ""}`, leftX, y, {
+  width: leftWidth
 });
+y = doc.y;
 
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 800 });
+// Company
+doc.text(`${proposal.company || ""}`, leftX, y, {
+  width: leftWidth
+});
+y = doc.y;
 
-    await page.setContent(html, { waitUntil: "networkidle0" });
+// GSTIN
+doc.text(`GSTIN: ${proposal.gstin || ""}`, leftX, y, {
+  width: leftWidth
+});
+y = doc.y;
 
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
+// Place of Supply
+doc.text(`Place of Supply: ${proposal.place || ""}`, leftX, y, {
+  width: leftWidth,
+  ellipsis: true // prevents unwanted second line
+});
+y = doc.y + 6;
+
+// Billing Address
+doc.font(openSansBold).text("Billing Address:", leftX, y);
+y = doc.y;
+
+doc.font(openSansRegular)
+   .text(proposal.billing_address || "", leftX, y, {
+     width: leftWidth,
+     lineGap: 2
+   });
+
+y = doc.y + 6;
+
+// Shipping Address
+doc.font(openSansBold).text("Shipping Address:", leftX, y);
+y = doc.y;
+
+doc.font(openSansRegular)
+   .text(proposal.shipping_address || "", leftX, y, {
+     width: leftWidth,
+     lineGap: 2
+   });
+
+    doc.text(`Date: ${formattedDate}`, 400, y, { align: "right" });
+
+    // TABLE
+    y = doc.y + 20;
+    const tableTop = y;
+const colX = [
+  40,  // Sr No
+  70,  // Description      (40 + 30)
+  240, // HSN              (70 + 170)
+  280, // Qty              (240 + 40)
+  315, // Rate             (280 + 35)
+  355, // Discount         (315 + 40)
+  395, // Amount           (355 + 40)
+  435, // CGST             (395 + 40)
+  465, // SGST             (435 + 30)
+  495, // IGST             (465 + 30)
+  525  // Total            (495 + 30)
+];
+
+
+const colWidth = [
+  30,  // Sr No
+  170, // Description
+  40,  // HSN
+  35,  // Qty
+  40,  // Rate
+  40,  // Discount
+  40,  // Amount
+  30,  // CGST
+  30,  // SGST
+  30,  // IGST
+  40   // Total
+];
+
+
+    // Header
+    doc.font(openSansBold).fontSize(9);
+    const headers = ["Sr No", "Description", "HSN/SAC", "Qty", "Rate", "Discount", "Amount", "CGST", "SGST", "IGST", "Total"];
+    headers.forEach((h, i) => {
+      doc.rect(colX[i], y, colWidth[i], 20).stroke();
+      doc.text(h, colX[i] + 2, y + 5, { width: colWidth[i] - 4, align: "center" });
+    });
+    y += 20;
+    doc.font(openSansRegular);
+
+    // Rows
+    computedItems.forEach((x, i) => {
+const rowHeight = Math.max(
+  doc.heightOfString(x.description, {
+    width: colWidth[1] - 6,
+    lineGap: 2
+  }) + 8,
+  24
+);
+
+      // Draw cell borders
+      colX.forEach((xPos, idx) => {
+        doc.rect(xPos, y, colWidth[idx], rowHeight).stroke();
+      });
+
+      // Fill data
+      doc.text(i + 1, colX[0] + 2, y + 5, { width: colWidth[0] - 4, align: "center" });
+      doc.text(x.description, colX[1] + 2, y + 5, { width: colWidth[1] - 4 });
+      doc.text(x.hsn || "", colX[2] + 2, y + 5, { width: colWidth[2] - 4, align: "center" });
+      doc.text(Number(x.qty).toFixed(2), colX[3] + 2, y + 5, { width: colWidth[3] - 4, align: "right" });
+      doc.text(Number(x.rate).toFixed(2), colX[4] + 2, y + 5, { width: colWidth[4] - 4, align: "right" });
+      doc.text(Number(x.discount || 0).toFixed(2), colX[5] + 2, y + 5, { width: colWidth[5] - 4, align: "right" });
+      doc.text(Number(x.amount).toFixed(2), colX[6] + 2, y + 5, { width: colWidth[6] - 4, align: "right" });
+      doc.text(Number(x.cgst).toFixed(2), colX[7] + 2, y + 5, { width: colWidth[7] - 4, align: "right" });
+      doc.text(Number(x.sgst).toFixed(2), colX[8] + 2, y + 5, { width: colWidth[8] - 4, align: "right" });
+      doc.text(Number(x.igst).toFixed(2), colX[9] + 2, y + 5, { width: colWidth[9] - 4, align: "right" });
+      doc.text(Number(x.total).toFixed(2), colX[10] + 2, y + 5, { width: colWidth[10] - 4, align: "right" });
+
+      y += rowHeight;
     });
 
-    await browser.close();
+// ================= TOTALS TABLE =================
+y += 20;
+
+// Table position & sizing
+const totalsTableX = 340;
+const labelColWidth = 135;
+const valueColWidth = 80;
+const rowHeight = 24;
+
+// Data
+const totalsData = [
+  ["Total Before Tax", subtotal.toFixed(2)],
+  ["CGST Total", cgstTotal.toFixed(2)],
+  ["SGST Total", sgstTotal.toFixed(2)],
+  ["IGST Total", igstTotal.toFixed(2)],
+  ["Total Tax", totalTax.toFixed(2)],
+  ["GRAND TOTAL", grandTotal.toFixed(2), true]
+];
+
+totalsData.forEach(([label, value, isBold]) => {
+  // Left cell (label)
+  doc
+    .rect(totalsTableX, y, labelColWidth, rowHeight)
+    .stroke();
+
+  doc
+    .font(isBold ? openSansBold : openSansRegular)
+    .fontSize(10)
+    .text(label, totalsTableX + 6, y + 7, {
+      width: labelColWidth - 12,
+      align: "left"
+    });
+
+  // Right cell (value)
+  doc
+    .rect(totalsTableX + labelColWidth, y, valueColWidth, rowHeight)
+    .stroke();
+
+  doc
+    .font(isBold ? openSansBold : openSansRegular)
+    .text(`₹ ${value}`, totalsTableX + labelColWidth + 4, y + 7, {
+      width: valueColWidth - 12,
+      align: "right"
+    });
+
+  y += rowHeight;
+});
+
+
+    // Terms
+    y += 30;
+    const terms = [
+      "Payment within 15 days from invoice date.",
+      "Delivery within 7 working days from order confirmation.",
+      "Warranty as per manufacturer terms.",
+      "Goods once sold will not be taken back.",
+      "All disputes subject to Pune jurisdiction.",
+    ];
+    doc.font(openSansBold).text("Terms & Conditions:", 40, y);
+    doc.font(openSansRegular);
+    terms.forEach((t, i) => {
+      y += 12;
+      doc.text(`${i + 1}. ${t}`, 60, y);
+    });
+
+    doc.end();
+
+    const pdfBuffer = await new Promise(resolve => {
+      const buffers = [];
+      doc.on("data", buffers.push.bind(buffers));
+      doc.on("end", () => resolve(Buffer.concat(buffers)));
+    });
 
     return new Response(pdfBuffer, {
       status: 200,
@@ -259,6 +335,7 @@ const formattedDate = new Date().toISOString().slice(0, 10);
         "Content-Disposition": `attachment; filename="${proposal.proposal_number}.pdf"`,
       },
     });
+
   } catch (err) {
     console.error("GET /api/proposals/pdf/[rfqid] error:", err);
     return Response.json({ message: "Server error" }, { status: 500 });
