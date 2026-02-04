@@ -34,7 +34,7 @@ export default function RFQHistoryPage() {
   }
 
   return (
-   <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+   <div className={`${styles.dashboardWrapper} container-fluid py-5`}>
       <div className={styles.dashboardCanvas} ></div>
 
       <div className="row mt-3">
@@ -46,7 +46,7 @@ export default function RFQHistoryPage() {
         </div>
       </div>
 
-      <div className="row mt-3">
+      <div className="row mt-3 mb-5">
         <div className="col-12">
           <div className={styles.tableBox}>
             <table className={`table mb-0 ${styles.customTable}`}>
