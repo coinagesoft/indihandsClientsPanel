@@ -235,10 +235,10 @@ const formattedDate = new Date().toISOString().slice(0, 10);
     `;
 
     // ✅ Puppeteer PDF
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+  const browser = await puppeteer.launch({
+  headless: true, // headless browser
+  args: ["--no-sandbox", "--disable-setuid-sandbox"], // safe for production too
+});
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1200, height: 800 });

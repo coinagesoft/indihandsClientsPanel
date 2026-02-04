@@ -115,10 +115,10 @@ export async function GET(req, { params }) {
 `;
 
     /* ================= PDF ================= */
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+ const browser = await puppeteer.launch({
+  headless: true, // headless browser
+  args: ["--no-sandbox", "--disable-setuid-sandbox"], // safe for production too
+});
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
