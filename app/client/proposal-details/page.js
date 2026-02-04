@@ -112,8 +112,8 @@ export default function ProposalDetailsPage() {
   </div>
 
   {/* RFQ SELECTION CARD */}
-  <div className={styles.sectionCard}>
-    <div className="row align-items-end">
+  <div className={`${styles.sectionCard} mb-5`}>
+    <div className="row align-items-end ">
       <div className="col-md-4">
         <label className="form-label fw-semibold">Select RFQ</label>
         <select
@@ -153,7 +153,7 @@ export default function ProposalDetailsPage() {
   {proposal && (
     <>
       {/* PROPOSAL HEADER */}
-      <div className={styles.headerCard}>
+      <div className={`${styles.headerCard} mx-5`}>
         <div>
           <h5 className={styles.proposalNo}>
             Proposal #{proposal.proposal_number}
@@ -170,7 +170,7 @@ export default function ProposalDetailsPage() {
       </div>
 
       {/* ADDRESS SECTION */}
-      <div className="row g-4 mt-3">
+      <div className="row g-4 mt-3 mx-5">
         <div className="col-md-6">
           <div className={styles.infoCard}>
             <div className={styles.infoTitle}>Billing Address</div>
@@ -191,7 +191,7 @@ export default function ProposalDetailsPage() {
       </div>
 
       {/* ITEMS TABLE */}
-      <div className={`${styles.sectionCard} mt-4`}>
+      <div className={`${styles.sectionCard} mt-4 mx-5`}>
         <h6 className={styles.sectionTitle}>Proposed Items</h6>
 
         <div className="table-responsive mt-2">
@@ -241,7 +241,7 @@ export default function ProposalDetailsPage() {
       </div>
 
       {/* SUMMARY + ACTIONS */}
-      <div className="row mt-4">
+      <div className="row mt-4 mx-5">
         <div className="col-md-7"></div>
 
         <div className="col-md-5">
