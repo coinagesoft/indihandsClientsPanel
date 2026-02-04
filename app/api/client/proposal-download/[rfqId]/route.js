@@ -72,7 +72,7 @@ export async function GET(req, { params }) {
     const formattedDate = new Date().toISOString().slice(0, 10);
 
     // Logo and fonts
-    const logoPath = path.join(process.cwd(), "public/materialize/assets/img/favicon/favicon.png");
+    const logoPath = path.join(process.cwd(), "public/images/favicon.png");
     const logoExists = fs.existsSync(logoPath);
 
     const openSansRegular = path.join(process.cwd(), "public/fonts/OpenSans_Condensed-Regular.ttf");
