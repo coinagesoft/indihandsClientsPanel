@@ -35,13 +35,12 @@ export async function GET() {
       [companyId]
     );
 
-    const [[activeQuoteItems]] = await db.query(
+   const [[rejectedRFQs]] = await db.query(
       `
-      SELECT COALESCE(SUM(rp.quantity), 0) AS count
-      FROM rfqs r
-      JOIN rfq_products rp ON rp.rfq_id = r.id
-      WHERE r.company_id = ?
-      AND r.status IN ('Submitted', 'Under Review')
+      SELECT COUNT(*) AS count
+      FROM rfqs
+      WHERE company_id = ?
+      AND status = 'Rejected'
       `,
       [companyId]
     );
@@ -50,7 +49,7 @@ export async function GET() {
       openRFQs: openRFQs.count,
       acceptedRFQs: acceptedRFQs.count,
       pendingProposals: pendingProposals.count,
-      activeQuoteItems: activeQuoteItems.count,
+      rejectedRFQs: rejectedRFQs.count,
     });
 
   } catch (error) {

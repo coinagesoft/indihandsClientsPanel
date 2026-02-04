@@ -18,7 +18,7 @@ export default function DashboardPage() {
           { label: "OPEN RFQs", value: data.openRFQs ?? 0 },
           { label: "ACCEPTED RFQs", value: data.acceptedRFQs ?? 0 },
           { label: "PENDING PROPOSALS", value: data.pendingProposals ?? 0 },
-          { label: "ACTIVE QUOTE ITEMS", value: data.activeQuoteItems ?? 0 },
+          { label: "REJECTED RFQs", value: data.rejectedRFQs ?? 0 },
         ]);
       });
   }, []);
