@@ -48,16 +48,16 @@ export default function DashboardPage() {
     Rejected: "rejected",
   };
 
-   if (loading) {
-    return (
-      <div
-        className="mt-5"
-        // style={{ minHeight: "70vh" }}
-      >
-        <div className="text-muted text-center mt-5">Loading dashboard...</div>
-      </div>
-    );
-  }
+  //  if (loading) {
+  //   return (
+  //     <div
+  //       className="mt-5"
+  //       // style={{ minHeight: "70vh" }}
+  //     >
+  //       <div className="text-muted text-center mt-5">Loading dashboard...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>

@@ -37,10 +37,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* LOADER */}
-      {loading && (
-        <div className="text-center mt-4">Loading catalogs...</div>
-      )}
+   
 
     {/* CATALOG GRID */}
 <div className="row g-4 mt-1">

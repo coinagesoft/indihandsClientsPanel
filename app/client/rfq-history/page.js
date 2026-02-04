@@ -20,9 +20,7 @@ export default function RFQHistoryPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return <div className={styles.loading}>Loading RFQ history…</div>;
-  }
+ 
 
   if (rfqs.length === 0) {
     return (

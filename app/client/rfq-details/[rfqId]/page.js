@@ -22,9 +22,6 @@ export default function RFQDetailsPage() {
       .finally(() => setLoading(false));
   }, [rfqId]);
 
-  if (loading) {
-    return <div className={styles.loading}>Loading RFQ details…</div>;
-  }
 
   if (!rfq) {
     return (

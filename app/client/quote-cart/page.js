@@ -67,9 +67,7 @@ export default function QuoteCartPage() {
     0
   );
 
-  if (loading) {
-    return <div className="text-center mt-5">Loading cart...</div>;
-  }
+ 
 
   /* ================= RFQ SUCCESS ================= */
   if (rfqSubmitted) {

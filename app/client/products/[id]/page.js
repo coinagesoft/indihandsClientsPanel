@@ -64,9 +64,7 @@ console.log("🟡 Add to Quote Payload:", payload);
     }
   };
 
-  if (loading) {
-    return <div className="text-center mt-5">Loading product...</div>;
-  }
+
 
   if (!product) {
     return <div className="text-center mt-5">Product not found</div>;
