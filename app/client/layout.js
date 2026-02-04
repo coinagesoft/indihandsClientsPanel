@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
-
+import Footer from "./Footer/page"
 export default function ClientLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -20,6 +20,7 @@ export default function ClientLayout({ children }) {
         }`}
       >
         {children}
+        <Footer/>
       </main>
     </div>
   );

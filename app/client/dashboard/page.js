@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
-
 export default function DashboardPage() {
   useAuthGuard();
 
@@ -62,7 +61,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className={`${styles.dashboardWrapper} container-fluid py-5`}>
+      <div className={`${styles.dashboardWrapper} container-fluid pt-5 pb-4`}>
         <div className={styles.dashboardCanvas}></div>
 
         {/* STATS CARDS */}
@@ -116,7 +115,10 @@ export default function DashboardPage() {
             </table>
           </div>
         </div>
+
+  
       </div>
+
     </>
   );
 }

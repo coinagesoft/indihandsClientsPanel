@@ -8,6 +8,8 @@
   margin-left: 240px;
   transition: margin-left 0.25s ease;
   width: 100%;
+position: relative;
+  z-index: 5;  
   /* margin-bottom: 40px; */
 }
 
