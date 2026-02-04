@@ -9,24 +9,37 @@ export default function DashboardPage() {
 
   const [stats, setStats] = useState([]);
   const [recentRFQs, setRecentRFQs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/client/dashboard/stats")
-      .then((res) => res.json())
-      .then((data) => {
-        setStats([
-          { label: "OPEN RFQs", value: data.openRFQs ?? 0 },
-          { label: "ACCEPTED RFQs", value: data.acceptedRFQs ?? 0 },
-          { label: "PENDING PROPOSALS", value: data.pendingProposals ?? 0 },
-          { label: "REJECTED RFQs", value: data.rejectedRFQs ?? 0 },
+    async function loadDashboard() {
+      try {
+        const [statsRes, rfqsRes] = await Promise.all([
+          fetch("/api/client/dashboard/stats"),
+          fetch("/api/client/dashboard/recent-rfqs"),
         ]);
-      });
-  }, []);
 
-  useEffect(() => {
-    fetch("/api/client/dashboard/recent-rfqs")
-      .then((res) => res.json())
-      .then((data) => setRecentRFQs(Array.isArray(data) ? data : []));
+        const statsData = await statsRes.json();
+        const rfqsData = await rfqsRes.json();
+
+        setStats([
+          { label: "OPEN RFQs", value: statsData.openRFQs ?? 0 },
+          { label: "ACCEPTED RFQs", value: statsData.acceptedRFQs ?? 0 },
+          { label: "PENDING PROPOSALS", value: statsData.pendingProposals ?? 0 },
+          { label: "REJECTED RFQs", value: statsData.rejectedRFQs ?? 0 },
+        ]);
+
+        setRecentRFQs(Array.isArray(rfqsData) ? rfqsData : []);
+      } catch (error) {
+        console.error("Dashboard load error:", error);
+        setStats([]);
+        setRecentRFQs([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboard();
   }, []);
 
   const statusClassMap = {
@@ -36,12 +49,22 @@ export default function DashboardPage() {
     Rejected: "rejected",
   };
 
+   if (loading) {
+    return (
+      <div
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "70vh" }}
+      >
+        <div className="text-muted">Loading dashboard...</div>
+      </div>
+    );
+  }
+
   return (
     <>
+      <div className={`${styles.dashboardWrapper} container-fluid py-5`}>
+        <div className={styles.dashboardCanvas}></div>
 
-      {/* MAIN DASHBOARD CONTENT */}
-      <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
-      <div className={styles.dashboardCanvas} ></div>
         {/* STATS CARDS */}
         <div className="row g-4 mt-2">
           {stats.map((item, index) => (
@@ -55,10 +78,10 @@ export default function DashboardPage() {
         </div>
 
         {/* RECENT RFQs TABLE */}
-        <div className={`${styles.recentBox} `}>
+        <div className={styles.recentBox}>
           <h4 className={styles.recentTitle}>Recent RFQs</h4>
 
-          <div className="table-responsive mt-3 ">
+          <div className="table-responsive mt-3">
             <table className={`table ${styles.tableCustom}`}>
               <thead>
                 <tr>
