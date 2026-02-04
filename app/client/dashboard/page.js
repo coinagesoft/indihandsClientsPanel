@@ -52,10 +52,10 @@ export default function DashboardPage() {
    if (loading) {
     return (
       <div
-        className=""
-        style={{ minHeight: "70vh" }}
+        className="mt-5"
+        // style={{ minHeight: "70vh" }}
       >
-        <div className="text-muted text-center mt-4">Loading dashboard...</div>
+        <div className="text-muted text-center mt-5">Loading dashboard...</div>
       </div>
     );
   }
