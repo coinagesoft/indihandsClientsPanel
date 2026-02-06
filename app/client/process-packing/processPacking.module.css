@@ -14,12 +14,39 @@
 }
 
 
+.dashboardCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
 
+  background-image:
+    url("/images/mandala-large-left.png"),
+    url("/images/motif-top-right.png"),
+    url("/images/bottom-right-mandala.png"),
+    url("/images/motif-bottom-left.png");
+
+  background-repeat: no-repeat;
+  background-position:
+    top 10px left 30px,
+    top 30px right 40px,
+    bottom 80px right 30px,
+    bottom 90px left 40px;
+
+  background-size:
+    120px auto,
+    80px auto,
+    260px auto,
+    90px auto;
+
+  opacity: 1; /* MUCH softer */
+}
 /* ================= DASHBOARD WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   min-height: 100vh; /* ensure wrapper covers full viewport */
+   padding: 32px 28px;
 }
 /* ================= STEP CARDS ================= */
 
@@ -71,4 +98,130 @@
   color: var(--color-gray-dark);
   line-height: 1.6;
   margin-bottom: 50px;
+}
+.dashboardCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background-image:
+    url("/images/parrot.png"),
+    url("/images/sun.png"),
+    url("/images/page3_bottom_right_logo.png");
+
+  background-repeat: no-repeat;
+  background-position:
+    top 30px right 40px,
+    top 60px left 30px,
+    bottom 50px right 40px;
+
+  background-size:
+    80px auto,
+    90px auto,
+    220px auto;
+
+  opacity: 0.18;
+}
+.pageTitle {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+
+.subTitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 520px;
+}
+.stepCard {
+  position: relative;
+  background: var(--bg-card);
+  padding: 22px 22px 26px;
+  border-radius: var(--radius-lg);
+  height: 100%;
+
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.stepCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(220, 102, 30, 0.08),
+    rgba(199, 204, 107, 0.10)
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.stepCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.stepCard:hover::after {
+  opacity: 1;
+}
+.stepTitle {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+
+.stepDesc {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.65;
+}
+.stepNumber {
+  width: 42px;
+  height: 42px;
+
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-hover)
+  );
+
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
+  margin-bottom: 12px;
+}
+.noteBox {
+  background: rgba(199, 204, 107, 0.22);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.65;
+
+  box-shadow: inset 0 0 0 1px rgba(68, 45, 10, 0.12);
+}
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 22px;
+  }
+
+  .stepCard {
+    padding: 18px;
+  }
 }

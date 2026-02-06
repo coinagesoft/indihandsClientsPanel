@@ -11,16 +11,35 @@ export default function RFQDetailsPage() {
   const [rfq, setRfq] = useState(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+useEffect(() => {
+  const token = localStorage.getItem("client_token");
+  if (!token || !rfqId) {
+    setLoading(false);
+    return;
+  }
 
-  useEffect(() => {
-    fetch(`/api/client/rfq-details/${rfqId}`)
-      .then(res => res.json())
-      .then(data => {
-        setRfq(data.rfq || null);
-        setItems(Array.isArray(data.items) ? data.items : []);
-      })
-      .finally(() => setLoading(false));
-  }, [rfqId]);
+  fetch(`/api/client/rfq-details/${rfqId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      setRfq(data.rfq || null);
+      setItems(Array.isArray(data.items) ? data.items : []);
+    })
+    .catch(err => {
+      console.error("RFQ details fetch error:", err);
+      setRfq(null);
+      setItems([]);
+    })
+    .finally(() => setLoading(false));
+}, [rfqId]);
+
 
 
   if (!rfq) {
@@ -45,13 +64,13 @@ export default function RFQDetailsPage() {
   const totalAmount = items.reduce((s, i) => s + Number(i.total), 0);
 
   return (
-    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+    <div className={`${styles.dashboardWrapper} container-fluid  `}>
       <div className={styles.dashboardCanvas} ></div>
 
       {/* HEADER */}
       <div className={styles.header}>
         <div>
-          <h4 className={styles.pageTitle}>RFQ-{rfq.id}</h4>
+          <h4 className='pageTitle'>RFQ-{rfq.id}</h4>
           <p className={styles.subText}>
             Submitted on{" "}
             {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}

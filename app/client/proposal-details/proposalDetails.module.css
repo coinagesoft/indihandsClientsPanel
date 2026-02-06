@@ -1,68 +1,174 @@
-
 .dashboardCanvas {
-  position: absolute; /* relative to dashboardWrapper */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   z-index: 9999;
   pointer-events: none;
 
-  /* Multiple backgrounds */
   background-image:
     url("/images/motif-top-right.png"),
+    url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
     url("/images/page3_bottom_left_logo.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
 
-  /* Fixed positions (px instead of % for independence) */
+  background-repeat: no-repeat;
   background-position:
-    top 20px right 30px,
-    bottom 10px right 10px,
-    bottom 10px left 20px;
+    top 10px right 40px,
+    top 40px left -20px,
+    bottom -10px right 40px,
+    bottom -10px left 40px;
 
-  /* Explicit sizes for each logo/motif */
   background-size:
-    70px 70px,   /* motif-top-right */
-    220px auto,  /* bottom-right logo */
-    130px auto;   /* bottom-left logo */
-  opacity: 1;
+    100px auto,
+    90px auto,
+    220px auto,
+    120px auto;
+
+  opacity: 1; /* decorative only */
 }
 
-
-
-
-
-/* ================= DASHBOARD WRAPPER ================= */
+/* ================= WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
-  z-index: 2;
-  padding-top: 40px;
-  padding-bottom: 180px;
-  min-height: 100vh; /* ensure wrapper covers full viewport */
+  min-height: 100vh;
+  padding: 32px 28px;
+
 }
-.pageTitle {
-  color: var(--color-primary);
-  font-size: var(--fs-lg);
-  font-weight: 600;
-  margin-bottom: 10px;
+/* ================= ACCORDION CARD ================= */
+.accordionCard {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
-.subTitle {
-  font-size: 14px;
-  color: #666;
-}
-
-/* STATUS */
-.statusBox {
-  background: #fff;
-  padding: 14px 16px;
-  border-radius: 12px;
+/* ================= HEADER ================= */
+.accordionHeader {
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 }
 
+.dashboardWrapper {
+  position: relative;
+  min-height: 100vh;
+  padding: 32px 28px;
+
+}
+
+.rfqMeta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ================= CHEVRON ================= */
+.chevron {
+  transition: transform 0.35s ease;
+  color: var(--text-muted);
+}
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+/* ================= BODY (RFQ-HISTORY LEVEL SMOOTH) ================= */
+.accordionBody {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 24px;
+  transform: translateY(-4px);
+
+  transition:
+    max-height 0.55s ease,
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    padding 0.4s ease;
+}
+
+.accordionBody.open {
+  max-height: 2000px;
+  opacity: 1;
+  transform: translateY(0);
+  padding: 20px 24px 24px;
+}
+
+/* ================= META ================= */
+.proposalMeta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* ================= ACTION BAR ================= */
+.actionBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+/* ================= BUTTON BASE ================= */
+.actionBtn {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+/* DOWNLOAD */
+.secondaryBtn {
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
+}
+.secondaryBtn:hover {
+  background: rgba(220, 102, 30, 0.08);
+  transform: translateY(-1px);
+}
+
+/* APPROVE */
+.approveBtn {
+  background: linear-gradient(135deg, #90ac30, #7f9928);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(144, 172, 48, 0.35);
+}
+.approveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(144, 172, 48, 0.45);
+}
+
+/* REJECT */
+.rejectBtn {
+  background: rgba(162, 20, 24, 0.12);
+  color: var(--color-danger);
+  border: 1.5px solid rgba(162, 20, 24, 0.35);
+}
+.rejectBtn:hover {
+  background: rgba(162, 20, 24, 0.18);
+  transform: translateY(-1px);
+}
+
+/* ================= STATUS ================= */
 .status {
   display: inline-flex;
   align-items: center;
@@ -70,7 +176,7 @@
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 600;
+  font-family: var(--font-ui);
 }
 
 .statusDot {
@@ -79,175 +185,35 @@
   border-radius: 50%;
 }
 
-.approved {
-  background: linear-gradient(135deg, #e0f6e9, #c8efd7);
-  color: #1e7e34;
-}
-.approved .statusDot { background: #1e7e34; }
-
 .pending {
-  background: linear-gradient(135deg, #fff4cc, #ffe8a3);
-  color: #856404;
+  background: rgba(251, 241, 230, 0.9);
+  color: #7a5b00;
 }
-.pending .statusDot { background: #856404; }
+.pending .statusDot {
+  background: #7a5b00;
+}
+
+.approved {
+  background: rgba(144, 172, 48, 0.28);
+  color: #3f4f14;
+}
+.approved .statusDot {
+  background: #3f4f14;
+}
 
 .rejected {
-  background: linear-gradient(135deg, #fde2e2, #f9caca);
-  color: #a71d2a;
+  background: rgba(162, 20, 24, 0.22);
+  color: var(--color-danger);
 }
-.rejected .statusDot { background: #a71d2a; }
-
-/* TABLE */
-.tableBox {
-  background: #faecd9;
-  padding: 18px;
-  border-radius: 16px;
+.rejected .statusDot {
+  background: var(--color-danger);
 }
 
-.customTable th {
-  background: #f3dcc4;
-  border: none;
-  font-weight: 600;
-}
-
-.customTable td {
-  border: none;
-}
-
-.productName {
-  font-weight: 500;
-}
-
-/* SUMMARY */
-.summaryBox {
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-}
-
-.summaryRow {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.grand {
-  font-weight: 600;
-  border-top: 1px solid #eee;
-  padding-top: 8px;
-}
-
-/* BUTTON */
-.actionBtn {
-  width: 100%;
-  margin-top: 14px;
-  background: var(--color-primary);
-  color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 400;
-}
-
-/* EMPTY / LOADING */
-.emptyState,
-.loading {
+/* ================= STATES ================= */
+.loading,
+.emptyState {
+  padding: 24px 0;
   text-align: center;
-  margin-top: 80px;
-  color: #666;
-}
-.divider {
-  margin: 10px 0;
-  border-top: 1px dashed #e0cdb8;
-}
-
-.headerCard {
-  background: #fff;
-  padding: 18px 20px;
-  border-radius: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.proposalNo {
-  margin: 0;
-  font-weight: 600;
-}
-
-.metaLine {
-  font-size: 13px;
-  color: #777;
-  margin-top: 2px;
-}
-
-.infoCard {
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px;
-  height: 100%;
-}
-
-.infoTitle {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.infoText {
-  font-size: 14px;
-  color: #555;
-  margin: 0;
-}
-.productImg {
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #e7d5c0;
-  background: #fff;
-}
-
-.noImg {
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
-  background: #f3dcc4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  font-size: 12px;
-}
-
-.productName {
-  font-weight: 600;
-}
-
-.productCode {
-  font-size: 12px;
-  color: #777;
-}
-.actionRow {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.approveBtn {
-  flex: 1;
-  background: #1e7e34;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: 400;
-}
-
-.rejectBtn {
-  flex: 1;
-  background: #a71d2a;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
+  color: var(--text-muted);
+  margin-top: 30px;
 }

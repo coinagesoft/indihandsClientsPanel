@@ -1,13 +1,28 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
+
 
 export async function GET(req, { params }) {
   try {
+    /* ✅ params destructure (NO await) */
     const { rfqId } = await params;
-    const companyId = 1;
-    const branchId = 1;
 
-    /* RFQ HEADER */
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch (err) {
+      console.error("Auth error:", err.message);
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
+
+    /* ===== RFQ HEADER ===== */
     const [[rfq]] = await db.query(
       `
       SELECT
@@ -31,7 +46,7 @@ export async function GET(req, { params }) {
       );
     }
 
-    /* RFQ PRODUCTS */
+    /* ===== RFQ PRODUCTS ===== */
     const [items] = await db.query(
       `
       SELECT
@@ -48,7 +63,7 @@ export async function GET(req, { params }) {
 
     return NextResponse.json({
       rfq,
-      items
+      items,
     });
 
   } catch (error) {
@@ -59,4 +74,5 @@ export async function GET(req, { params }) {
     );
   }
 }
+
 

@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
 export async function POST() {
   try {
-    const companyId = 1; // TODO: from auth
-    const branchId = 1;  // TODO: from auth
+ let decoded;
+      try {
+        decoded = verifyToken(req);
+      } catch {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+    const { companyId, branchId } = decoded;
 
     /* 1️⃣ FIND DRAFT RFQ */
     const [[rfq]] = await db.query(

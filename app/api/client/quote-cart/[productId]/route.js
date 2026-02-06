@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
 
 export async function DELETE(req, { params }) {
   try {
-    const { productId } = await params;
-    const companyId = 1; // TODO: from auth/session
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
+    const { productId } = params;
 
     if (!productId) {
       return NextResponse.json(
@@ -13,19 +25,21 @@ export async function DELETE(req, { params }) {
       );
     }
 
-    /* 1️⃣ FIND DRAFT RFQ */
+    /* 1️⃣ FIND DRAFT RFQ (company + branch scoped) */
     const [[rfq]] = await db.query(
       `
       SELECT id
       FROM rfqs
       WHERE company_id = ?
+        AND branch_id = ?
         AND status = 'Draft'
       LIMIT 1
       `,
-      [companyId]
+      [companyId, branchId]
     );
 
     if (!rfq) {
+      // cart already empty – safe no-op
       return NextResponse.json({ success: true });
     }
 
@@ -48,3 +62,4 @@ export async function DELETE(req, { params }) {
     );
   }
 }
+

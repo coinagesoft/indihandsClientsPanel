@@ -1,11 +1,22 @@
 export const runtime = "nodejs";
 import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
 
 export async function GET(req, { params }) {
   try {
     const { rfqId } = await params;
     const rfq_id = Number(rfqId);
-    const companyId = 1; // TODO: from auth
+   let decoded;
+      try {
+        decoded = verifyToken(req);
+      } catch (err) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+  
+      const { companyId, branchId } = decoded;
 
     if (!rfq_id) {
       return Response.json({ proposal: null });

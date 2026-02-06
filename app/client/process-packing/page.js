@@ -27,17 +27,15 @@ export default function ProcessPackingPage() {
   ];
 
   return (
-    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+    <div className={`${styles.dashboardWrapper} container-fluid  `}>
       <div className={styles.dashboardCanvas} ></div>
       {/* Page Header */}
-      <div className="row mt-3">
-        <div className="col">
-          <h4 className={styles.pageTitle}>Process of Packing</h4>
+    
+          <h4 className='pageTitle '>Process of Packing</h4>
           <p className={styles.subTitle}>
             From artisan hands to your workspace — carefully packed at every step
           </p>
-        </div>
-      </div>
+    
 
       {/* Steps */}
       <div className="row mt-4 g-4">

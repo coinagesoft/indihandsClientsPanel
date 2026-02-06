@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const companyId = 1; // TODO: from auth
-    const branchId = 1;  // TODO: from auth
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch (err) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
 
     /* 1️⃣ FIND DRAFT RFQ (company + branch) */
     const [[rfq]] = await db.query(
@@ -22,7 +33,7 @@ export async function GET() {
     if (!rfq) {
       return NextResponse.json({
         items: [],
-        summary: { totalItems: 0, subtotal: 0 }
+        summary: { totalItems: 0, subtotal: 0 },
       });
     }
 
@@ -51,8 +62,8 @@ export async function GET() {
       items,
       summary: {
         totalItems: items.reduce((s, i) => s + i.qty, 0),
-        subtotal
-      }
+        subtotal,
+      },
     });
 
   } catch (error) {
@@ -68,17 +79,24 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    // TODO: replace with auth later
-    const companyId = 1;
-    const branchId = 1;
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
 
     const { productId, quantity } = await req.json();
 
-    console.log("🟢 Quote Cart Payload:", { productId, quantity });
-
     if (!productId || !quantity || quantity < 1) {
       return NextResponse.json(
-        { error: "Invalid payload", received: { productId, quantity } },
+        { error: "Invalid payload" },
         { status: 400 }
       );
     }
@@ -159,14 +177,9 @@ export async function POST(req) {
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error("Add to Quote Error FULL:", {
-      message: error.message,
-      sqlMessage: error.sqlMessage,
-      stack: error.stack,
-    });
-
+    console.error("Add to Quote Error:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to add to quote" },
+      { error: "Failed to add to quote" },
       { status: 500 }
     );
   }
@@ -176,8 +189,18 @@ export async function POST(req) {
 
 export async function PATCH(req) {
   try {
-    const companyId = 1; // TODO: from auth
-    const branchId = 1;  // TODO: from auth
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
 
     const { productId, action } = await req.json();
 
@@ -188,6 +211,7 @@ export async function PATCH(req) {
       );
     }
 
+    /* 1️⃣ FIND DRAFT RFQ (company + branch scoped) */
     const [[rfq]] = await db.query(
       `
       SELECT id
@@ -240,4 +264,6 @@ export async function PATCH(req) {
     );
   }
 }
+
+
 

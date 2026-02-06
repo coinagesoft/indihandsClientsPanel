@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='text-center mt-t pt-5'>Terms and conditions</div>
+    <div className='text-center mt-t pt-5 pageTitle'>Terms and conditions</div>
   )
 }
 

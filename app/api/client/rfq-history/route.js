@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const companyId = 1;
-    const branchId = 1;
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch (err) {
+      console.error("Auth error:", err.message);
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
 
     const [rows] = await db.query(
       `
@@ -35,5 +46,6 @@ export async function GET() {
     );
   }
 }
+
 
 

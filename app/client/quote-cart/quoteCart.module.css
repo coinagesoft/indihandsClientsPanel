@@ -1,278 +1,238 @@
+/* ================= CANVAS ================= */
 .dashboardCanvas {
-  position: absolute; /* relative to dashboardWrapper */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
- z-index: 9999;
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
   pointer-events: none;
 
-  /* Multiple backgrounds */
   background-image:
-  url("/images/sun.png"),
-  url("/images/page3_bottom_right_logo.png"),
+    url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
+    url("/images/page3_bottom_left_logo.png"),
     url("/images/parrot.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
 
-  /* Fixed positions (px instead of % for independence) */
+  background-repeat: no-repeat;
   background-position:
-    top 15px right 30px,
-     top 10px left -10px,
-    bottom 10px right 10px,
-    bottom 5px left 20px;
+    top 20px right 40px,
+    top 40px left 10px,
+    bottom 50px right 40px,
+    bottom 40px left 40px;
 
-  /* Explicit sizes for each logo/motif */
   background-size:
-    90px 90px,
-    90px 90px,   /* motif-top-right */
-    220px auto,  /* bottom-right logo */
-    100px auto;   /* bottom-left logo */
-  opacity: 1;
+    90px auto,
+    90px auto,
+    200px auto,
+    100px auto;
+
+  opacity: 1; /* decorative only */
 }
 
-
-
-
-
-
-/* ================= DASHBOARD WRAPPER ================= */
+/* ================= WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
-  z-index: 2;
-  padding-top: 40px;
-  padding-bottom: 180px;
-  min-height: 100vh; /* ensure wrapper covers full viewport */
-}
-/* ================= PAGE TITLE ================= */
-.pageTitle {
-  color: var(--color-primary);
-  font-weight: 600;
-  font-size: 20px;
+  min-height: 100vh;
+  padding: 32px 28px;
+
 }
 
-/* ================= CENTER WRAPPER ================= */
+/* ================= PAGE TITLE ================= */
+
+
+/* ================= CENTER STATES ================= */
 .centerWrapper {
   min-height: 70vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-/* ================= SUCCESS CARD ================= */
-.successCard {
-  background: #faecd9;
-  padding: 40px 32px;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
+/* ================= SUCCESS / EMPTY CARD ================= */
+.successCard,
+.emptyCard {
+  background: var(--bg-card);
+  padding: 42px 36px;
+  border-radius: var(--radius-lg);
+  max-width: 460px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
+/* ================= SUCCESS ================= */
 .successIcon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 16px;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
   border-radius: 50%;
-  background: #28a745;
-  color: white;
+  background: rgba(144, 172, 48, 0.25);
+  color: var(--color-success);
   font-size: 36px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .successTitle {
-  color: var(--color-primary);
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-family: var(--font-heading);
+  color: var(--text-heading);
+  margin-bottom: 8px;
 }
 
 .successText {
   font-size: 14px;
-  color: #555;
-  margin-bottom: 24px;
+  color: var(--text-muted);
+  margin-bottom: 26px;
 }
 
-/* ================= EMPTY CARD ================= */
-.emptyCard {
-  background: #faecd9;
-  padding: 32px;
-  border-radius: 16px;
-  text-align: center;
-  max-width: 420px;
-}
-
-.emptyCard h5 {
-  color: var(--color-primary);
-  margin-bottom: 6px;
-}
-
-.emptyCard p {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 16px;
-}
-
-/* ================= ACTION BUTTONS ================= */
+/* ================= ACTIONS ================= */
 .successActions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .primaryBtn {
   background: var(--color-primary);
-  color: white;
+  color: #fff;
+  font-family: var(--font-ui);
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .primaryBtn:hover {
-  opacity: 0.9;
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .secondaryBtn {
   background: transparent;
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
+  font-family: var(--font-ui);
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .secondaryBtn:hover {
   background: var(--color-primary);
-  color: white;
+  color: #fff;
 }
 
 /* ================= CART BOX ================= */
 .cartBox {
-  background: #faecd9;
-  padding: 16px;
-  border-radius: 12px;
+  background: var(--bg-card);
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
-/* ================= PRODUCT NAME ================= */
+/* ================= PRODUCT CELL ================= */
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.productImg {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: zoom-in;
+  border: 1px solid rgba(68, 45, 10, 0.12);
+}
+
 .productName {
-  font-weight: 500;
-  color: var(--color-primary);
+  font-family: var(--font-ui);
+  color: var(--text-heading);
 }
 
-/* ================= QTY CONTROL ================= */
+/* ================= QTY ================= */
 .qtyControl {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .qtyControl button {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(68, 45, 10, 0.2);
+  background: var(--bg-card);
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-/* ================= REMOVE BUTTON ================= */
+.qtyControl button:hover {
+  background: var(--bg-soft);
+}
+
+/* ================= REMOVE ================= */
 .removeBtn {
   background: transparent;
   border: none;
   font-size: 18px;
-  color: #888;
+  color: var(--text-muted);
   cursor: pointer;
 }
 
 .removeBtn:hover {
-  color: red;
+  color: var(--color-danger);
 }
 
 /* ================= SUMMARY ================= */
 .summaryBox {
-  background: #faecd9;
-  padding: 16px;
-  border-radius: 12px;
+  background: var(--bg-card);
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.summaryBox h6 {
+  font-family: var(--font-ui);
+  margin-bottom: 14px;
 }
 
 .summaryRow {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
 }
 
-.submitBtn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-}
-
-
-/* ================= SUBMIT BUTTON ================= */
-
+/* ================= SUBMIT ================= */
 .submitBtn {
   width: 100%;
   margin-top: 16px;
   padding: 12px;
   background: var(--color-primary);
-  color: var(--color-white);
+  color: #fff;
   border: none;
   border-radius: var(--radius-md);
-  font-size: var(--fs-md);
-  font-weight: 500;
+  font-family: var(--font-ui);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  transition: all 0.25s ease;
 }
 
 .submitBtn:hover {
-  opacity: 0.95;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
-/* ================= EMPTY STATE ================= */
-
-.emptyCart {
-  text-align: center;
-  margin-top: 60px;
-  color: var(--color-gray-dark);
-  font-size: var(--fs-md);
-}
-/* PRODUCT CELL */
-.productCell {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.productImg {
-  width: 54px;
-  height: 54px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: zoom-in;
-  border: 1px solid #eee;
-}
-
-.productName {
-  font-weight: 500;
-}
-
-/* ZOOM MODAL */
+/* ================= ZOOM ================= */
 .zoomOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,12 +240,12 @@
 }
 
 .zoomBox {
-  position: relative;
   background: #fff;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 14px;
+  border-radius: var(--radius-md);
   max-width: 90%;
   max-height: 90%;
+  position: relative;
 }
 
 .zoomBox img {
@@ -298,11 +258,36 @@
   position: absolute;
   top: -10px;
   right: -10px;
-  background: #9c2c2c;
+  background: var(--color-primary);
   color: #fff;
   border: none;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   cursor: pointer;
+}
+.tableCustom {
+  font-size: 14px;
+}
+
+.tableCustom thead th {
+  font-family: var(--font-ui);
+  color: var(--color-secondary);
+  font-size: 13px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(68, 45, 10, 0.12);
+}
+
+.tableCustom tbody td {
+  padding: 14px 8px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.tableCustom tbody tr {
+  transition: background 0.25s ease;
+}
+
+.tableCustom tbody tr:hover {
+  background: rgba(199, 204, 107, 0.22);
 }

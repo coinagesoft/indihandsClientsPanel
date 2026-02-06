@@ -5,308 +5,261 @@ import styles from "./proposalDetails.module.css";
 
 export default function ProposalDetailsPage() {
   const [rfqs, setRfqs] = useState([]);
-  const [selectedRfq, setSelectedRfq] = useState("");
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [openRfq, setOpenRfq] = useState(null);
+  const [proposalData, setProposalData] = useState({});
+  const [loadingRfq, setLoadingRfq] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  /* ================= RFQs ================= */
-  useEffect(() => {
-    fetch("/api/client/rfqs-with-proposals")
-      .then(res => res.json())
-      .then(setRfqs)
-      .catch(() => setRfqs([]));
-  }, []);
+  /* ================= RFQ LIST ================= */
+useEffect(() => {
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    setRfqs([]);
+    return;
+  }
 
-  /* ================= PROPOSAL BY RFQ ================= */
-  useEffect(() => {
-    if (!selectedRfq) {
-      setData(null);
+  fetch("/api/client/rfqs-with-proposals", {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => setRfqs(Array.isArray(data) ? data : []))
+    .catch(() => setRfqs([]));
+}, []);
+
+
+  /* ================= LOAD PROPOSAL ================= */
+ const loadProposal = async (rfqId, force = false) => {
+  if (proposalData[rfqId] && !force) return;
+
+  const token = localStorage.getItem("client_token");
+  if (!token) return;
+
+  setLoadingRfq(rfqId);
+
+  const res = await fetch(`/api/client/proposal-by-rfq/${rfqId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  });
+
+  const data = await res.json();
+
+  setProposalData(prev => ({
+    ...prev,
+    [rfqId]: data,
+  }));
+
+  setLoadingRfq(null);
+};
+
+
+  /* ================= APPROVE / REJECT ================= */
+ const updateStatus = async (proposalId, status, rfqId) => {
+  if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
+
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    alert("Unauthorized");
+    return;
+  }
+
+  try {
+    setActionLoading(true);
+
+    const res = await fetch("/api/client/proposal-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+      },
+      body: JSON.stringify({ proposalId, status }),
+    });
+
+    if (!res.ok) {
+      alert("Failed to update status");
       return;
     }
 
-    setLoading(true);
-    fetch(`/api/client/proposal-by-rfq/${selectedRfq}`)
-      .then(res => res.json())
-      .then(setData)
-      .finally(() => setLoading(false));
-  }, [selectedRfq]);
+    // 🔄 Force reload proposal so UI updates immediately
+    await loadProposal(rfqId, true);
 
-  const proposal = data?.proposal;
+  } finally {
+    setActionLoading(false);
+  }
+};
 
-  const statusKey =
-    proposal?.status?.toLowerCase()?.replace(/\s+/g, "") || "";
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    return new Date(dateStr).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  /* ================= APPROVE / REJECT ================= */
-  const updateStatus = async (status) => {
-    if (!proposal?.id) return;
-
-    const confirmMsg =
-      status === "Approved"
-        ? "Are you sure you want to APPROVE this proposal?"
-        : "Are you sure you want to REJECT this proposal?";
-
-    if (!confirm(confirmMsg)) return;
-
-    try {
-      setActionLoading(true);
-
-      const res = await fetch("/api/client/proposal-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          proposalId: proposal.id,
-          status,
-        }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        alert(result.message || "Action failed");
-        return;
-      }
-
-      alert(`Proposal ${status} successfully`);
-
-      // 🔄 Reload proposal
-      fetch(`/api/client/proposal-by-rfq/${selectedRfq}`)
-        .then(res => res.json())
-        .then(setData);
-
-    } finally {
-      setActionLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (data?.totals) {
-      console.log("UI Totals", {
-        subtotal: data.totals.subtotal,
-        totalTax: data.totals.totalTax,
-        grandTotal: data.totals.subtotal + data.totals.totalTax,
-      });
-    }
-  }, [data]);
-
-  return (
-    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
-      <div className={styles.dashboardCanvas} ></div>
-
-      {/* TITLE */}
-      <h4 className={styles.pageTitle}>Proposal Details</h4>
-
-      {/* RFQ SELECT */}
-      <div className="row mt-2">
-        <div className="col-md-4">
-          <label className="form-label">Select RFQ</label>
-          <select
-            className="form-select"
-            value={selectedRfq}
-            onChange={e => setSelectedRfq(e.target.value)}
-          >
-            <option value="">-- Select RFQ --</option>
-            {rfqs.map(r => (
-              <option key={r.rfq_id} value={r.rfq_id}>
-                RFQ-{r.rfq_id}
-                {r.proposal_id ? " • Proposal Sent" : ""}
-              </option>
-            ))}
-          </select>
-        </div>
+  if (rfqs.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <h5>No Proposal found</h5>
+        <p>Your sent proposal will appear here.</p>
       </div>
+    );
+  }
+  
+  return (
+    <div className={`${styles.dashboardWrapper} container-fluid `}>
+      <div className={styles.dashboardCanvas} />
 
-      {/* LOADING */}
-      {loading && <div className={styles.loading}>Loading proposal…</div>}
+      <h4 className='pageTitle'>Proposal Details</h4>
 
-      {/* EMPTY */}
-      {selectedRfq && !loading && !proposal && (
-        <div className={styles.emptyState}>
-          <h6>Proposal not sent yet</h6>
-          <p>Please wait until admin sends the proposal.</p>
-        </div>
-      )}
+      <div className="mt-4">
+        {rfqs.map(rfq => {
+          const isOpen = openRfq === rfq.rfq_id;
+          const data = proposalData[rfq.rfq_id];
+          const proposal = data?.proposal;
 
-      {/* ================= PROPOSAL ================= */}
-      {proposal && (
-        <>
-          {/* HEADER */}
-          <div className={`${styles.headerCard} mx-5 px-4 mt-5`}>
-            <div>
-              <h5 className={styles.proposalNo}>
-                Proposal #{proposal.proposal_number}
-              </h5>
-              <div className={styles.metaLine}>
-                RFQ-{proposal.rfq_id} • {formatDate(proposal.proposal_date)}
-              </div>
-            </div>
+          const statusKey =
+            proposal?.status?.toLowerCase()?.replace(/\s+/g, "") || "";
 
-            <span className={`${styles.status} ${styles[statusKey]}`}>
-              <span className={styles.statusDot} />
-              {proposal.status}
-            </span>
-          </div>
+          const canTakeAction =
+            proposal && ["Pending", "Sent"].includes(proposal.status);
 
-          {/* ADDRESSES */}
-          <div className="row mt-4 mx-5">
-            <div className="col-md-6 text-start">
-              <div className={styles.infoCard}>
-                <div className={styles.infoTitle}>Billing Address</div>
-                <p className={styles.infoText}>
-                  {proposal.billing_address}
-                </p>
-              </div>
-            </div>
-
-            <div className="col-md-6 text-end">
-              <div className={styles.infoCard}>
-                <div className={styles.infoTitle}>Shipping Address</div>
-                <p className={styles.infoText}>
-                  {proposal.shipping_address}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ITEMS */}
-          <div className={`${styles.tableBox} mt-3 mx-5`}>
-            <table className={`table mb-0 ${styles.customTable}`}>
-              <thead>
-                <tr>
-                  <th style={{ width: 80 }}>Image</th>
-                  <th>Product</th>
-                  <th className="text-center">HSN</th>
-                  <th className="text-center">Qty</th>
-                  <th className="text-end">Rate</th>
-                  <th className="text-end">Amount</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {data.items.map((i, idx) => (
-                  <tr key={idx}>
-                    <td>
-                      {i.featured_image ? (
-                        <img
-                          src={i.featured_image}
-                          alt={i.description}
-                          className={styles.productImg}
-                        />
-                      ) : (
-                        <div className={styles.noImg}>—</div>
-                      )}
-                    </td>
-
-                    <td>
-                      <div className={styles.productName}>
-                        {i.description}
-                      </div>
-                    </td>
-
-                    <td className="text-center">
-                      {i.hsn || "—"}
-                    </td>
-
-                    <td className="text-center">{i.qty}</td>
-
-                    <td className="text-end">
-                      ₹ {Number(i.rate).toLocaleString()}
-                    </td>
-
-                    <td className="text-end fw-semibold">
-                      ₹ {Number(i.total).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* SUMMARY */}
-          <div className="row mt-5 mx-5">
-            <div className="col-md-7" />
-
-            <div className="col-md-5">
-              <div className={styles.summaryBox}>
-                <div className={styles.summaryRow}>
-                  <span>Subtotal</span>
-                  <span>₹ {Number(data.totals.subtotal).toLocaleString()}</span>
-                </div>
-
-                <div className={styles.summaryRow}>
-                  <span>CGST</span>
-                  <span>₹ {Number(proposal.cgst_total).toLocaleString()}</span>
-                </div>
-
-                <div className={styles.summaryRow}>
-                  <span>SGST</span>
-                  <span>₹ {Number(proposal.sgst_total).toLocaleString()}</span>
-                </div>
-
-                {Number(proposal.igst_total) > 0 && (
-                  <div className={styles.summaryRow}>
-                    <span>IGST</span>
-                    <span>₹ {Number(proposal.igst_total).toLocaleString()}</span>
+          return (
+            <div key={rfq.rfq_id} className={styles.accordionCard}>
+              {/* ================= HEADER ================= */}
+              <div
+                className={styles.accordionHeader}
+                onClick={() => {
+                  setOpenRfq(isOpen ? null : rfq.rfq_id);
+                  if (!isOpen) loadProposal(rfq.rfq_id);
+                }}
+              >
+                <div>
+                  <div className={styles.rfqTitle}>RFQ-{rfq.rfq_id}</div>
+                  <div className={styles.rfqMeta}>
+                    {rfq.proposal_id
+                      ? "Proposal Sent"
+                      : "Waiting for Proposal"}
                   </div>
-                )}
+                </div>
 
-                <hr className={styles.divider} />
-
-                <div className={`${styles.summaryRow} ${styles.grand}`}>
-                  <span>Grand Total</span>
-                  <span>
-                    ₹ {(Number(data.totals.subtotal) + Number(data.totals.totalTax)).toLocaleString()}
+                <div className={styles.headerRight}>
+                  {proposal && (
+                    <span className={`${styles.status} ${styles[statusKey]}`}>
+                      <span className={styles.statusDot} />
+                      {proposal.status}
+                    </span>
+                  )}
+                  <span
+                    className={`${styles.chevron} ${
+                      isOpen ? styles.open : ""
+                    }`}
+                  >
+                    ❯
                   </span>
-
                 </div>
+              </div>
 
-                {/* DOWNLOAD */}
-                <button
-                  className={styles.actionBtn}
-                  onClick={() =>
-                    window.open(
-                      `/api/client/proposal-download/${selectedRfq}`,
-                      "_blank"
-                    )
-                  }
-                >
-                  Download Proposal PDF
-                </button>
+              {/* ================= BODY ================= */}
+              <div
+                className={`${styles.accordionBody} ${
+                  isOpen ? styles.open : ""
+                }`}
+              >
+                {loadingRfq === rfq.rfq_id && (
+                  <div className={styles.loading}>Loading proposal…</div>
+                )}
 
-                {/* CLIENT ACTIONS */}
-                {["Sent", "Pending"].includes(proposal.status) && (
-                  <div className={styles.actionRow}>
-                    <button
-                      className={styles.approveBtn}
-                      disabled={actionLoading}
-                      onClick={() => updateStatus("Approved")}
-                    >
-                      Approve Proposal
-                    </button>
-
-                    <button
-                      className={styles.rejectBtn}
-                      disabled={actionLoading}
-                      onClick={() => updateStatus("Rejected")}
-                    >
-                      Reject Proposal
-                    </button>
+                {!proposal && !loadingRfq && (
+                  <div className={styles.emptyState}>
+                    Proposal not sent yet
                   </div>
                 )}
 
+                {proposal && (
+                  <>
+                    <div className={styles.proposalMeta}>
+                      Proposal #{proposal.proposal_number} •{" "}
+                      {new Date(proposal.proposal_date).toLocaleDateString(
+                        "en-IN"
+                      )}
+                    </div>
+
+                    {/* ================= ITEMS TABLE ================= */}
+                    <table className={`table ${styles.customTable}`}>
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th className="text-center">Qty</th>
+                          <th className="text-end">Rate</th>
+                          <th className="text-end">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.items.map((i, idx) => (
+                          <tr key={idx}>
+                            <td>{i.description}</td>
+                            <td className="text-center">{i.qty}</td>
+                            <td className="text-end">
+                              ₹ {Number(i.rate).toLocaleString()}
+                            </td>
+                            <td className="text-end fw-semibold">
+                              ₹ {Number(i.total).toLocaleString()}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* ================= ACTION BAR ================= */}
+                    <div className={styles.actionBar}>
+                      <button
+                        className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                        onClick={() =>
+                          window.open(
+                            `/api/client/proposal-download/${rfq.rfq_id}`
+                          )
+                        }
+                      >
+                        Download PDF
+                      </button>
+
+                      {canTakeAction && (
+                        <>
+                          <button
+                            className={`${styles.actionBtn} ${styles.rejectBtn}`}
+                            disabled={actionLoading}
+                            onClick={() =>
+                              updateStatus(
+                                proposal.id,
+                                "Rejected",
+                                rfq.rfq_id
+                              )
+                            }
+                          >
+                            Reject
+                          </button>
+
+                          <button
+                            className={`${styles.actionBtn} ${styles.approveBtn}`}
+                            disabled={actionLoading}
+                            onClick={() =>
+                              updateStatus(
+                                proposal.id,
+                                "Approved",
+                                rfq.rfq_id
+                              )
+                            }
+                          >
+                            Approve
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
-          </div>
-        </>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 }

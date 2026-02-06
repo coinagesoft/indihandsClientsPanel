@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const companyId = 1;
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
+    const { companyId } = decoded;
+
+    /* ===== RECENT RFQs ===== */
     const [rows] = await db.query(
       `
       SELECT
@@ -27,10 +40,14 @@ export async function GET() {
       [companyId]
     );
 
-    return NextResponse.json(rows); // ✅ array returned
+    return NextResponse.json(rows); // ✅ safe, company-scoped
 
   } catch (error) {
     console.error("Recent RFQs API Error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
 }
+

@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
 
 export async function DELETE(req, { params }) {
   try {
-    const companyId = 1; // TODO: from auth
-    const addressId = params.id;
+  let decoded;
+  const addressId = params.id;
+       try {
+         decoded = verifyToken(req);
+       } catch {
+         return NextResponse.json(
+           { error: "Unauthorized" },
+           { status: 401 }
+         );
+       }
+     const { companyId, branchId } = decoded;
 
     await db.query(
       `

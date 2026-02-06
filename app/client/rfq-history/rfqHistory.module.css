@@ -1,218 +1,239 @@
+/* ================= CANVAS ================= */
 .dashboardCanvas {
-  position: absolute; /* relative to dashboardWrapper */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
- z-index: 9999;
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
   pointer-events: none;
 
-  /* Multiple backgrounds */
   background-image:
-  url("/images/motif-top-right.png"),
-  url("/images/page3_bottom_right_logo.png"),
+    url("/images/motif-top-right.png"),
+    url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
-    url("/images/sun.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    url("/images/page3_bottom_left_logo.png");
 
-  /* Fixed positions (px instead of % for independence) */
+  background-repeat: no-repeat;
   background-position:
-    top 20px right 30px,
-     top 10px left 10px,
-    bottom 10px right 10px,
-    bottom 5px left 20px;
+    top 10px right 40px,
+    top 90px left -20px,
+    bottom -10px right 40px,
+    bottom -10px left 40px;
 
-  /* Explicit sizes for each logo/motif */
   background-size:
-    70px 70px,
-    70px 70px,   /* motif-top-right */
-    220px auto,  /* bottom-right logo */
-    100px auto;   /* bottom-left logo */
-  opacity: 1;
+    100px auto,
+    90px auto,
+    220px auto,
+    120px auto;
+
+  opacity: 1; /* decorative only */
 }
 
-
-
-
-
-
-/* ================= DASHBOARD WRAPPER ================= */
+/* ================= WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
-  z-index: 2;
-  padding-top: 40px;
-  padding-bottom: 180px;
-  min-height: 100vh; /* ensure wrapper covers full viewport */
-}
-/* ================= RFQ HISTORY ================= */
+  min-height: 100vh;
+  padding: 32px 28px;
 
-.pageTitle {
-  color: var(--color-primary);
-  font-weight: 600;
-  font-size: var(--fs-lg);
 }
+
+/* ================= TITLES ================= */
+
 
 .subtitle {
-  color: var(--color-gray-dark);
-  font-size: var(--fs-sm);
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
-/* TABLE BOX */
+/* ================= TABLE BOX ================= */
 .tableBox {
-  background: #faecd9;
+  background: var(--bg-card);
   padding: 18px;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
-/* TABLE */
-.customTable th {
-  background: #f3dcc4;
-  border: none;
-  font-weight: 600;
+/* ================= TABLE ================= */
+.customTable {
+  font-size: 14px;
 }
 
-.customTable td {
-  border: none;
+.customTable thead th {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-secondary);
+  letter-spacing: 0.4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(68, 45, 10, 0.12);
+}
+
+.customTable tbody td {
+  padding: 14px 10px;
+  color: var(--text-primary);
   vertical-align: middle;
 }
 
-/* RFQ BADGE */
-.rfqBadge {
-  background: #fff;
-  border: 1px solid #f0d5b8;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: var(--color-primary);
+.customTable tbody tr {
+  transition: background 0.25s ease;
 }
 
-/* ROW INTERACTION */
+.customTable tbody tr:hover {
+  background: var(--bg-soft);
+}
+
+/* ================= RFQ BADGE ================= */
+.rfqBadge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--color-primary);
+  background: rgba(220, 102, 30, 0.12);
+}
+
+/* ================= ROW INTERACTION ================= */
 .rowClickable {
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-.rowClickable:hover {
-  background: rgba(0, 0, 0, 0.04);
-  box-shadow: inset 4px 0 0 var(--color-primary);
-}
-
-/* EXPAND ICON */
 .expandIcon {
-  width: 30px;
+  width: 32px;
   text-align: center;
 }
 
 .chevron {
   display: inline-block;
   transition: transform 0.25s ease;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .chevron.open {
   transform: rotate(90deg);
 }
 
-/* EXPAND ROW */
-.expandRow td {
-  background: transparent;
-  padding: 10px;
+/* ================= EXPAND ROW (SMOOTH OPEN + CLOSE) ================= */
+
+/* ================= EXPAND ROW (ALIGNED & CLEAN) ================= */
+
+.expandRow {
+  overflow: hidden;
 }
 
 .expandCell {
   padding: 0;
+  border: none;
 }
+
+/* CLOSED STATE */
+.expandRow .expandBox {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  padding: 0 24px;
+  transform: translateY(-4px);
+
+  transition:
+    max-height 0.45s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    padding 0.35s ease;
+}
+
+/* OPEN STATE */
+.expandRow.open .expandBox {
+  max-height: 240px;
+  opacity: 1;
+  transform: translateY(0);
+  padding: 20px 24px;
+}
+
+/* ================= EXPAND CONTENT LAYOUT ================= */
 
 .expandBox {
-  background: #fff6ea;
-  border-radius: 14px;
-  padding: 16px 18px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between; /* 🔥 key fix */
+  gap: 24px;
+
+  background: rgba(199, 204, 107, 0.22);
+  border-radius: var(--radius-md);
 }
 
+/* Left text */
+.expandBox > div:first-child {
+  max-width: 70%;
+  color: var(--text-primary);
+}
+
+/* ================= ACTIONS (RIGHT ALIGNED) ================= */
 .expandActions {
   display: flex;
-  gap: 10px;
-  white-space: nowrap;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 8px;
 }
 
-/* BUTTONS */
-.primaryBtn {
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 500;
+/* ================= BASE ACTION BUTTON ================= */
+.actionBtn {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 999px; /* pill */
+  cursor: pointer;
   text-decoration: none;
-}
-
-.secondaryBtn {
-  background: transparent;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-
-/* STATUS */
-.status {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  gap: 8px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-.statusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+/* ================= SECONDARY (VIEW DETAILS) ================= */
+.secondaryBtn {
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
 }
 
-/* STATUS COLORS */
-.submitted {
-  background: linear-gradient(135deg, #e8eaff, #d9dcff);
-  color: #2f3ab2;
-}
-.submitted .statusDot {
-  background: #2f3ab2;
+.secondaryBtn:hover {
+  background: rgba(220, 102, 30, 0.08);
+  transform: translateY(-1px);
 }
 
-.underreview {
-  background: linear-gradient(135deg, #fff4cc, #ffe8a3);
-  color: #8a6d00;
-}
-.underreview .statusDot {
-  background: #8a6d00;
-}
-
-.accepted {
-  background: linear-gradient(135deg, #e0f6e9, #c8efd7);
-  color: #1e7e34;
-}
-.accepted .statusDot {
-  background: #1e7e34;
+/* ================= PRIMARY (DOWNLOAD PDF) ================= */
+.primaryBtn {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-hover)
+  );
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
 }
 
-.rejected {
-  background: linear-gradient(135deg, #fde2e2, #f9caca);
-  color: #a71d2a;
-}
-.rejected .statusDot {
-  background: #a71d2a;
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(220, 102, 30, 0.45);
 }
 
-/* EMPTY / LOADING */
+/* ================= DISABLED (SAFE) ================= */
+.actionBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 .emptyState,
 .loading {
   text-align: center;
   margin-top: 80px;
-  color: #666;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 30px;
 }

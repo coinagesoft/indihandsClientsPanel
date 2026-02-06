@@ -31,11 +31,9 @@ useEffect(() => {
   <div className={`${styles.dashboardWrapper} container-fluid   `}>
       <div className={styles.dashboardCanvas} ></div>
       {/* TITLE */}
-      <div className="row mt-3 ">
-        <div className="col-12">
-          <h4 className={styles.pageTitle}>Product Catalog</h4>
-        </div>
-      </div>
+    
+          <h4 className='pageTitle'>Product Catalog</h4>
+     
 
    
 
@@ -60,9 +58,7 @@ useEffect(() => {
 
 
           {/* BADGE */}
-          <span className={styles.badge}>
-            {cat.productCount} Products
-          </span>
+        
 
           {/* CONTENT */}
           <h6 className={styles.cardTitle}>{cat.title}</h6>

@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
 export async function POST(req) {
   try {
-    const companyId = 1; // TODO: from auth
-    const { address } = await req.json();
+  let decoded;
+  const { address } = await req.json();
+       try {
+         decoded = verifyToken(req);
+       } catch {
+         return NextResponse.json(
+           { error: "Unauthorized" },
+           { status: 401 }
+         );
+       }
+     const { companyId, branchId } = decoded;
 
     if (!address?.trim()) {
       return NextResponse.json(

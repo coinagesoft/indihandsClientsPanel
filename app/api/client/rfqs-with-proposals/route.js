@@ -1,10 +1,26 @@
 export const runtime = "nodejs";
+import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
-export async function GET() {
+
+
+export async function GET(req) {
   try {
-    const companyId = 1; // TODO: from auth/session
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch (err) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
+    const { companyId, branchId } = decoded;
+
+    /* ===== RFQ + PROPOSALS (BRANCH SCOPED) ===== */
     const [rows] = await db.query(
       `
       SELECT
@@ -18,18 +34,20 @@ export async function GET() {
        AND p.company_id = ?
        AND p.status IN ('Pending','Approved')
       WHERE r.company_id = ?
+        AND r.branch_id = ?
       ORDER BY r.id DESC
       `,
-      [companyId, companyId]
+      [companyId, companyId, branchId]
     );
 
-    return Response.json(rows);
+    return NextResponse.json(rows);
 
   } catch (err) {
     console.error("RFQ dropdown API error:", err);
-    return Response.json(
+    return NextResponse.json(
       { message: "Server error" },
       { status: 500 }
     );
   }
 }
+

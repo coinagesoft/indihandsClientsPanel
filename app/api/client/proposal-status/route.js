@@ -1,10 +1,22 @@
 export const runtime = "nodejs";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
 export async function POST(req) {
   try {
     const { proposalId, status } = await req.json();
-    const companyId = 1; // TODO: auth
+     /* ===== AUTH ===== */
+      let decoded;
+      try {
+        decoded = verifyToken(req);
+      } catch (err) {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+  
+      const { companyId, branchId } = decoded;
 
     if (!proposalId || !["Approved", "Rejected"].includes(status)) {
       return Response.json(

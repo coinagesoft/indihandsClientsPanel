@@ -74,7 +74,7 @@ const [adding, setAdding] = useState(false);
       {/* HEADER */}
       <div className="row mt-2">
         <div className="col-12">
-          <h4 className={styles.pageTitle}>Products</h4>
+          <h4 className='pageTitle'>Products</h4>
           <p className={styles.pageSubTitle}>
             Art-led desk essentials for leadership spaces
           </p>

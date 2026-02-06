@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
+
 
 function safeJsonArray(value) {
   if (!value) return [];
@@ -24,10 +26,21 @@ function safeJsonArray(value) {
 
 
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const companyId = 1; // TODO: from auth
-    const branchId = 1;  // TODO: from auth
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+      console.log("decoded",decoded)
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId, branchId } = decoded;
 
     /* ===== COMPANY ===== */
     const [[company]] = await db.query(
@@ -40,10 +53,13 @@ export async function GET() {
     );
 
     if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Company not found" },
+        { status: 404 }
+      );
     }
 
-    /* ===== BRANCHES ===== */
+    /* ===== BRANCHES (🔥 MAIN POINT) ===== */
     const [branches] = await db.query(
       `
       SELECT
@@ -63,7 +79,7 @@ export async function GET() {
     );
 
     const formattedBranches = branches.map(b => ({
-      id: b.id,
+      id: b.id, // 🔥 all branch ids of THIS company
       branch_name: b.branch_name,
       gstin: b.gstin,
       billing_address: b.billing_address || "",
@@ -80,8 +96,8 @@ export async function GET() {
         company_name: company.company_name,
         company_email: company.company_email,
       },
-      branches: formattedBranches,
-      active_branch_id: branchId,
+      branches: formattedBranches, // ✅ company che sagle branches
+      active_branch_id: branchId,   // ✅ logged-in branch
     });
 
   } catch (error) {
@@ -95,16 +111,27 @@ export async function GET() {
 
 
 
-
-
-
 export async function PUT(req) {
   try {
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { companyId } = decoded;
+
+    /* ===== BODY ===== */
     const {
       branch_id,
       billing_address,
       shipping_address,
-      primary_contact
+      primary_contact,
     } = await req.json();
 
     if (!branch_id) {
@@ -114,12 +141,30 @@ export async function PUT(req) {
       );
     }
 
+    /* ===== SECURITY CHECK 🔥 ===== */
+    const [[branch]] = await db.query(
+      `
+      SELECT id
+      FROM company_branches
+      WHERE id = ? AND company_id = ?
+      `,
+      [branch_id, companyId]
+    );
+
+    if (!branch) {
+      return NextResponse.json(
+        { error: "Forbidden: Invalid branch access" },
+        { status: 403 }
+      );
+    }
+
+    /* ===== UPDATE ===== */
     await db.query(
       `
       UPDATE company_branches
       SET
         billing_address = ?,
-        shipping_address = ?,       -- ✅ FIX
+        shipping_address = ?,
         contact_person = ?,
         phones = ?,
         emails = ?
@@ -131,7 +176,7 @@ export async function PUT(req) {
         primary_contact?.name || "",
         JSON.stringify(primary_contact?.phones || []),
         JSON.stringify(primary_contact?.emails || []),
-        branch_id
+        branch_id,
       ]
     );
 
@@ -145,5 +190,6 @@ export async function PUT(req) {
     );
   }
 }
+
 
 

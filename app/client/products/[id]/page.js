@@ -78,7 +78,7 @@ console.log("🟡 Add to Quote Payload:", payload);
       {/* TITLE */}
       <div className="row mt-3">
         <div className="col-12">
-          <h4 className={styles.titleMain}>
+          <h4 className='pageTitle'>
             {product.title}
             {product.subtitle && (
               <span className={styles.subTitle}>{product.subtitle}</span>

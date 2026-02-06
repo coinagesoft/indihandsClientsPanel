@@ -14,51 +14,92 @@ export default function QuoteCartPage() {
   // 🔍 image zoom
   const [zoomImg, setZoomImg] = useState(null);
 
-  /* ================= FETCH CART ================= */
-  const fetchCart = async () => {
-    setLoading(true);
-    const res = await fetch("/api/client/quote-cart");
-    const data = await res.json();
-    setCartItems(data.items || []);
-    setLoading(false);
-  };
+/* ================= FETCH CART ================= */
+const fetchCart = async () => {
+  setLoading(true);
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    console.error("Token missing");
+    setLoading(false);
+    return;
+  }
+
+  const res = await fetch("/api/client/quote-cart", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  setCartItems(data.items || []);
+  setLoading(false);
+};
+
+useEffect(() => {
+  fetchCart();
+}, []);
+
 
   /* ================= UPDATE QTY ================= */
-  const updateQty = async (productId, action) => {
-    await fetch("/api/client/quote-cart", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, action }),
-    });
-    fetchCart();
-  };
+const updateQty = async (productId, action) => {
+  const token = localStorage.getItem("client_token");
+  if (!token) return;
+
+  await fetch("/api/client/quote-cart", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+    body: JSON.stringify({ productId, action }),
+  });
+
+  fetchCart();
+};
+
 
   /* ================= DELETE ITEM ================= */
-  const removeItem = async (productId) => {
-    await fetch(`/api/client/quote-cart/${productId}`, {
-      method: "DELETE",
-    });
-    fetchCart();
-  };
+const removeItem = async (productId) => {
+  const token = localStorage.getItem("client_token");
+  if (!token) return;
+
+  await fetch(`/api/client/quote-cart/${productId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  });
+
+  fetchCart();
+};
+
 
   /* ================= SUBMIT RFQ ================= */
-  const submitRFQ = async () => {
-    const res = await fetch("/api/client/submit-rfq", {
-      method: "POST",
-    });
+const submitRFQ = async () => {
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    alert("Unauthorized");
+    return;
+  }
 
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Failed to submit RFQ");
-      return;
-    }
+  const res = await fetch("/api/client/submit-rfq", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  });
 
-    setRfqSubmitted(true);
-  };
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Failed to submit RFQ");
+    return;
+  }
+
+  setRfqSubmitted(true);
+};
+
 
   /* ================= TOTALS ================= */
   const totalItems = cartItems.reduce((sum, i) => sum + i.qty, 0);
@@ -119,20 +160,25 @@ export default function QuoteCartPage() {
       </div>
     );
   }
+const maskAmountWithStars = (amount) => {
+  if (amount === null || amount === undefined) return "";
+  const digits = String(Math.floor(amount)).length;
+  return "*".repeat(digits);
+};
 
   /* ================= CART UI ================= */
   return (
-    <div className={`${styles.dashboardWrapper} container-fluid py-5 `}>
+    <div className={`${styles.dashboardWrapper} container-fluid  `}>
       <div className={styles.dashboardCanvas} ></div>
 
-      <h4 className={styles.pageTitle}>Quote Cart</h4>
+      <h4 className='pageTitle'>Quote Cart</h4>
 
       <div className="row mt-3">
 
         {/* CART TABLE */}
         <div className="col-lg-9">
           <div className={styles.cartBox}>
-            <table className="table mb-0">
+            <table className="table-custom mb-0">
               <thead>
                 <tr>
                   <th>Product</th>
@@ -216,17 +262,17 @@ export default function QuoteCartPage() {
               <span>Total Items</span>
               <span>{totalItems}</span>
             </div>
+<div className={styles.summaryRow}>
+  <span>Total Amount</span>
+  <span>₹ {maskAmountWithStars(totalAmount)}</span>
+</div>
 
-            <div className={styles.summaryRow}>
-              <span>Total Amount</span>
-              <span>₹ {totalAmount.toLocaleString()}</span>
-            </div>
 
             <button
               className={styles.submitBtn}
               onClick={submitRFQ}
             >
-              Submit RFQ
+              Request for Proposal
             </button>
           </div>
         </div>

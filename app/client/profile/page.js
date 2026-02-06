@@ -46,21 +46,39 @@ const handleLogout = async () => {
 
 
   /* ================= FETCH PROFILE ================= */
-  useEffect(() => {
-    fetch("/api/client/company-profile")
-      .then(res => res.json())
-      .then(data => {
-        if (!data?.company) return;
+useEffect(() => {
+  const token = localStorage.getItem("client_token");
 
-        setCompany(data.company);
-        setBranches(data.branches || []);
+  fetch("/api/client/company-profile", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      if (!data?.company) return;
 
-        if (data.branches?.length) {
-          loadBranch(data.branches[0]);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, []);
+      setCompany(data.company);
+      setBranches(data.branches || []);
+
+      // 🔥 logged-in branch select kar
+      if (data.branches?.length) {
+        const activeBranch =
+          data.branches.find(b => b.id === data.active_branch_id) ||
+          data.branches[0];
+
+        loadBranch(activeBranch);
+      }
+    })
+    .catch(err => {
+      console.error("Company profile fetch failed", err);
+    })
+    .finally(() => setLoading(false));
+}, []);
+
 
   const loadBranch = (branch) => {
     if (!branch) return;
@@ -76,42 +94,52 @@ const handleLogout = async () => {
   };
 
   /* ================= SAVE ================= */
-  const saveProfile = async () => {
-    if (!activeBranchId) return;
+const saveProfile = async () => {
+  if (!activeBranchId) return;
 
-    setSaving(true);
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    alert("Unauthorized");
+    return;
+  }
 
-    const res = await fetch("/api/client/company-profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        branch_id: activeBranchId,
-        billing_address: billing,
-        shipping_address: shipping,
-        primary_contact: contact,
-      }),
-    });
+  setSaving(true);
 
-    setSaving(false);
+  const res = await fetch("/api/client/company-profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+    body: JSON.stringify({
+      branch_id: activeBranchId,
+      billing_address: billing,
+      shipping_address: shipping,
+      primary_contact: contact,
+    }),
+  });
 
-    if (!res.ok) {
-      alert("❌ Failed to save profile");
-      return;
-    }
+  setSaving(false);
 
-    alert("✅ Branch profile updated successfully");
-  };
+  if (!res.ok) {
+    alert("❌ Failed to save profile");
+    return;
+  }
+
+  alert("✅ Branch profile updated successfully");
+};
+
 
   if (loading) {
     return <div className="text-center mt-5">Loading company profile...</div>;
   }
 
   return (
-    <div className="container-fluid py-5">
+    <div className={`${styles.dashboardWrapper} container-fluid `}>
 
       {/* ===== HEADER WITH LOGOUT ===== */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className={styles.pageTitle}>Company Profile</h4>
+        <h4 className='pageTitle '>Company Profile</h4>
+      <div className="text-end mb-3 ">
 
         <button
           className={styles.logoutBtn}
