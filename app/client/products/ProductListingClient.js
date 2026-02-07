@@ -44,24 +44,38 @@ const [adding, setAdding] = useState(false);
   }, [categoryId]);
 
   /* ================= FETCH PRODUCTS ================= */
-  useEffect(() => {
-    setLoading(true);
+ useEffect(() => {
+  setLoading(true);
 
-    const params = new URLSearchParams();
-        params.append("catalogId", catalogId); 
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    setProducts([]);
+    setLoading(false);
+    return;
+  }
 
-    if (search) params.append("search", search);
-    if (categoryId) params.append("categoryId", categoryId);
-    if (subcategoryId) params.append("subcategoryId", subcategoryId);
-    if (stock) params.append("stock", stock);
-    if (sort) params.append("sort", sort);
+  const params = new URLSearchParams();
+  params.append("catalogId", catalogId);
 
-    fetch(`/api/client/products?${params.toString()}`)
-      .then(res => res.json())
-      .then(data => setProducts(Array.isArray(data) ? data : []))
-      .catch(() => setProducts([]))
-      .finally(() => setLoading(false));
-  }, [search, categoryId, subcategoryId, stock, sort]);
+  if (search) params.append("search", search);
+  if (categoryId) params.append("categoryId", categoryId);
+  if (subcategoryId) params.append("subcategoryId", subcategoryId);
+  if (stock) params.append("stock", stock);
+  if (sort) params.append("sort", sort);
+
+  fetch(`/api/client/products?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  })
+    .then(res => res.json())
+   .then(data => {
+      console.log("📦 Products API Response:", data); // 👈 LOG HERE
+      setProducts(Array.isArray(data) ? data : []);
+    })
+    .catch(() => setProducts([]))
+    .finally(() => setLoading(false));
+}, [search, categoryId, subcategoryId, stock, sort, catalogId]);
 
 
 
@@ -183,7 +197,7 @@ const [adding, setAdding] = useState(false);
 
                 <div className={styles.bottomRow}>
                   <span className={styles.price}>
-                    ₹ {Number(p.base_price).toFixed(2)}
+                    ₹ {Number(p.final_price).toFixed(2)}
                   </span>
                   <button
                     className={styles.addBtn}

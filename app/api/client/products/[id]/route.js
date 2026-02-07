@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { db } from "@/app/db";
+import { db } from "../../../../db";
+import { verifyToken } from "../../../../lib/auth";
 
 export async function GET(req, { params }) {
   try {
@@ -12,7 +13,19 @@ const { id: productId } = await params;
       );
     }
 
-    const companyId = 1; // TODO: get from auth/session
+     /* ===== AUTH ===== */
+       let decoded;
+       try {
+         decoded = verifyToken(req);
+       } catch (err) {
+         console.error("Auth error:", err.message);
+         return NextResponse.json(
+           { error: "Unauthorized" },
+           { status: 401 }
+         );
+       }
+   
+       const { companyId} = decoded; // TODO: get from auth/session
 
     /* ================= PRODUCT (BASE + COMPANY PRICE) ================= */
     const [[product]] = await db.query(

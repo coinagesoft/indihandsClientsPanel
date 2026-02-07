@@ -13,18 +13,27 @@ export default function ProductDetailsPage() {
   const [adding, setAdding] = useState(false);
 
   /* ================= FETCH PRODUCT ================= */
-  useEffect(() => {
-    if (!id) return;
+useEffect(() => {
+  if (!id) return;
 
-    setLoading(true);
+  const token = localStorage.getItem("client_token");
+  if (!token) return;
 
-    fetch(`/api/client/products/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        if (!data?.error) setProduct(data);
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+  setLoading(true);
+
+  fetch(`/api/client/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+    },
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("📦 Products details API Response:", data);
+      if (!data?.error) setProduct(data);
+    })
+    .finally(() => setLoading(false));
+}, [id]);
+
 
   /* ================= ADD TO QUOTE ================= */
 const addToQuote = async () => {
@@ -56,6 +65,7 @@ const addToQuote = async () => {
     });
 
     const data = await res.json();
+       // 👈 LOG HERE
 
     if (!res.ok) {
       alert(data?.error || "Failed to add product");

@@ -16,7 +16,7 @@ export async function GET(req, { params }) {
         );
       }
   
-      const { companyId, branchId } = decoded;
+      const { companyId } = decoded;
 
     if (!rfq_id) {
       return Response.json({ proposal: null });

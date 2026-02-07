@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../db";
+import { verifyToken } from "../../../lib/auth";
 
 export async function GET(req) {
   try {
@@ -12,7 +13,19 @@ export async function GET(req) {
     const sort = searchParams.get("sort") || "latest";
     const catalogId = searchParams.get("catalogId");
 
-    const companyId = 1; // TODO: get from auth/session
+ /* ===== AUTH ===== */
+       let decoded;
+       try {
+         decoded = verifyToken(req);
+       } catch (err) {
+         console.error("Auth error:", err.message);
+         return NextResponse.json(
+           { error: "Unauthorized" },
+           { status: 401 }
+         );
+       }
+   
+       const { companyId} = decoded; 
 
     if (!catalogId) {
       return NextResponse.json([], { status: 200 });
