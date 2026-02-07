@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
+import PageWrapper from "../../../components/common/wrapper";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -109,12 +110,12 @@ useEffect(() => {
     alert("✅ Profile updated successfully");
   };
 
-  if (loading) {
-    return <div className="text-center mt-5">Loading profile...</div>;
-  }
+
 
   return (
-    <div className="container-fluid">
+      <PageWrapper loading={loading}>
+    <div className={`${styles.dashboardWrapper} container-fluid   `}>
+        {/* <div className={styles.dashboardCanvas} ></div> */}
 
       {/* HEADER */}
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -213,5 +214,6 @@ useEffect(() => {
 
       </div>
     </div>
+    </PageWrapper>
   );
 }

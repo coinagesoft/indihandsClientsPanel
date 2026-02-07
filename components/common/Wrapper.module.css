@@ -1,0 +1,30 @@
+.pageLoader {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #fff;
+}
+
+.logoSpinner {
+  width: 80px;
+  height: 80px;
+  animation: spin 1.2s linear infinite;
+}
+
+.loadingText {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* 🔄 Rotation animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

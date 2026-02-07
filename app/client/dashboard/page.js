@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
+import PageWrapper from "../../../components/common/wrapper";
 
 export default function DashboardPage() {
   useAuthGuard();
@@ -67,15 +68,10 @@ export default function DashboardPage() {
     Rejected: "rejected",
   };
 
-  if (loading) {
-    return (
-      <div className="text-center mt-5 text-muted">
-        Loading dashboard...
-      </div>
-    );
-  }
+ 
 
   return (
+    <PageWrapper loading={loading}>
     <div className={`${styles.dashboardWrapper} container-fluid `}>
       <div className={styles.dashboardCanvas} />
 
@@ -132,5 +128,6 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

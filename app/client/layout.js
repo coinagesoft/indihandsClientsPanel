@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
-import Footer from "./Footer/page";
 
 export default function ClientLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -26,21 +25,10 @@ export default function ClientLayout({ children }) {
           collapsed ? styles.collapsedContent : ""
         }`}
       >
-        {/* 🔹 MAIN LOADER */}
-        {loading && (
-          <div className={styles.mainLoader}>
-            <div className={styles.spinner}></div>
-            <span>Loading...</span>
-          </div>
-        )}
-
-        {/* 🔹 PAGE CONTENT + FOOTER (AFTER LOAD) */}
-        {!loading && (
+      
           <>
             {children}
-            <Footer />
           </>
-        )}
       </main>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
+import PageWrapper from "../../../../components/common/wrapper";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
@@ -11,6 +12,8 @@ export default function ProductDetailsPage() {
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [hasFetched, setHasFetched] = useState(false);
+
 
   /* ================= MASONRY DUMMY IMAGES ================= */
 const images = [
@@ -26,26 +29,38 @@ const images = [
 
 
   /* ================= FETCH PRODUCT ================= */
-  useEffect(() => {
-    if (!id) return;
+useEffect(() => {
+  if (!id) return;
 
-    const token = localStorage.getItem("client_token");
-    if (!token) return;
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    setLoading(false);
+    setHasFetched(true);
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    fetch(`/api/client/products/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  fetch(`/api/client/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data?.error) {
+        setProduct(data);
+      } else {
+        setProduct(null);
+      }
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log("📦 Product API:", data);
-        if (!data?.error) setProduct(data);
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+    .catch(() => setProduct(null))
+    .finally(() => {
+      setLoading(false);
+      setHasFetched(true); // ✅ mark fetch completed
+    });
+}, [id]);
+
 
   /* ================= ADD TO QUOTE ================= */
   const addToQuote = async () => {
@@ -85,15 +100,28 @@ const images = [
     }
   };
 
-  if (loading) {
-    return <div className="text-center mt-5">Loading...</div>;
-  }
 
-  if (!product) {
-    return <div className="text-center mt-5">Product not found</div>;
-  }
+if (loading) {
+  return <PageWrapper loading={true} />;
+}
+
+// 2️⃣ API finished, product not found
+if (hasFetched && !product) {
+  return (
+    <PageWrapper loading={false}>
+      <div className="text-center mt-5">
+        <h5>Product not found</h5>
+        <p className="text-muted">
+          This product may be unavailable or removed.
+        </p>
+      </div>
+    </PageWrapper>
+  );
+}
+
 
   return (
+      <PageWrapper loading={loading}>
     <div className={`${styles.dashboardWrapper} container-fluid`}>
       <div className={styles.dashboardCanvas}></div>
 
@@ -127,7 +155,7 @@ const images = [
         {/* IMAGES – MIXED HEIGHT MASONRY */}
         <div className="col-lg-6">
           <div className={styles.masonry}>
-            {images.map((img, index) => (
+            {product.images.map((img, index) => (
               <div key={index} className={styles.masonryItem}>
                 <img
                   src={img}
@@ -188,5 +216,6 @@ const images = [
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

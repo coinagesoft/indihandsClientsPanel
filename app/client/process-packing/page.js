@@ -1,5 +1,6 @@
 "use client";
 
+import PageWrapper from "../../../components/common/wrapper";
 import styles from "./processPacking.module.css";
 
 export default function ProcessPackingPage() {
@@ -27,6 +28,8 @@ export default function ProcessPackingPage() {
   ];
 
   return (
+  <PageWrapper>
+
     <div className={`${styles.dashboardWrapper} container-fluid  `}>
       <div className={styles.dashboardCanvas} ></div>
       {/* Page Header */}
@@ -60,5 +63,6 @@ export default function ProcessPackingPage() {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }
