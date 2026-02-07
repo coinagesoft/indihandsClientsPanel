@@ -6,10 +6,8 @@ import { verifyToken } from "../../../lib/auth";
 function safeJsonArray(value) {
   if (!value) return [];
 
-  // MySQL JSON column sometimes already returns array
   if (Array.isArray(value)) return value;
 
-  // If value looks like JSON array
   if (typeof value === "string" && value.trim().startsWith("[")) {
     try {
       const parsed = JSON.parse(value);
@@ -19,9 +17,10 @@ function safeJsonArray(value) {
     }
   }
 
-  // Plain string fallback → wrap in array
   return [value];
 }
+
+
 
 
 
@@ -32,7 +31,6 @@ export async function GET(req) {
     let decoded;
     try {
       decoded = verifyToken(req);
-      console.log("decoded",decoded)
     } catch {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -59,8 +57,8 @@ export async function GET(req) {
       );
     }
 
-    /* ===== BRANCHES (🔥 MAIN POINT) ===== */
-    const [branches] = await db.query(
+    /* ===== ONLY LOGGED-IN BRANCH (🔥 FIX) ===== */
+    const [[branch]] = await db.query(
       `
       SELECT
         id,
@@ -72,32 +70,37 @@ export async function GET(req) {
         phones,
         emails
       FROM company_branches
-      WHERE company_id = ?
-      ORDER BY id ASC
+      WHERE id = ?
+        AND company_id = ?
       `,
-      [companyId]
+      [branchId, companyId]
     );
 
-    const formattedBranches = branches.map(b => ({
-      id: b.id, // 🔥 all branch ids of THIS company
-      branch_name: b.branch_name,
-      gstin: b.gstin,
-      billing_address: b.billing_address || "",
-      shipping_address: b.shipping_address || "",
-      primary_contact: {
-        name: b.contact_person || "",
-        emails: safeJsonArray(b.emails),
-        phones: safeJsonArray(b.phones),
-      },
-    }));
+    if (!branch) {
+      return NextResponse.json(
+        { error: "Branch not found or access denied" },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({
       company: {
         company_name: company.company_name,
         company_email: company.company_email,
       },
-      branches: formattedBranches, // ✅ company che sagle branches
-      active_branch_id: branchId,   // ✅ logged-in branch
+      branch: {
+        id: branch.id,
+        branch_name: branch.branch_name,
+        gstin: branch.gstin,
+        billing_address: branch.billing_address || "",
+        shipping_address: branch.shipping_address || "",
+        primary_contact: {
+          name: branch.contact_person || "",
+          emails: safeJsonArray(branch.emails),
+          phones: safeJsonArray(branch.phones),
+        },
+      },
+      active_branch_id: branchId,
     });
 
   } catch (error) {
@@ -108,6 +111,8 @@ export async function GET(req) {
     );
   }
 }
+
+
 
 
 
@@ -124,31 +129,24 @@ export async function PUT(req) {
       );
     }
 
-    const { companyId } = decoded;
+    const { companyId, branchId } = decoded;
 
     /* ===== BODY ===== */
     const {
-      branch_id,
       billing_address,
       shipping_address,
       primary_contact,
     } = await req.json();
 
-    if (!branch_id) {
-      return NextResponse.json(
-        { error: "Branch ID required" },
-        { status: 400 }
-      );
-    }
-
-    /* ===== SECURITY CHECK 🔥 ===== */
+    /* ===== VALIDATE BRANCH (extra safety) ===== */
     const [[branch]] = await db.query(
       `
       SELECT id
       FROM company_branches
-      WHERE id = ? AND company_id = ?
+      WHERE id = ?
+        AND company_id = ?
       `,
-      [branch_id, companyId]
+      [branchId, companyId]
     );
 
     if (!branch) {
@@ -158,7 +156,7 @@ export async function PUT(req) {
       );
     }
 
-    /* ===== UPDATE ===== */
+    /* ===== UPDATE ONLY LOGGED-IN BRANCH ===== */
     await db.query(
       `
       UPDATE company_branches
@@ -176,11 +174,14 @@ export async function PUT(req) {
         primary_contact?.name || "",
         JSON.stringify(primary_contact?.phones || []),
         JSON.stringify(primary_contact?.emails || []),
-        branch_id,
+        branchId,
       ]
     );
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      message: "Branch profile updated successfully",
+    });
 
   } catch (error) {
     console.error("Company Profile UPDATE Error:", error);
@@ -190,6 +191,7 @@ export async function PUT(req) {
     );
   }
 }
+
 
 
 
