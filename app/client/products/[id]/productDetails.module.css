@@ -1,92 +1,56 @@
-.dashboardCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-
-  background-image:
-    url("/images/parrot.png"),
-    url("/images/sun.png"),
-    url("/images/page3_bottom_right_logo.png");
-
-  background-repeat: no-repeat;
-  background-position:
-    top 28px right 40px,
-    top -15px left -20px,
-    bottom 40px right 40px;
-
-  background-size:
-    64px auto,
-    90px auto,
-    200px auto;
-
-  opacity: 1; /* 🌿 soft & premium */
-}
 .dashboardWrapper {
   position: relative;
-  z-index: 1;
   min-height: 100vh;
-
   padding: 36px 28px 180px;
-
   background: linear-gradient(
     180deg,
     rgba(251, 241, 230, 0.96),
     rgba(251, 241, 230, 0.78)
   );
 }
-.titleMain {
-  font-family: var(--font-heading);
-  font-size: 26px;
-  color: var(--text-heading);
-  margin-bottom: 4px;
+
+.dashboardCanvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .subTitle {
-  font-family: var(--font-body);
   font-size: 14px;
   color: var(--text-muted);
 }
+
 .breadcrumbBox {
   font-size: 13px;
   color: var(--text-muted);
   padding: 10px 0;
   margin-bottom: 18px;
-
   border-top: 1px dashed rgba(68, 45, 10, 0.25);
   border-bottom: 1px dashed rgba(68, 45, 10, 0.25);
 }
-.imageCard {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  height: 180px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-}
-
-.imageCard img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
 .rightBox {
+  position: sticky;
+  top: 110px;               /* header + breadcrumb gap */
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 22px;
-
   box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease;
 }
+
+
+.rightBox.is-stuck {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+
 .section {
   margin-bottom: 20px;
 }
 
 .sectionTitle {
-  font-family: var(--font-ui);
   font-size: 14px;
   color: var(--color-primary);
   margin-bottom: 6px;
@@ -95,61 +59,97 @@
 .descText {
   font-size: 14px;
   line-height: 1.7;
-  color: var(--text-primary);
-}
-.actionBox {
-  display: flex;
-  align-items: flex-end;
-  gap: 20px;
-  margin-top: 16px;
 }
 
-.qtyBox label {
-  font-size: 13px;
-  font-family: var(--font-ui);
-  color: var(--text-heading);
-  margin-bottom: 4px;
+/* ================= MASONRY ================= */
+
+.masonry {
+  column-count: 2;
+  column-gap: 16px;
+}
+
+
+/* Masonry item wrapper */
+.masonryItem {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  overflow: hidden;                 /* IMPORTANT */
+  border-radius: 14px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Image base */
+.masonryItem img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+/* Hover magic ✨ */
+.masonryItem:hover {
+  transform: translateY(-4px);
+}
+
+.masonryItem:hover img {
+  transform: scale(1.08);
+}
+.masonryItem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.12),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.masonryItem:hover::after {
+  opacity: 1;
+}
+
+
+/* ================= ACTION ================= */
+
+.actionBox {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
 }
 
 .qtyBox input {
   width: 120px;
   padding: 8px 10px;
-
-  font-size: 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(68, 45, 10, 0.35);
-  outline: none;
-
-  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-.qtyBox input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(220, 102, 30, 0.15);
-}
 .addBtn {
+  padding: 10px 24px;
+  border-radius: 999px;
   background: linear-gradient(
     135deg,
     var(--color-primary),
     var(--color-primary-hover)
   );
   color: #fff;
-
-  font-family: var(--font-ui);
-  font-size: 14px;
-
-  padding: 10px 24px;
-  border-radius: 999px;
   border: none;
   cursor: pointer;
-
-  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
-.addBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(220, 102, 30, 0.45);
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .masonry {
+    column-count: 1;
+  }
+}
+@media (max-width: 768px) {
+  .rightBox {
+    position: static;
+  }
 }

@@ -12,91 +12,95 @@ export default function ProductDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
 
+  /* ================= MASONRY DUMMY IMAGES ================= */
+const images = [
+  "https://images.unsplash.com/photo-1586864387789-628af9feed72?w=900&q=80", // landscape
+  "https://images.unsplash.com/photo-1519664824562-b4bc73f9795a?q=80&w=327&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // portrait
+  "https://images.unsplash.com/photo-1712232971357-fd8f4b5e313c?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // medium
+  "https://images.unsplash.com/photo-1647437992378-f47b93029d15?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1711871124431-836d92aed0d9?q=80&w=478&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // tall
+  "https://images.unsplash.com/photo-1647107349002-85e66a39abd3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+];
+
+
+
+
   /* ================= FETCH PRODUCT ================= */
-useEffect(() => {
-  if (!id) return;
+  useEffect(() => {
+    if (!id) return;
 
-  const token = localStorage.getItem("client_token");
-  if (!token) return;
+    const token = localStorage.getItem("client_token");
+    if (!token) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  fetch(`/api/client/products/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
-    },
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log("📦 Products details API Response:", data);
-      if (!data?.error) setProduct(data);
+    fetch(`/api/client/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .finally(() => setLoading(false));
-}, [id]);
-
+      .then(res => res.json())
+      .then(data => {
+        console.log("📦 Product API:", data);
+        if (!data?.error) setProduct(data);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
 
   /* ================= ADD TO QUOTE ================= */
-const addToQuote = async () => {
-  if (!id || qty < 1) return;
+  const addToQuote = async () => {
+    if (!id || qty < 1) return;
 
-  const token = localStorage.getItem("client_token");
-  if (!token) {
-    alert("Unauthorized");
-    return;
-  }
-
-  setAdding(true);
-
-  try {
-    const payload = {
-      productId: Number(id),
-      quantity: qty,
-    };
-
-    console.log("🟡 Add to Quote Payload:", payload);
-
-    const res = await fetch("/api/client/quote-cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // 🔥 REQUIRED
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-       // 👈 LOG HERE
-
-    if (!res.ok) {
-      alert(data?.error || "Failed to add product");
+    const token = localStorage.getItem("client_token");
+    if (!token) {
+      alert("Unauthorized");
       return;
     }
 
-    alert("Added to Quote ✅");
+    setAdding(true);
 
-  } catch (err) {
-    alert("Something went wrong");
-  } finally {
-    setAdding(false);
+    try {
+      const res = await fetch("/api/client/quote-cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: Number(id),
+          quantity: qty,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data?.error || "Failed to add product");
+        return;
+      }
+
+      alert("Added to Quote ✅");
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center mt-5">Loading...</div>;
   }
-};
-
-
-
 
   if (!product) {
     return <div className="text-center mt-5">Product not found</div>;
   }
 
   return (
-   <div className={`${styles.dashboardWrapper} container-fluid   `}>
-      <div className={styles.dashboardCanvas} ></div>
-
+    <div className={`${styles.dashboardWrapper} container-fluid`}>
+      <div className={styles.dashboardCanvas}></div>
 
       {/* TITLE */}
       <div className="row mt-3">
         <div className="col-12">
-          <h4 className='pageTitle'>
+          <h4 className="pageTitle">
             {product.title}
             {product.subtitle && (
               <span className={styles.subTitle}>{product.subtitle}</span>
@@ -120,18 +124,16 @@ const addToQuote = async () => {
       {/* CONTENT */}
       <div className="row mt-4 g-4">
 
-        {/* IMAGES */}
+        {/* IMAGES – MIXED HEIGHT MASONRY */}
         <div className="col-lg-6">
-          <div className="row g-3">
-            {product.images.map((img, index) => (
-              <div key={index} className="col-6">
-                <div className={styles.imageCard}>
-                  <img
-                    src={img}
-                    alt={product.title}
-                    onError={e => (e.target.src = "/images/no-image.png")}
-                  />
-                </div>
+          <div className={styles.masonry}>
+            {images.map((img, index) => (
+              <div key={index} className={styles.masonryItem}>
+                <img
+                  src={img}
+                  alt={product.title}
+                  loading="lazy"
+                />
               </div>
             ))}
           </div>
@@ -141,13 +143,11 @@ const addToQuote = async () => {
         <div className="col-lg-6">
           <div className={styles.rightBox}>
 
-            {/* DESCRIPTION */}
             <div className={styles.section}>
               <h6 className={styles.sectionTitle}>Description</h6>
               <p className={styles.descText}>{product.description}</p>
             </div>
 
-            {/* SPECS */}
             <div className={styles.section}>
               <h6 className={styles.sectionTitle}>Product Details</h6>
 
@@ -157,7 +157,6 @@ const addToQuote = async () => {
                   <p><b>Size:</b> {product.details.size}</p>
                   <p><b>Weight:</b> {product.details.weight}</p>
                 </div>
-
                 <div className="col-6">
                   <p><b>Price:</b> ₹ {Number(product.price).toFixed(2)}</p>
                   <p><b>HSN:</b> {product.hsn || "-"}</p>
@@ -165,10 +164,9 @@ const addToQuote = async () => {
               </div>
             </div>
 
-            {/* ACTION */}
             <div className={styles.actionBox}>
               <div className={styles.qtyBox}>
-                <label>Quantity</label>
+                <label className="me-2">Quantity</label>
                 <input
                   type="number"
                   min="1"
