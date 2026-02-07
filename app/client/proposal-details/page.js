@@ -92,8 +92,9 @@ export default function ProposalDetailsPage() {
     return (
       <PageWrapper loading={false}>
         <div className={styles.emptyState}>
-          <h5>No Proposal found</h5>
-          <p>Your sent proposal will appear here.</p>
+         <h5>No proposals found</h5>
+<p>Proposals sent by the admin will appear here.</p>
+
         </div>
       </PageWrapper>
     );

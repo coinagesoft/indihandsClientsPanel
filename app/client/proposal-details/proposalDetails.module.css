@@ -210,10 +210,11 @@
 }
 
 /* ================= STATES ================= */
-.loading,
-.emptyState {
-  padding: 24px 0;
+.emptyState,
+.loading {
   text-align: center;
+  margin-top: 80px;
+  font-size: 14px;
   color: var(--text-muted);
-  margin-top: 30px;
+  margin-top: auto auto;
 }
