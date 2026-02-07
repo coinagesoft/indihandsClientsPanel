@@ -155,7 +155,7 @@ if (hasFetched && !product) {
         {/* IMAGES – MIXED HEIGHT MASONRY */}
         <div className="col-lg-6">
           <div className={styles.masonry}>
-            {product.images.map((img, index) => (
+            {images.map((img, index) => (
               <div key={index} className={styles.masonryItem}>
                 <img
                   src={img}
