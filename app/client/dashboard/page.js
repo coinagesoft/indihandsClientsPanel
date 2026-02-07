@@ -104,7 +104,7 @@ export default function DashboardPage() {
                 <th>Date</th>
                 <th>Items</th>
                 <th>Status</th>
-                <th>Notes</th>
+                {/* <th>Notes</th> */}
               </tr>
             </thead>
             <tbody>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
                       {rfq.status}
                     </span>
                   </td>
-                  <td className={styles.notes}>{rfq.notes}</td>
+                  {/* <td className={styles.notes}>{rfq.notes}</td> */}
                 </tr>
               ))}
             </tbody>
