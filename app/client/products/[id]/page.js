@@ -27,42 +27,50 @@ export default function ProductDetailsPage() {
   }, [id]);
 
   /* ================= ADD TO QUOTE ================= */
-  const addToQuote = async () => {
-    if (!id || qty < 1) return;
+const addToQuote = async () => {
+  if (!id || qty < 1) return;
 
-    setAdding(true);
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    alert("Unauthorized");
+    return;
+  }
 
-    try {
-const payload = {
-  productId: Number(id),
-  quantity: qty,
+  setAdding(true);
+
+  try {
+    const payload = {
+      productId: Number(id),
+      quantity: qty,
+    };
+
+    console.log("🟡 Add to Quote Payload:", payload);
+
+    const res = await fetch("/api/client/quote-cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data?.error || "Failed to add product");
+      return;
+    }
+
+    alert("Added to Quote ✅");
+
+  } catch (err) {
+    alert("Something went wrong");
+  } finally {
+    setAdding(false);
+  }
 };
 
-console.log("🟡 Add to Quote Payload:", payload);
-
-      const res = await fetch("/api/client/quote-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: Number(id),
-          quantity: qty,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data?.error || "Failed to add product");
-        return;
-      }
-
-      alert("Added to Quote ✅");
-    } catch (err) {
-      alert("Something went wrong");
-    } finally {
-      setAdding(false);
-    }
-  };
 
 
 

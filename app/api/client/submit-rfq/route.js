@@ -2,17 +2,21 @@ import { NextResponse } from "next/server";
 import { db } from "../../../db";
 import { verifyToken } from "../../../lib/auth";
 
-export async function POST() {
+
+export async function POST(req) {
   try {
- let decoded;
-      try {
-        decoded = verifyToken(req);
-      } catch {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 401 }
-        );
-      }
+    /* ===== AUTH ===== */
+    let decoded;
+    try {
+      decoded = verifyToken(req);
+    } catch (err) {
+      console.error("Auth error:", err.message);
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { companyId, branchId } = decoded;
 
     /* 1️⃣ FIND DRAFT RFQ */
@@ -77,3 +81,4 @@ export async function POST() {
     );
   }
 }
+
