@@ -13,43 +13,43 @@ export default function ClientLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  if (!email || !password) {
-    setError("Please enter email and password");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const res = await fetch("/api/client/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.message || "Login failed");
+    if (!email || !password) {
+      setError("Please enter email and password");
       return;
     }
 
-localStorage.setItem("client_token", data.token);
-localStorage.setItem("client_user", JSON.stringify(data.user));
+    try {
+      setLoading(true);
 
-    /* ✅ REDIRECT */
-    router.push("/client/dashboard");
+      const res = await fetch("/api/client/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-  } catch (err) {
-    setError("Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("client_token", data.token);
+      localStorage.setItem("client_user", JSON.stringify(data.user));
+
+      /* ✅ REDIRECT */
+      router.push("/client/dashboard");
+
+    } catch (err) {
+      setError("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
@@ -114,15 +114,18 @@ localStorage.setItem("client_user", JSON.stringify(data.user));
           </form>
         </div>
 
-        <img
-          src="/images/design-studio.png"
-          className={styles.designStudio}
-          alt="mandala"
-        />
+        <div className={styles.bottomSection}>
+          <img
+            src="/images/design-studio.png"
+            className={styles.designStudio}
+            alt="mandala"
+          />
 
-        <p className={styles.footer}>
-          © 2026 IndiHands | www.indihands.com
-        </p>
+          <p className={styles.footer}>
+            © 2026 IndiHands | www.indihands.com
+          </p>
+        </div>
+
       </div>
 
       {/* RIGHT PANEL */}
