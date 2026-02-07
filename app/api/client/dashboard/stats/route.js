@@ -9,13 +9,10 @@ export async function GET(req) {
     try {
       decoded = verifyToken(req);
     } catch {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { companyId } = decoded;
+    const { companyId, branchId } = decoded;
 
     /* ===== OPEN RFQs ===== */
     const [[openRFQs]] = await db.query(
@@ -23,20 +20,10 @@ export async function GET(req) {
       SELECT COUNT(*) AS count
       FROM rfqs
       WHERE company_id = ?
+        AND branch_id = ?
         AND status IN ('Submitted', 'Under Review')
       `,
-      [companyId]
-    );
-
-    /* ===== PENDING PROPOSALS ===== */
-    const [[pendingProposals]] = await db.query(
-      `
-      SELECT COUNT(*) AS count
-      FROM proposals
-      WHERE company_id = ?
-        AND status = 'Pending'
-      `,
-      [companyId]
+      [companyId, branchId]
     );
 
     /* ===== ACCEPTED RFQs ===== */
@@ -45,9 +32,10 @@ export async function GET(req) {
       SELECT COUNT(*) AS count
       FROM rfqs
       WHERE company_id = ?
+        AND branch_id = ?
         AND status = 'Accepted'
       `,
-      [companyId]
+      [companyId, branchId]
     );
 
     /* ===== REJECTED RFQs ===== */
@@ -56,16 +44,30 @@ export async function GET(req) {
       SELECT COUNT(*) AS count
       FROM rfqs
       WHERE company_id = ?
+        AND branch_id = ?
         AND status = 'Rejected'
       `,
-      [companyId]
+      [companyId, branchId]
+    );
+
+    /* ===== PENDING PROPOSALS (linked to branch RFQs) ===== */
+    const [[pendingProposals]] = await db.query(
+      `
+      SELECT COUNT(*) AS count
+      FROM proposals p
+      JOIN rfqs r ON r.id = p.rfq_id
+      WHERE p.company_id = ?
+        AND r.branch_id = ?
+        AND p.status = 'Pending'
+      `,
+      [companyId, branchId]
     );
 
     return NextResponse.json({
-      openRFQs: openRFQs.count ?? 0,
-      acceptedRFQs: acceptedRFQs.count ?? 0,
-      pendingProposals: pendingProposals.count ?? 0,
-      rejectedRFQs: rejectedRFQs.count ?? 0,
+      openRFQs: openRFQs.count || 0,
+      acceptedRFQs: acceptedRFQs.count || 0,
+      rejectedRFQs: rejectedRFQs.count || 0,
+      pendingProposals: pendingProposals.count || 0,
     });
 
   } catch (error) {
@@ -76,4 +78,3 @@ export async function GET(req) {
     );
   }
 }
-

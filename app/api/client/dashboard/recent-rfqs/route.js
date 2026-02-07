@@ -15,9 +15,9 @@ export async function GET(req) {
       );
     }
 
-    const { companyId } = decoded;
+    const { companyId, branchId } = decoded;
 
-    /* ===== RECENT RFQs ===== */
+    /* ===== RECENT RFQs (BRANCH-WISE) ===== */
     const [rows] = await db.query(
       `
       SELECT
@@ -33,14 +33,15 @@ export async function GET(req) {
       LEFT JOIN rfq_products rp 
         ON rp.rfq_id = r.id
       WHERE r.company_id = ?
+        AND r.branch_id = ?
       GROUP BY r.id
       ORDER BY r.submitted_at DESC
       LIMIT 5
       `,
-      [companyId]
+      [companyId, branchId]
     );
 
-    return NextResponse.json(rows); // ✅ safe, company-scoped
+    return NextResponse.json(rows);
 
   } catch (error) {
     console.error("Recent RFQs API Error:", error);
@@ -50,4 +51,3 @@ export async function GET(req) {
     );
   }
 }
-

@@ -37,6 +37,7 @@ export default function DashboardPage() {
 
       const statsData = await statsRes.json();
       const rfqsData = await rfqsRes.json();
+      console.log("rfqs",rfqsData)
 
       setStats([
         { label: "OPEN RFQs", value: statsData.openRFQs ?? 0 },

@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
       }
 
       alert("✅ Password reset successful");
-      router.push("/client/login");
+      router.push("/login");
     } catch (err) {
       setError("Something went wrong");
     } finally {
