@@ -237,3 +237,32 @@
   color: var(--text-muted);
   margin-top: auto auto;
 }
+/* ================= STATUS ================= */
+.status {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  letter-spacing: 0.3px;
+}
+
+/* Status Variants */
+.submitted {
+  background: rgba(220, 102, 30, 0.2);
+  color: var(--color-primary);
+}
+
+.underreview {
+  background: rgba(255, 226, 146, 0.7);
+  color: #7a5b00;
+}
+
+.accepted {
+  background: rgba(144, 172, 48, 0.3);
+  color: #3f4f14;
+}
+
+.rejected {
+  background: rgba(162, 20, 24, 0.25);
+  color: var(--color-danger);
+}

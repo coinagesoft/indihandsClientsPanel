@@ -10,14 +10,17 @@ export default function ProposalDetailsPage() {
   const [proposalData, setProposalData] = useState({});
   const [loadingRfq, setLoadingRfq] = useState(null);     // row-level
   const [actionLoading, setActionLoading] = useState(false);
+
   const [pageLoading, setPageLoading] = useState(true);   // ✅ ADD
+  const [hasFetched, setHasFetched] = useState(false);    // ✅ ADD
 
   /* ================= RFQ LIST ================= */
   useEffect(() => {
     const token = localStorage.getItem("client_token");
     if (!token) {
       setRfqs([]);
-      setPageLoading(false); // ✅ stop page loader
+      setPageLoading(false);
+      setHasFetched(true);
       return;
     }
 
@@ -30,9 +33,18 @@ export default function ProposalDetailsPage() {
         if (!res.ok) throw new Error("Unauthorized");
         return res.json();
       })
-      .then((data) => setRfqs(Array.isArray(data) ? data : []))
-      .catch(() => setRfqs([]))
-      .finally(() => setPageLoading(false)); // ✅ always stop
+      .then((data) => {
+        console.log("📦 RFQs with proposals response:", data); // ✅ LOG
+        setRfqs(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error("❌ RFQ list fetch error:", err);
+        setRfqs([]);
+      })
+      .finally(() => {
+        setPageLoading(false);
+        setHasFetched(true); // ✅ mark fetch completed
+      });
   }, []);
 
   /* ================= LOAD PROPOSAL ================= */
@@ -42,22 +54,27 @@ export default function ProposalDetailsPage() {
     const token = localStorage.getItem("client_token");
     if (!token) return;
 
-    setLoadingRfq(rfqId); // row loader only
+    setLoadingRfq(rfqId);
 
-    const res = await fetch(`/api/client/proposal-by-rfq/${rfqId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const res = await fetch(`/api/client/proposal-by-rfq/${rfqId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      console.log(`📄 Proposal response for RFQ-${rfqId}:`, data); // ✅ LOG
 
-    setProposalData((prev) => ({
-      ...prev,
-      [rfqId]: data,
-    }));
-
-    setLoadingRfq(null);
+      setProposalData((prev) => ({
+        ...prev,
+        [rfqId]: data,
+      }));
+    } catch (err) {
+      console.error(`❌ Proposal fetch error for RFQ-${rfqId}:`, err);
+    } finally {
+      setLoadingRfq(null);
+    }
   };
 
   /* ================= APPROVE / REJECT ================= */
@@ -65,7 +82,10 @@ export default function ProposalDetailsPage() {
     if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
 
     const token = localStorage.getItem("client_token");
-    if (!token) return;
+    if (!token) {
+      alert("Unauthorized");
+      return;
+    }
 
     try {
       setActionLoading(true);
@@ -79,29 +99,40 @@ export default function ProposalDetailsPage() {
         body: JSON.stringify({ proposalId, status }),
       });
 
-      if (!res.ok) return;
+      const data = await res.json();
+      console.log("🔄 Proposal status update response:", data); // ✅ LOG
 
-      await loadProposal(rfqId, true); // refresh
+      if (!res.ok) {
+        alert("Failed to update status");
+        return;
+      }
+
+      await loadProposal(rfqId, true); // refresh proposal
     } finally {
       setActionLoading(false);
     }
   };
 
-  /* ✅ PAGE-LEVEL EMPTY STATE */
-  if (!pageLoading && rfqs.length === 0) {
+  /* ================= PAGE-LEVEL LOADER ================= */
+  if (pageLoading && !hasFetched) {
+    return <PageWrapper loading={true} />;
+  }
+
+  /* ================= PAGE-LEVEL EMPTY STATE ================= */
+  if (hasFetched && rfqs.length === 0) {
     return (
       <PageWrapper loading={false}>
         <div className={styles.emptyState}>
-         <h5>No proposals found</h5>
-<p>Proposals sent by the admin will appear here.</p>
-
+          <h5>No proposals found</h5>
+          <p>Proposals sent by the admin will appear here.</p>
         </div>
       </PageWrapper>
     );
   }
 
+  /* ================= MAIN UI ================= */
   return (
-    <PageWrapper loading={pageLoading}>
+    <PageWrapper loading={false}>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
 
@@ -121,7 +152,7 @@ export default function ProposalDetailsPage() {
 
             return (
               <div key={rfq.rfq_id} className={styles.accordionCard}>
-                {/* HEADER */}
+                {/* ================= HEADER ================= */}
                 <div
                   className={styles.accordionHeader}
                   onClick={() => {
@@ -130,7 +161,9 @@ export default function ProposalDetailsPage() {
                   }}
                 >
                   <div>
-                    <div className={styles.rfqTitle}>RFQ-{rfq.rfq_id}</div>
+                    <div className={styles.rfqTitle}>
+                      RFQ-{rfq.rfq_id}
+                    </div>
                     <div className={styles.rfqMeta}>
                       {rfq.proposal_id
                         ? "Proposal Sent"
@@ -138,7 +171,7 @@ export default function ProposalDetailsPage() {
                     </div>
                   </div>
 
-                  <div className={styles.headerRight}>
+                  {/* <div className={styles.headerRight}>
                     {proposal && (
                       <span className={`${styles.status} ${styles[statusKey]}`}>
                         <span className={styles.statusDot} />
@@ -152,17 +185,39 @@ export default function ProposalDetailsPage() {
                     >
                       ❯
                     </span>
-                  </div>
+                  </div> */}
+<div className={styles.headerRight}>
+  {proposal && (
+    <>
+      <span className={`${styles.status} ${styles[statusKey]}`}>
+        <span className={styles.statusDot} />
+        {proposal.status}
+      </span>
+
+      <span
+        className={`${styles.chevron} ${
+          isOpen ? styles.open : ""
+        }`}
+      >
+        ❯
+      </span>
+    </>
+  )}
+</div>
+
+
                 </div>
 
-                {/* BODY */}
+                {/* ================= BODY ================= */}
                 <div
                   className={`${styles.accordionBody} ${
                     isOpen ? styles.open : ""
                   }`}
                 >
                   {loadingRfq === rfq.rfq_id && (
-                    <div className={styles.loading}>Loading proposal…</div>
+                    <div className={styles.loading}>
+                      Loading proposal…
+                    </div>
                   )}
 
                   {!proposal && !loadingRfq && (
@@ -173,7 +228,84 @@ export default function ProposalDetailsPage() {
 
                   {proposal && (
                     <>
-                      {/* same table + actions as before */}
+                      <div className={styles.proposalMeta}>
+                        Proposal #{proposal.proposal_number} •{" "}
+                        {new Date(
+                          proposal.proposal_date
+                        ).toLocaleDateString("en-IN")}
+                      </div>
+
+                      {/* ================= ITEMS TABLE ================= */}
+                      <table className={`table ${styles.customTable}`}>
+                        <thead>
+                          <tr>
+                            <th>Product</th>
+                            <th className="text-center">Qty</th>
+                            <th className="text-end">Rate</th>
+                            <th className="text-end">Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.items.map((i, idx) => (
+                            <tr key={idx}>
+                              <td>{i.description}</td>
+                              <td className="text-center">{i.qty}</td>
+                              <td className="text-end">
+                                ₹ {Number(i.rate).toLocaleString()}
+                              </td>
+                              <td className="text-end fw-semibold">
+                                ₹ {Number(i.total).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      {/* ================= ACTION BAR ================= */}
+                      <div className={styles.actionBar}>
+                        <button
+                          className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                          onClick={() =>
+                            window.open(
+                              `/api/client/proposal-download/${rfq.rfq_id}`
+                            )
+                          }
+                        >
+                          Download PDF
+                        </button>
+
+                        {canTakeAction && (
+                          <>
+                            <button
+                              className={`${styles.actionBtn} ${styles.rejectBtn}`}
+                              disabled={actionLoading}
+                              onClick={() =>
+                                updateStatus(
+                                  proposal.id,
+                                  "Rejected",
+                                  rfq.rfq_id
+                                )
+                              }
+                            >
+                              Reject
+                            </button>
+
+                            <button
+                              className={`${styles.actionBtn} ${styles.approveBtn}`}
+                              disabled={actionLoading}
+                              onClick={() =>
+                                updateStatus(
+                                  proposal.id,
+                                  "Approved",
+                                  rfq.rfq_id
+                                )
+                              }
+                            >
+                              Approve
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </>
                   )}
                 </div>
