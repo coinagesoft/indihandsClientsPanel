@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./quoteCart.module.css";
 import PageWrapper from "../../../components/common/wrapper";
+import Toast from "../../../components/common/Toast";
 
 export default function QuoteCartPage() {
   const router = useRouter();
@@ -14,6 +15,18 @@ export default function QuoteCartPage() {
 
   // 🔍 image zoom
   const [zoomImg, setZoomImg] = useState(null);
+const [toast, setToast] = useState({ message: "", type: "" });
+const toastTimer = useRef(null);
+
+const showToast = (message, type = "success") => {
+  if (toastTimer.current) clearTimeout(toastTimer.current);
+
+  setToast({ message, type });
+
+  toastTimer.current = setTimeout(() => {
+    setToast({ message: "", type: "" });
+  }, 3000);
+};
 
 /* ================= FETCH CART ================= */
 const fetchCart = async () => {
@@ -42,45 +55,81 @@ useEffect(() => {
 }, []);
 
 
-  /* ================= UPDATE QTY ================= */
+/* ================= UPDATE QTY ================= */
 const updateQty = async (productId, action) => {
   const token = localStorage.getItem("client_token");
-  if (!token) return;
+  if (!token) {
+    showToast("Unauthorized", "error");
+    return;
+  }
 
-  await fetch("/api/client/quote-cart", {
+  const item = cartItems.find(i => i.productId === productId);
+  if (!item) return;
+
+  // 🚫 Prevent increasing beyond stock
+  if (action === "inc" && item.qty >= item.stock_qty) {
+    showToast(
+      `Only ${item.stock_qty} items available in stock`,
+      "warning"
+    );
+    return;
+  }
+
+  // 🚫 Prevent decreasing below 1 (extra safety)
+  if (action === "dec" && item.qty <= 1) {
+    return;
+  }
+
+  const res = await fetch("/api/client/quote-cart", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ productId, action }),
   });
 
+  if (!res.ok) {
+    showToast("Stock limit reached", "error");
+    return;
+  }
+
   fetchCart();
 };
 
 
-  /* ================= DELETE ITEM ================= */
+
+/* ================= DELETE ITEM ================= */
 const removeItem = async (productId) => {
   const token = localStorage.getItem("client_token");
-  if (!token) return;
+  if (!token) {
+    showToast("Unauthorized", "error");
+    return;
+  }
 
-  await fetch(`/api/client/quote-cart/${productId}`, {
+  const res = await fetch(`/api/client/quote-cart/${productId}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
+      Authorization: `Bearer ${token}`,
     },
   });
 
+  if (!res.ok) {
+    showToast("Failed to remove item", "error");
+    return;
+  }
+
+  showToast("Item removed from quote cart", "success");
   fetchCart();
 };
+
 
 
   /* ================= SUBMIT RFQ ================= */
 const submitRFQ = async () => {
   const token = localStorage.getItem("client_token");
   if (!token) {
-    alert("Unauthorized");
+   showToast("Unauthorized", "error");
     return;
   }
 
@@ -94,10 +143,10 @@ const submitRFQ = async () => {
   const data = await res.json();
 
   if (!res.ok) {
-    alert(data.error || "Failed to submit RFQ");
+   showToast(data.error || "Failed to submit RFQ", "error");
     return;
   }
-
+  showToast("RFQ submitted successfully 🎉", "success");
   setRfqSubmitted(true);
 };
 
@@ -167,8 +216,18 @@ const maskAmountWithStars = (amount) => {
   return "*".repeat(digits);
 };
 
+
+
+
   /* ================= CART UI ================= */
   return (
+    <>
+    <Toast
+  message={toast.message}
+  type={toast.type}
+  onClose={() => setToast({ message: "", type: "" })}
+/>
+
       <PageWrapper loading={loading}>
     <div className={`${styles.dashboardWrapper} container-fluid  `}>
       <div className={styles.dashboardCanvas} ></div>
@@ -303,5 +362,6 @@ const maskAmountWithStars = (amount) => {
       )}
     </div>
     </PageWrapper>
+  </>
   );
 }

@@ -37,7 +37,8 @@ const { id: productId } = await params;
         p.base_price,
         COALESCE(cpp.custom_price, p.base_price) AS final_price,
         p.featured_image,
-        p.hsn
+        p.hsn,
+        p.stock_qty
       FROM products p
       LEFT JOIN company_product_pricing cpp
         ON cpp.product_id = p.id
@@ -97,7 +98,7 @@ const { id: productId } = await params;
       base_price: product.base_price, // optional (for admin/debug)
 
       hsn: product.hsn,
-
+      stock_qty:product.stock_qty,
       images: images.length
         ? images.map(i => i.image_url)
         : [product.featured_image],

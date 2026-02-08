@@ -8,7 +8,6 @@ export async function GET(req) {
     try {
       decoded = verifyToken(req);
     } catch (err) {
-      console.error("Auth error:", err.message);
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -21,6 +20,7 @@ export async function GET(req) {
       `
       SELECT
         r.id AS rfq_id,
+        r.rfq_number,
         r.status,
         r.submitted_at AS created_date,
         COALESCE(SUM(rp.quantity), 0) AS total_items,
@@ -30,7 +30,11 @@ export async function GET(req) {
       WHERE r.company_id = ?
         AND r.branch_id = ?
         AND r.status != 'Draft'
-      GROUP BY r.id, r.status, r.submitted_at
+      GROUP BY 
+        r.id,
+        r.rfq_number,
+        r.status,
+        r.submitted_at
       ORDER BY r.submitted_at DESC
       `,
       [companyId, branchId]
@@ -46,6 +50,7 @@ export async function GET(req) {
     );
   }
 }
+
 
 
 

@@ -16,7 +16,7 @@ export async function DELETE(req, { params }) {
     }
 
     const { companyId, branchId } = decoded;
-    const { productId } = params;
+    const { productId } = await params;
 
     if (!productId) {
       return NextResponse.json(

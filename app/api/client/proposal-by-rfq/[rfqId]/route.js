@@ -28,6 +28,7 @@ export async function GET(req, { params }) {
       SELECT
         p.id,
         p.rfq_id,
+        p.rfq_number,
         p.proposal_number,
         p.proposal_date,
         p.billing_address,

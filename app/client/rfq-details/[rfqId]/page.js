@@ -78,7 +78,7 @@ export default function RFQDetailsPage() {
         {/* HEADER */}
         <div className={styles.header}>
           <div>
-            <h4 className="pageTitle">RFQ-{rfq.id}</h4>
+            <h4 className="pageTitle">{rfq.rfq_number || `RFQ-${rfq.id}`}</h4>
             <p className={styles.subText}>
               Submitted on{" "}
               {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}

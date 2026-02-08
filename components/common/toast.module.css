@@ -1,0 +1,55 @@
+.toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  min-width: 280px;
+  max-width: 360px;
+
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-family: var(--font-ui);
+  font-size: 14px;
+  animation: slideIn 0.3s ease;
+  z-index: 9999;
+}
+
+/* STATES */
+.success {
+  background: var(--color-success);
+  color: #fff;
+}
+
+.error {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.warning {
+  background: var(--color-warning);
+  color: var(--text-heading);
+}
+
+.toast button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

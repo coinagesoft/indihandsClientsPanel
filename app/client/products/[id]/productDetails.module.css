@@ -153,3 +153,57 @@
     position: static;
   }
 }
+/* ================= IMAGE POPUP ================= */
+
+.imageOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.imagePopup {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.imagePopup img {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+
+  background: #fff;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.inStock {
+  color: #198754;
+  font-weight: 600;
+}
+
+.outOfStock {
+  color: #dc3545;
+  font-weight: 600;
+}

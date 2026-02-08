@@ -15,7 +15,7 @@ export async function GET(req, { params }) {
     /* ================= RFQ ================= */
     const [[rfq]] = await db.query(
       `
-      SELECT r.id, r.status, r.submitted_at,
+      SELECT r.id,r.rfq_number, r.status, r.submitted_at,
              c.company_name,
              cb.contact_person
       FROM rfqs r
@@ -81,7 +81,7 @@ export async function GET(req, { params }) {
     let y = 110;
     doc.font(openSansRegular).fontSize(10);
 
-    doc.text(`RFQ No: RFQ-${rfq.id}`, 40, y); y += 14;
+    doc.text(`RFQ No: ${rfq.rfq_number || `RFQ-${rfq.id}`}`, 40, y); y += 14;
     doc.text(`Date: ${new Date(rfq.submitted_at).toLocaleDateString("en-IN")}`, 40, y); y += 14;
     doc.text(`Status: ${rfq.status}`, 40, y); y += 14;
     doc.text(`Customer: ${rfq.contact_person}`, 40, y); y += 14;
@@ -149,7 +149,7 @@ export async function GET(req, { params }) {
     return new Response(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="RFQ-${rfq.id}.pdf"`,
+        "Content-Disposition": `attachment; filename="RFQ-${rfq.rfq_number || rfq.id}.pdf"`,
       },
     });
 

@@ -92,7 +92,7 @@ export default function RFQHistoryPage() {
                       rfq.status?.toLowerCase().replace(/\s+/g, "");
 
                     return (
-                      <React.Fragment key={rfq.rfq_id}>
+                      <React.Fragment key={ rfq.rfq_id}>
                         {/* MAIN ROW */}
                         <tr
                           className={styles.rowClickable}
@@ -102,7 +102,7 @@ export default function RFQHistoryPage() {
                         >
                           <td>
                             <span className={styles.rfqBadge}>
-                              RFQ-{rfq.rfq_id}
+                              {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
                             </span>
                           </td>
                           <td>

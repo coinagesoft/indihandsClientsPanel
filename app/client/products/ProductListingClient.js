@@ -92,7 +92,7 @@ export default function ProductListingPage() {
 
   /* ================= UI ================= */
   return (
-  <PageWrapper loading={pageLoading}>
+    <PageWrapper loading={pageLoading}>
 
       <div className={`${styles.dashboardWrapper} container-fluid   `}>
         <div className={styles.dashboardCanvas} ></div>
@@ -213,6 +213,19 @@ export default function ProductListingPage() {
                   </div>
 
                   <p className={styles.productName}>{p.product_name}</p>
+
+                  <p className={styles.stockText}>
+                    {p.stock_qty > 0 ? (
+                      <span className={styles.inStock}>
+                        In stock ({p.stock_qty})
+                      </span>
+                    ) : (
+                      <span className={styles.outOfStock}>
+                        Out of stock
+                      </span>
+                    )}
+                  </p>
+
 
                   <div className={styles.bottomRow}>
                     <span className={styles.price}>

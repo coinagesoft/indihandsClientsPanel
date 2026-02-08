@@ -27,6 +27,7 @@ export async function GET(req, { params }) {
       `
       SELECT
         id,
+        rfq_number,
         status,
         submitted_at,
         notes
