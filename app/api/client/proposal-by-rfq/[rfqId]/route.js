@@ -23,29 +23,31 @@ export async function GET(req, { params }) {
     }
 
     /* ================= PROPOSAL ================= */
-    const [[proposal]] = await db.query(
-      `
-      SELECT
-        p.id,
-        p.rfq_id,
-        p.rfq_number,
-        p.proposal_number,
-        p.proposal_date,
-        p.billing_address,
-        p.shipping_address,
-        p.place,
-        p.subtotal,
-        p.cgst_total,
-        p.sgst_total,
-        p.igst_total,
-        p.grand_total,
-        p.status
-      FROM proposals p
-      WHERE p.rfq_id = ? AND p.company_id = ?
-      LIMIT 1
-      `,
-      [rfq_id, companyId]
-    );
+   const [[proposal]] = await db.query(
+  `
+  SELECT
+    p.id,
+    p.rfq_id,
+    r.rfq_number,
+    p.proposal_number,
+    p.proposal_date,
+    p.billing_address,
+    p.shipping_address,
+    p.place,
+    p.subtotal,
+    p.cgst_total,
+    p.sgst_total,
+    p.igst_total,
+    p.grand_total,
+    p.status
+  FROM proposals p
+  JOIN rfqs r ON r.id = p.rfq_id
+  WHERE p.rfq_id = ? AND p.company_id = ?
+  LIMIT 1
+  `,
+  [rfq_id, companyId]
+);
+
 
     if (!proposal) {
       return Response.json({ proposal: null });

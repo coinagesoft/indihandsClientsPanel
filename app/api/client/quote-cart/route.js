@@ -152,22 +152,27 @@ export async function POST(req) {
       rfq = { id: rfqId, rfq_number: rfqNumber };
     }
 
-    /* 3️⃣ GET PRODUCT PRICE */
-    const [[product]] = await db.query(
-      `
-      SELECT base_price
-      FROM products
-      WHERE id = ?
-      `,
-      [productId]
-    );
+ /* 3️⃣ GET PRODUCT PRICE (CUSTOM → BASE FALLBACK) */
+const [[product]] = await db.query(
+  `
+  SELECT
+    COALESCE(cp.custom_price, p.base_price) AS price
+  FROM products p
+  LEFT JOIN company_product_pricing cp
+    ON cp.product_id = p.id
+   AND cp.company_id = ?
+  WHERE p.id = ?
+  `,
+  [companyId, productId]
+);
 
-    if (!product) {
-      return NextResponse.json(
-        { error: "Product not found" },
-        { status: 404 }
-      );
-    }
+if (!product) {
+  return NextResponse.json(
+    { error: "Product not found" },
+    { status: 404 }
+  );
+}
+
 
     /* 4️⃣ CHECK IF PRODUCT EXISTS IN RFQ */
     const [[existing]] = await db.query(
@@ -196,7 +201,7 @@ export async function POST(req) {
         (rfq_id, product_id, quantity, quoted_price)
         VALUES (?, ?, ?, ?)
         `,
-        [rfq.id, productId, quantity, product.base_price]
+        [rfq.id, productId, quantity, product.price]
       );
     }
 

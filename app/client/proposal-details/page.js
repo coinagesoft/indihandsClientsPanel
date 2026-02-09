@@ -162,7 +162,7 @@ export default function ProposalDetailsPage() {
                 >
                   <div>
                     <div className={styles.rfqTitle}>
-                      RFQ-{rfq.rfq_id}
+                      {rfq.rfq_number || `RFQ-{rfq.rfq_id}`}
                     </div>
                     <div className={styles.rfqMeta}>
                       {rfq.proposal_id
