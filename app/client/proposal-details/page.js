@@ -64,6 +64,8 @@ export default function ProposalDetailsPage() {
       });
 
       const data = await res.json();
+
+
       console.log(`📄 Proposal response for RFQ-${rfqId}:`, data); // ✅ LOG
 
       setProposalData((prev) => ({
@@ -144,6 +146,9 @@ export default function ProposalDetailsPage() {
             const data = proposalData[rfq.rfq_id];
             const proposal = data?.proposal;
 
+            // ✅ ADD THESE
+const charges = data?.charges || [];
+const totals = data?.totals || {};
             const statusKey =
               proposal?.status?.toLowerCase()?.replace(/\s+/g, "") || "";
 
@@ -246,7 +251,8 @@ export default function ProposalDetailsPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {data.items.map((i, idx) => (
+                          {data?.items?.map((i, idx) => (
+
                             <tr key={idx}>
                               <td>{i.description}</td>
                               <td className="text-center">{i.qty}</td>
@@ -260,6 +266,45 @@ export default function ProposalDetailsPage() {
                           ))}
                         </tbody>
                       </table>
+      {charges.length > 0 && (
+  <div className={styles.chargesBox}>
+    {/* <h6 className={styles.sectionTitle}>Additional Charges</h6> */}
+
+    <table className={`table ${styles.customTable}`}>
+      <thead>
+        <tr>
+          <th>Charges</th>
+          <th className="text-end">Amount (incl. tax)</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {charges.map((c, i) => {
+          const tax = (c.amount * c.taxPercent) / 100;
+          const total = c.amount + tax;
+
+          return (
+            <tr key={i}>
+              <td>
+                {c.label}
+                {c.taxPercent > 0 && (
+                  <div className={styles.taxHint}>
+                    Includes {c.taxPercent}% tax
+                  </div>
+                )}
+              </td>
+
+              <td className="text-end fw-semibold">
+                ₹ {total.toLocaleString()}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+)}
+
 
                       {/* ================= ACTION BAR ================= */}
                       <div className={styles.actionBar}>

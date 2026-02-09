@@ -33,6 +33,7 @@ export async function GET(req, { params }) {
       return Response.json({ message: "Proposal not found for this RFQ" }, { status: 404 });
     }
 
+    
     // Fetch items
     const [items] = await db.query(
       `SELECT 
@@ -46,11 +47,25 @@ export async function GET(req, { params }) {
       [proposal.id]
     );
 
+    // Fetch additional charges
+const [charges] = await db.query(
+  `
+  SELECT label, amount,
+   tax_percent AS taxPercent
+  FROM proposal_charges
+  WHERE proposal_id = ?
+  `,
+  [proposal.id]
+);
+
+
     // Calculations
     const calcAmount = (qty, rate, discount) => Number(qty) * Number(rate) - ((Number(qty) * Number(rate) * Number(discount || 0)) / 100);
     const calcTax = (amount, percent) => (Number(amount) * Number(percent || 0)) / 100;
 
     let subtotal = 0, cgstTotal = 0, sgstTotal = 0, igstTotal = 0;
+
+
 
     const computedItems = items.map(it => {
       const amount = calcAmount(it.qty, it.rate, it.discount);
@@ -66,10 +81,36 @@ export async function GET(req, { params }) {
 
       return { ...it, amount, cgst, sgst, igst, total };
     });
+let chargesAmount = 0;
+let chargesTax = 0;
 
-    const totalTax = cgstTotal + sgstTotal + igstTotal;
-    const grandTotal = subtotal + totalTax;
-    const formattedDate = new Date().toISOString().slice(0, 10);
+charges.forEach(c => {
+  const amt = Number(c.amount || 0);
+  const taxPct = Number(c.taxPercent || 0);
+  const tax = (amt * taxPct) / 100;
+
+  chargesAmount += amt;
+  chargesTax += tax;
+});
+
+
+
+
+const totalTax = cgstTotal + sgstTotal + igstTotal + chargesTax;
+
+const grandTotal =
+  subtotal +
+  cgstTotal +
+  sgstTotal +
+  igstTotal +
+  chargesAmount +
+  chargesTax;
+
+
+   const formattedDate = proposal.proposal_date
+  ? new Date(proposal.proposal_date).toISOString().slice(0, 10)
+  : "";
+
 
     // Logo and fonts
     const logoPath = path.join(process.cwd(), "public/images/favicon.png");
@@ -225,6 +266,10 @@ const colWidth = [
     doc.font(openSansRegular);
 
     // Rows
+    if (computedItems.length === 0) {
+  doc.text("No line items. Charges applied.", colX[1], y + 8);
+  y += 30;
+} else {
     computedItems.forEach((x, i) => {
 const rowHeight = Math.max(
   doc.heightOfString(x.description, {
@@ -254,6 +299,7 @@ const rowHeight = Math.max(
 
       y += rowHeight;
     });
+  }
 
 // ================= TOTALS TABLE =================
 y += 20;
@@ -264,15 +310,24 @@ const labelColWidth = 135;
 const valueColWidth = 80;
 const rowHeight = 24;
 
-// Data
+
+
 const totalsData = [
   ["Total Before Tax", subtotal.toFixed(2)],
   ["CGST Total", cgstTotal.toFixed(2)],
   ["SGST Total", sgstTotal.toFixed(2)],
   ["IGST Total", igstTotal.toFixed(2)],
   ["Total Tax", totalTax.toFixed(2)],
+  ...(chargesAmount > 0
+    ? [
+        ["Additional Charges", chargesAmount.toFixed(2)],
+        ["Charges Tax", chargesTax.toFixed(2)],
+      ]
+    : []),
   ["GRAND TOTAL", grandTotal.toFixed(2), true]
 ];
+
+
 
 totalsData.forEach(([label, value, isBold]) => {
   // Left cell (label)
@@ -302,6 +357,26 @@ totalsData.forEach(([label, value, isBold]) => {
 
   y += rowHeight;
 });
+
+if (charges.length > 0) {
+  y += 30;
+  doc.font(openSansBold).text("Additional Charges:", 40, y);
+  y += 12;
+
+  doc.font(openSansRegular);
+charges.forEach((c, i) => {
+  const tax = (Number(c.amount) * Number(c.taxPercent || 0)) / 100;
+
+  doc.text(
+    `${i + 1}. ${c.label}: ₹ ${Number(c.amount).toFixed(2)}`
+      + (c.taxPercent ? ` (+${c.taxPercent}% = ₹ ${tax.toFixed(2)})` : ""),
+    60,
+    y
+  );
+  y += 12;
+});
+
+}
 
 
     // Terms
