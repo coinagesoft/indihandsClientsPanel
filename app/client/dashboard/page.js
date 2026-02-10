@@ -107,7 +107,7 @@ export default function DashboardPage() {
             <tbody>
               {recentRFQs.map((rfq) => (
                 <tr key={rfq.id}>
-                  <td className={styles.rfqId}>RFQ-{rfq.id}</td>
+                  <td className={styles.rfqId}>{rfq.rfq_number}</td>
                   <td>{rfq.branch}</td>
                   <td>{rfq.submittedAt}</td>
                   <td>{rfq.items}</td>
