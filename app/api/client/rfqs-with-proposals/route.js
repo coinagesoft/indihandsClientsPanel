@@ -26,6 +26,9 @@ export async function GET(req) {
       SELECT
         r.id AS rfq_id,
          r.rfq_number,
+    r.client_name,
+       r.client_phone,
+       r.client_email,
         p.id AS proposal_id,
         p.proposal_number,
         p.status

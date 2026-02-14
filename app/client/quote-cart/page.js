@@ -12,6 +12,11 @@ export default function QuoteCartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
+const [client, setClient] = useState({
+  name: "",
+  phone: "",
+  email: ""
+});
 
   // 🔍 image zoom
   const [zoomImg, setZoomImg] = useState(null);
@@ -138,6 +143,11 @@ const submitRFQ = async () => {
     headers: {
       Authorization: `Bearer ${token}`, // 🔥 REQUIRED
     },
+     body: JSON.stringify({
+      clientName: client.name,
+      clientPhone: client.phone,
+      clientEmail: client.email,
+    }),
   });
 
   const data = await res.json();
@@ -314,29 +324,72 @@ const maskAmountWithStars = (amount) => {
           </div>
         </div>
 
-        {/* SUMMARY */}
-        <div className="col-lg-3">
-          <div className={styles.summaryBox}>
-            <h6>Summary</h6>
+{/* ================= SUMMARY ================= */}
+<div className="col-lg-3">
+  <div className={`${styles.summaryCard} card`}>
 
-            <div className={styles.summaryRow}>
-              <span>Total Items</span>
-              <span>{totalItems}</span>
-            </div>
-<div className={styles.summaryRow}>
-  <span>Total Amount</span>
-  <span>₹ {maskAmountWithStars(totalAmount)}</span>
+    {/* TITLE */}
+    <div className={styles.summaryHeader}>
+      <h6 className={styles.summaryTitle}>Summary</h6>
+    </div>
+
+    {/* TOTALS */}
+    <div className={styles.summaryStats}>
+      <div className={styles.statRow}>
+        <span>Total Items</span>
+        <strong>{totalItems}</strong>
+      </div>
+
+      <div className={styles.statRow}>
+        <span>Total Amount</span>
+        <strong>₹ {maskAmountWithStars(totalAmount)}</strong>
+      </div>
+    </div>
+
+    {/* CLIENT BLOCK */}
+    <div className={styles.clientSection}>
+      <div className={styles.sectionLabel}>Client Details</div>
+
+      <input
+        className={`form-control ${styles.input}`}
+        placeholder="Client Name"
+        value={client.name}
+        onChange={(e) =>
+          setClient({ ...client, name: e.target.value })
+        }
+      />
+
+      <input
+        className={`form-control ${styles.input}`}
+        placeholder="Phone Number"
+        value={client.phone}
+        onChange={(e) =>
+          setClient({ ...client, phone: e.target.value })
+        }
+      />
+
+      <input
+        className={`form-control ${styles.input}`}
+        placeholder="Email ID"
+        value={client.email}
+        onChange={(e) =>
+          setClient({ ...client, email: e.target.value })
+        }
+      />
+    </div>
+
+    {/* ACTION */}
+    <button
+      className={`btn-primary w-100 ${styles.submitBtn}`}
+      onClick={submitRFQ}
+    >
+      Request for Proposal
+    </button>
+
+  </div>
 </div>
 
 
-            <button
-              className={styles.submitBtn}
-              onClick={submitRFQ}
-            >
-              Request for Proposal
-            </button>
-          </div>
-        </div>
 
       </div>
 

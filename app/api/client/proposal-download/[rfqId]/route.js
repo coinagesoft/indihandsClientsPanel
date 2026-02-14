@@ -15,11 +15,14 @@ export async function GET(req, { params }) {
     // Fetch proposal
     const [[proposal]] = await db.query(
       `SELECT 
-        p.id, p.rfq_id, p.proposal_number, p.proposal_date,
+        p.id, p.rfq_id,  p.company_id,  p.proposal_number, p.proposal_date,
         p.billing_address, p.shipping_address, p.place,
         c.company_name AS company,
         cb.contact_person AS customerName,
-        cb.gstin
+        cb.gstin,
+          r.client_name,
+  r.client_phone,
+  r.client_email
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
       JOIN companies c ON c.id = r.company_id
@@ -32,7 +35,10 @@ export async function GET(req, { params }) {
     if (!proposal) {
       return Response.json({ message: "Proposal not found for this RFQ" }, { status: 404 });
     }
-
+/* ✅ normalize client fields */
+proposal.clientName = proposal.client_name || "";
+proposal.clientPhone = proposal.client_phone || "";
+proposal.clientEmail = proposal.client_email || "";
     
     // Fetch items
     const [items] = await db.query(
@@ -48,15 +54,16 @@ export async function GET(req, { params }) {
     );
 
     // Fetch additional charges
+// Fetch company charges
 const [charges] = await db.query(
   `
-  SELECT label, amount,
-   tax_percent AS taxPercent
-  FROM proposal_charges
-  WHERE proposal_id = ?
+  SELECT label, amount, tax_percent AS taxPercent
+  FROM company_charges
+  WHERE company_id = ?
   `,
-  [proposal.id]
+  [proposal.company_id]
 );
+
 
 
     // Calculations
@@ -173,14 +180,18 @@ doc.font(openSansRegular)
 
 y += 14;
 
-// To
-doc.text(`To: ${proposal.customerName || ""}`, leftX, y, {
-  width: leftWidth
-});
+doc.text(`To: ${proposal.clientName || ""}`, leftX, y, { width: leftWidth });
 y = doc.y;
 
+doc.text(`Phone: ${proposal.clientPhone || ""}`, leftX, y, { width: leftWidth });
+y = doc.y;
+
+doc.text(`Email: ${proposal.clientEmail || ""}`, leftX, y, { width: leftWidth });
+y = doc.y;
+
+
 // Company
-doc.text(`${proposal.company || ""}`, leftX, y, {
+doc.text(`Company : ${proposal.company || ""}`, leftX, y, {
   width: leftWidth
 });
 y = doc.y;

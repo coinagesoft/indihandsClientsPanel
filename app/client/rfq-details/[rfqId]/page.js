@@ -6,7 +6,11 @@ import styles from "./rfqDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 
 export default function RFQDetailsPage() {
-  const { rfqId } = useParams();
+  const params = useParams();
+  const rfqId = Array.isArray(params.rfqId)
+    ? params.rfqId[0]
+    : params.rfqId;
+
   const router = useRouter();
 
   const [rfq, setRfq] = useState(null);
@@ -41,15 +45,11 @@ export default function RFQDetailsPage() {
       .finally(() => setLoading(false));
   }, [rfqId]);
 
-  /* ✅ LOADING FIRST */
-  if (loading) {
-    return <PageWrapper loading={true} />;
-  }
+  if (loading) return <PageWrapper loading />;
 
-  /* ✅ EMPTY / ERROR STATE AFTER LOAD */
   if (!rfq) {
     return (
-      <PageWrapper loading={false}>
+      <PageWrapper>
         <div className={styles.emptyState}>
           <h5>RFQ not found</h5>
           <button
@@ -71,18 +71,28 @@ export default function RFQDetailsPage() {
   const totalAmount = items.reduce((s, i) => s + Number(i.total), 0);
 
   return (
-    <PageWrapper loading={false}>
+    <PageWrapper>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
 
         {/* HEADER */}
         <div className={styles.header}>
           <div>
-            <h4 className="pageTitle">{rfq.rfq_number || `RFQ-${rfq.id}`}</h4>
+            <h4 className="pageTitle">
+              {rfq.rfq_number || `RFQ-${rfq.id}`}
+            </h4>
+
             <p className={styles.subText}>
               Submitted on{" "}
               {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}
             </p>
+
+            {/* ✅ CLIENT INFO */}
+            <div className={styles.clientInfo}>
+              <div><strong>Client:</strong> {rfq.client_name}</div>
+              <div><strong>Phone:</strong> {rfq.client_phone}</div>
+              <div><strong>Email:</strong> {rfq.client_email}</div>
+            </div>
           </div>
 
           <span className={`${styles.status} ${styles[statusKey]}`}>

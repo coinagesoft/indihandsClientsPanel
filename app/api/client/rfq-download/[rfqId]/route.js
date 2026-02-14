@@ -7,23 +7,35 @@ export const runtime = "nodejs";
 
 export async function GET(req, { params }) {
   try {
-    const { rfqId } =await  params;
-    if (!rfqId) {
+    /* ✅ FIX params */
+    const { rfqId } =  await params;
+    const rfq_id = Number(rfqId);
+
+    if (!rfq_id) {
       return Response.json({ message: "Invalid RFQ ID" }, { status: 400 });
     }
 
     /* ================= RFQ ================= */
     const [[rfq]] = await db.query(
       `
-      SELECT r.id,r.rfq_number, r.status, r.submitted_at,
-             c.company_name,
-             cb.contact_person
+      SELECT 
+        r.id,
+        r.rfq_number,
+        r.status,
+        r.submitted_at,
+
+        r.client_name,
+        r.client_phone,
+        r.client_email,
+
+        c.company_name,
+        cb.contact_person
       FROM rfqs r
       JOIN companies c ON c.id = r.company_id
       JOIN company_branches cb ON cb.id = r.branch_id
       WHERE r.id = ?
       `,
-      [rfqId]
+      [rfq_id]
     );
 
     if (!rfq) {
@@ -38,7 +50,7 @@ export async function GET(req, { params }) {
       JOIN products p ON p.id = rp.product_id
       WHERE rp.rfq_id = ?
       `,
-      [rfqId]
+      [rfq_id]
     );
 
     /* ================= FONTS ================= */
@@ -82,9 +94,25 @@ export async function GET(req, { params }) {
     doc.font(openSansRegular).fontSize(10);
 
     doc.text(`RFQ No: ${rfq.rfq_number || `RFQ-${rfq.id}`}`, 40, y); y += 14;
-    doc.text(`Date: ${new Date(rfq.submitted_at).toLocaleDateString("en-IN")}`, 40, y); y += 14;
+    doc.text(
+      `Date: ${rfq.submitted_at ? new Date(rfq.submitted_at).toLocaleDateString("en-IN") : ""}`,
+      40,
+      y
+    ); 
+    y += 14;
+
     doc.text(`Status: ${rfq.status}`, 40, y); y += 14;
-    doc.text(`Customer: ${rfq.contact_person}`, 40, y); y += 14;
+
+    /* ✅ CLIENT DETAILS */
+    doc.text(`Client: ${rfq.client_name || rfq.contact_person || ""}`, 40, y); 
+    y += 14;
+
+    if (rfq.client_phone)
+      { doc.text(`Phone: ${rfq.client_phone}`, 40, y); y += 14; }
+
+    if (rfq.client_email)
+      { doc.text(`Email: ${rfq.client_email}`, 40, y); y += 14; }
+
     doc.text(`Company: ${rfq.company_name}`, 40, y);
 
     /* ================= TABLE ================= */
@@ -110,7 +138,7 @@ export async function GET(req, { params }) {
     items.forEach((item, i) => {
       const qty = Number(item.quantity);
       const rate = Number(item.quoted_price);
-      const total = qty * rate; // ✅ numeric math only
+      const total = qty * rate;
 
       const row = [
         i + 1,
@@ -158,3 +186,4 @@ export async function GET(req, { params }) {
     return Response.json({ message: "Server error" }, { status: 500 });
   }
 }
+

@@ -26,7 +26,11 @@ export async function GET(req, { params }) {
       SELECT
         p.id,
         p.rfq_id,
+        p.company_id, 
         r.rfq_number,
+         r.client_name,
+  r.client_phone,
+  r.client_email,
         p.proposal_number,
         p.proposal_date,
         p.billing_address,
@@ -70,17 +74,18 @@ export async function GET(req, { params }) {
     );
 
     /* ================= CHARGES ================= */
+ /* ================= COMPANY CHARGES ================= */
     const [charges] = await db.query(
       `
       SELECT
         label,
         amount,
         tax_percent AS taxPercent
-      FROM proposal_charges
-      WHERE proposal_id = ?
+      FROM company_charges
+      WHERE company_id = ?
       ORDER BY id ASC
       `,
-      [proposal.id]
+      [proposal.company_id]
     );
 
     let chargesAmount = 0;
@@ -97,6 +102,9 @@ export async function GET(req, { params }) {
     return Response.json({
       proposal: {
         ...proposal,
+          clientName: proposal.client_name || "",
+  clientPhone: proposal.client_phone || "",
+  clientEmail: proposal.client_email || "",
         subtotal: Number(proposal.subtotal),
         cgst_total: Number(proposal.cgst_total),
         sgst_total: Number(proposal.sgst_total),

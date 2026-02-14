@@ -165,16 +165,27 @@ const totals = data?.totals || {};
                     if (!isOpen) loadProposal(rfq.rfq_id);
                   }}
                 >
-                  <div>
-                    <div className={styles.rfqTitle}>
-                      {rfq.rfq_number || `RFQ-{rfq.rfq_id}`}
-                    </div>
-                    <div className={styles.rfqMeta}>
-                      {rfq.proposal_id
-                        ? "Proposal Sent"
-                        : "Waiting for Proposal"}
-                    </div>
-                  </div>
+                <div>
+  <div className={styles.rfqTitle}>
+    {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
+  </div>
+
+  <div className={styles.rfqMeta}>
+    {rfq.proposal_id ? "Proposal Sent" : "Waiting for Proposal"}
+  </div>
+
+  {proposal && (
+    <div className={styles.clientMini}>
+      {proposal.customerName && (
+        <span>{proposal.customerName}</span>
+      )}
+      {proposal.company && (
+        <span> • {proposal.company}</span>
+      )}
+    </div>
+  )}
+</div>
+
 
                   {/* <div className={styles.headerRight}>
                     {proposal && (
@@ -239,6 +250,30 @@ const totals = data?.totals || {};
                           proposal.proposal_date
                         ).toLocaleDateString("en-IN")}
                       </div>
+                      <div className={`${styles.clientBlock} row `}>
+  <div className="col-4"><strong>Client Name:</strong> {proposal.clientName}</div>
+    <div className="col-5"><strong>Client Email:</strong> {proposal.clientEmail}</div>
+      <div className="col-3"><strong>Client Phone:</strong> {proposal.clientPhone}</div>
+  {/* <div><strong>Company:</strong> {proposal.company}</div> */}
+ 
+</div>
+<br></br>
+<div className={`${styles.addressBlock} row` }>
+  <div className="col-6">
+    <strong>Billing:</strong>
+    {proposal.billing_address}
+  </div>
+
+  <div className="col-6">
+    <strong>Shipping:</strong>
+    {proposal.shipping_address}
+  </div>
+</div>
+ {proposal.gstin && (
+    <div><strong>GSTIN:</strong> {proposal.gstin}</div>
+  )} <br>
+  </br>
+
 
                       {/* ================= ITEMS TABLE ================= */}
                       <table className={`table ${styles.customTable}`}>

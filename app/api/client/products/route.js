@@ -7,8 +7,6 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
 
     const search = searchParams.get("search");
-    const categoryId = searchParams.get("categoryId");
-    const subcategoryId = searchParams.get("subcategoryId");
     const stock = searchParams.get("stock");
     const sort = searchParams.get("sort") || "latest";
     const catalogId = searchParams.get("catalogId");
@@ -39,15 +37,6 @@ export async function GET(req) {
       values.push(`%${search}%`);
     }
 
-    if (categoryId) {
-      where += ` AND c.id = ?`;
-      values.push(categoryId);
-    }
-
-    if (subcategoryId) {
-      where += ` AND sc.id = ?`;
-      values.push(subcategoryId);
-    }
 
     if (stock === "in") where += ` AND p.stock_qty > 0`;
     if (stock === "out") where += ` AND p.stock_qty = 0`;
@@ -73,10 +62,6 @@ export async function GET(req) {
       LEFT JOIN company_product_pricing cpp
         ON cpp.product_id = p.id
        AND cpp.company_id = ?
-      LEFT JOIN categories c 
-        ON c.name = p.category
-      LEFT JOIN subcategories sc 
-        ON sc.name = p.sub_category
       ${where}
       GROUP BY p.id
       ${orderBy}

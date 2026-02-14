@@ -282,7 +282,7 @@ useEffect(() => {
             {/* IMAGES – MIXED HEIGHT MASONRY */}
             <div className="col-lg-6">
               <div className={styles.masonry}>
-                {images.map((img, index) => (
+                {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
                     <img
                       src={img}

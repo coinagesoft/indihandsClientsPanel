@@ -12,8 +12,6 @@ export default function ProductListingPage() {
   const searchParams = useSearchParams();
   const catalogId = searchParams.get("catalogId");
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
   const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -25,27 +23,8 @@ export default function ProductListingPage() {
   const [hasFetched, setHasFetched] = useState(false);
 
 
-  /* ================= FETCH CATEGORIES ================= */
-  useEffect(() => {
-    fetch("/api/client/categories")
-      .then(res => res.json())
-      .then(data => setCategories(Array.isArray(data) ? data : []))
-      .catch(() => setCategories([]));
-  }, []);
 
-  /* ================= FETCH SUBCATEGORIES ================= */
-  useEffect(() => {
-    if (!categoryId) {
-      setSubcategories([]);
-      setSubcategoryId("");
-      return;
-    }
 
-    fetch(`/api/client/subcategories?categoryId=${categoryId}`)
-      .then(res => res.json())
-      .then(data => setSubcategories(Array.isArray(data) ? data : []))
-      .catch(() => setSubcategories([]));
-  }, [categoryId]);
 
   /* ================= FETCH PRODUCTS ================= */
   useEffect(() => {
@@ -69,8 +48,6 @@ export default function ProductListingPage() {
     const params = new URLSearchParams();
     params.append("catalogId", catalogId);
     if (search) params.append("search", search);
-    if (categoryId) params.append("categoryId", categoryId);
-    if (subcategoryId) params.append("subcategoryId", subcategoryId);
     if (stock) params.append("stock", stock);
     if (sort) params.append("sort", sort);
 
@@ -86,7 +63,7 @@ export default function ProductListingPage() {
         setHasFetched(true);   // ✅ mark fetch done
       });
 
-  }, [search, categoryId, subcategoryId, stock, sort, catalogId]);
+  }, [search, stock, sort, catalogId]);
 
 
 
@@ -120,39 +97,7 @@ export default function ProductListingPage() {
             />
           </div>
 
-          <div className="col-xl-2 col-md-6">
-            <label className={styles.label}>Category</label>
-            <select
-              className={`form-select ${styles.select}`}
-              value={categoryId}
-              onChange={e => {
-                setCategoryId(e.target.value);
-                setSubcategoryId("");
-              }}
-            >
-              <option value="">All</option>
-              {categories.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="col-xl-2 col-md-6">
-            <label className={styles.label}>Sub Category</label>
-            <select
-              className={`form-select ${styles.select}`}
-              value={subcategoryId}
-              disabled={!categoryId}
-              onChange={e => setSubcategoryId(e.target.value)}
-            >
-              <option value="">
-                {categoryId ? "All" : "Select Category First"}
-              </option>
-              {subcategories.map(sc => (
-                <option key={sc.id} value={sc.id}>{sc.name}</option>
-              ))}
-            </select>
-          </div>
+      
 
           <div className="col-xl-2 col-md-6">
             <label className={styles.label}>Availability</label>

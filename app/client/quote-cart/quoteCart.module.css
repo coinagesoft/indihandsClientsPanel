@@ -15,7 +15,7 @@
   background-position:
     top 20px right 40px,
     top 40px left 10px,
-    bottom 50px right 40px,
+    bottom -30px right 40px,
     bottom -10px left 40px;
 
   background-size:
@@ -187,107 +187,103 @@
 .removeBtn:hover {
   color: var(--color-danger);
 }
+/* ===================================================== */
+/* ================= SUMMARY CARD ====================== */
+/* ===================================================== */
 
-/* ================= SUMMARY ================= */
-.summaryBox {
+.summaryCard {
   background: var(--bg-card);
-  padding: 22px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: fit-content;
 }
 
-.summaryBox h6 {
-  font-family: var(--font-ui);
-  margin-bottom: 14px;
+/* HEADER */
+.summaryHeader {
+  border-bottom: 1px solid rgba(68,45,10,0.08);
+  padding-bottom: 8px;
 }
 
-.summaryRow {
+.summaryTitle {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: var(--text-heading);
+  margin: 0;
+}
+
+/* STATS BOX */
+.summaryStats {
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statRow {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
-  color: var(--text-primary);
+  align-items: center;
+  font-size: 14px;
 }
 
-/* ================= SUBMIT ================= */
-.submitBtn {
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-md);
+.statRow span {
+  color: var(--text-muted);
+}
+
+.statRow strong {
   font-family: var(--font-ui);
-  cursor: pointer;
+  color: var(--color-primary);
+  font-size: 15px;
+}
+
+/* CLIENT SECTION */
+.clientSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionLabel {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 2px;
+}
+
+/* INPUTS */
+.input {
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(68,45,10,0.15);
+  padding: 10px 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(220,102,30,0.15);
+}
+
+/* BUTTON */
+.submitBtn {
+  margin-top: 6px;
+  padding: 12px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  border-radius: var(--radius-md);
   transition: all 0.25s ease;
 }
 
 .submitBtn:hover {
-  background: var(--color-primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
-}
-
-/* ================= ZOOM ================= */
-.zoomOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.zoomBox {
-  background: #fff;
-  padding: 14px;
-  border-radius: var(--radius-md);
-  max-width: 90%;
-  max-height: 90%;
-  position: relative;
-}
-
-.zoomBox img {
-  max-width: 100%;
-  max-height: 80vh;
-  border-radius: 8px;
-}
-
-.zoomClose {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.tableCustom {
-  font-size: 14px;
-}
-
-.tableCustom thead th {
-  font-family: var(--font-ui);
-  color: var(--color-secondary);
-  font-size: 13px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(68, 45, 10, 0.12);
-}
-
-.tableCustom tbody td {
-  padding: 14px 8px;
-  color: var(--text-primary);
-  vertical-align: middle;
-}
-
-.tableCustom tbody tr {
-  transition: background 0.25s ease;
-}
-
-.tableCustom tbody tr:hover {
-  background: rgba(199, 204, 107, 0.22);
 }

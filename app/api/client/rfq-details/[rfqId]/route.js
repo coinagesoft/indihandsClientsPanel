@@ -6,7 +6,15 @@ import { verifyToken } from "../../../../lib/auth";
 export async function GET(req, { params }) {
   try {
     /* ✅ params destructure (NO await) */
-    const { rfqId } = await params;
+    const { rfqId } =await params;
+    const rfq_id = Number(rfqId);
+
+    if (!rfq_id) {
+      return NextResponse.json(
+        { error: "Invalid RFQ id" },
+        { status: 400 }
+      );
+    }
 
     /* ===== AUTH ===== */
     let decoded;
@@ -30,14 +38,19 @@ export async function GET(req, { params }) {
         rfq_number,
         status,
         submitted_at,
-        notes
+        notes,
+
+        client_name,
+        client_phone,
+        client_email
+
       FROM rfqs
       WHERE id = ?
         AND company_id = ?
         AND branch_id = ?
       LIMIT 1
       `,
-      [rfqId, companyId, branchId]
+      [rfq_id, companyId, branchId]
     );
 
     if (!rfq) {
@@ -59,11 +72,14 @@ export async function GET(req, { params }) {
       JOIN products p ON p.id = rp.product_id
       WHERE rp.rfq_id = ?
       `,
-      [rfqId]
+      [rfq_id]
     );
 
     return NextResponse.json({
-      rfq,
+      rfq: {
+        ...rfq,
+        total_items: items.length,
+      },
       items,
     });
 
@@ -75,5 +91,6 @@ export async function GET(req, { params }) {
     );
   }
 }
+
 
 
