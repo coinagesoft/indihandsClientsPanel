@@ -2,7 +2,7 @@
 .dashboardCanvas {
   position: absolute;
   inset: 0;
-  z-index: 9999;
+  z-index: 10;
   pointer-events: none;
 
   background-image:
@@ -13,8 +13,8 @@
   background-repeat: no-repeat;
   background-position:
     top 40px right 50px,
-    bottom 60px right 40px,
-    bottom -60px left 40px;
+    bottom 10px right 40px,
+  bottom 20px left 40px;  
 
   background-size:
     70px auto,
@@ -28,10 +28,11 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px;
+ padding: 32px 28px 140px;
   overflow: auto;
 
 }
+
 
 
 

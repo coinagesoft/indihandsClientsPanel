@@ -89,7 +89,7 @@ export default function RFQDetailsPage() {
 
             {/* ✅ CLIENT INFO */}
             <div className={styles.clientInfo}>
-              <div><strong>Client:</strong> {rfq.client_name}</div>
+              <div><strong>Client Name:</strong> {rfq.client_name}</div>
               <div><strong>Phone:</strong> {rfq.client_phone}</div>
               <div><strong>Email:</strong> {rfq.client_email}</div>
             </div>
