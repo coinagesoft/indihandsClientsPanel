@@ -87,7 +87,7 @@ export default function ProductListingPage() {
         {/* FILTER BAR */}
         <div className={`${styles.filterBar} row g-4 mt-3 mx-1`}>
 
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-5 col-md-6">
             <label className={styles.label}>Search</label>
             <input
               className={`form-control ${styles.input}`}
@@ -99,7 +99,7 @@ export default function ProductListingPage() {
 
       
 
-          <div className="col-xl-2 col-md-6">
+          <div className="col-xl-3 col-md-6">
             <label className={styles.label}>Availability</label>
             <select
               className={`form-select ${styles.select}`}
@@ -112,7 +112,7 @@ export default function ProductListingPage() {
             </select>
           </div>
 
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-4 col-md-6">
             <label className={styles.label}>Sort</label>
             <select
               className={`form-select ${styles.select}`}
