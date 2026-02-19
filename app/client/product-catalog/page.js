@@ -47,8 +47,9 @@ export default function ProductCatalogPage() {
             </div>
           ) : (
             categories.map(cat => (
-            <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6">
+  <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6 d-flex">
   <div className={styles.catalogCard}>
+
 
     {/* IMAGE */}
     <div className={styles.catalogImgWrap}>
@@ -60,17 +61,21 @@ export default function ProductCatalogPage() {
     </div>
 
     {/* CONTENT */}
-    <div className={styles.catalogContent}>
-      <h6 className={styles.catalogTitle}>{cat.title}</h6>
-      <p className={styles.catalogDesc}>{cat.desc}</p>
+   <div className={styles.catalogContent}>
+  <h6 className={styles.catalogTitle}>{cat.title}</h6>
 
-      <Link
-        href={`/client/products?catalogId=${cat.id}`}
-        className={styles.catalogBtn}
-      >
-        View Products
-      </Link>
-    </div>
+  <div className={styles.catalogBottom}>
+    <p className={styles.catalogDesc}>{cat.desc}</p>
+
+    <Link
+      href={`/client/products?catalogId=${cat.id}`}
+      className={styles.catalogBtn}
+    >
+      View Products
+    </Link>
+  </div>
+</div>
+
 
   </div>
 </div>

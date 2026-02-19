@@ -35,198 +35,89 @@
 
 
 
-
-/* ================= CARD ================= */
-.cardBox {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+/* ===== CARD ===== */
+.catalogCard {
+  background: #efe4d7;                 /* exact beige */
+  border-radius: 12px;
+  padding: 14px 14px 16px;
   height: 100%;
-
+  width: 400px;
   display: flex;
   flex-direction: column;
-  position: relative;
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  transition: all 0.35s ease;
-}
-
-.cardBox::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(220, 102, 30, 0.08),
-    rgba(199, 204, 107, 0.08)
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-    pointer-events: none; 
-}
-
-.cardBox:hover::after {
-  opacity: 1;
-}
-
-.cardBox:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-hover);
-}
-
-/* ================= IMAGE ================= */
-.imageBox {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  margin-bottom: 14px;
-
-  transition: transform 0.4s ease;
-}
-
-.cardBox:hover .imageBox {
-  transform: scale(1.05);
-}
-
-/* ================= BADGE ================= */
-.badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--color-primary);
-
-  font-family: var(--font-ui);
-  font-size: 12px;
-  padding: 6px 14px;
-  border-radius: 999px;
-
-  box-shadow: 0 6px 14px rgba(68, 45, 10, 0.18);
-  z-index: 2;
-}
-
-/* ================= TITLE ================= */
-.cardTitle {
-  font-family: var(--font-ui);
-  font-size: 16px;
-  color: var(--text-heading);
-  margin-bottom: 6px;
-}
-
-/* ================= DESCRIPTION ================= */
-.cardDesc {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  margin-bottom: 18px;
-}
-
-/* ================= CTA ================= */
-.viewBtnLink {
-  margin-top: auto;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  width: 160px;
-  padding: 10px 14px;
-
-  background: var(--color-primary);
-  color: #fff;
-
-  font-family: var(--font-ui);
-  font-size: 14px;
-  text-decoration: none;
-
-  border-radius: var(--radius-md);
-  transition: all 0.3s ease;
-}
-
-.viewBtnLink i {
-  transition: transform 0.3s ease;
-}
-
-.viewBtnLink:hover {
-  background: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-
-  
-}
-
-.viewBtnLink:hover i {
-  transform: translateX(4px);
-}
-
-/* ================= CARD ================= */
-.catalogCard {
- background: var(--bg-card);
-   border-radius: 14px;
-  padding: 14px;
-  height: 100%;
-  transition: all 0.25s ease;
+  justify-content: flex-start;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .catalogCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(68,45,10,0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
 }
 
-/* ================= IMAGE ================= */
+/* ===== IMAGE ===== */
 .catalogImgWrap {
-  border-radius: 10px;
+  width: 85%;
+  height: 148px;                      /* ref height */
+  border-radius: 8px;
   overflow: hidden;
-  background: #d9d1c4;
-  margin-bottom: 10px;
+  background: #ddd3c7;
 }
 
 .catalogImg {
   width: 100%;
-  height: 150px;        /* same proportion as reference */
+  height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 10px;
 }
 
-/* ================= CONTENT ================= */
+/* CONTENT */
 .catalogContent {
-  padding: 2px 4px 4px;
+  padding-top: 8px;
 }
 
+/* TITLE */
 .catalogTitle {
-  font-family: var(--font-heading);
-  font-size: 15px;
-  color: #b23a2b; /* reference red */
-  margin-bottom: 2px;
+  font-size: 14px;
   line-height: 1.25;
+  font-weight: 600;
+  color: #b12a1c;
+  margin: 6px 0 6px;
 }
 
+/* DESC + BUTTON ROW */
+.catalogBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   /* key: button right */
+  gap: 10px;
+  color: black;
+  font-weight: bold;
+}
+
+/* DESC */
 .catalogDesc {
-  font-size: 12.8px;
-  color: #6e6256;
-  margin-bottom: 10px;
+  font-size: 12.5px;
   line-height: 1.35;
+  color: #6b5f55;
+  margin: 0;
+  max-width: 65%;                  /* keeps space for button */
 }
 
-/* ================= BUTTON ================= */
+/* BUTTON */
 .catalogBtn {
-  display: inline-block;
-  background: #f3f4f6;
-  border: 1px solid rgba(0,0,0,0.08);
-  color: #444;
-  padding: 5px 12px;
-  border-radius: 7px;
+  flex-shrink: 0;
+  background: #f4f4f4;
+  border: 1px solid #d8cdc2;
+  color: #1e1717;
   font-size: 12.5px;
+  padding: 6px 14px;
+  border-radius: 5px;
   text-decoration: none;
-  transition: all 0.2s ease;
+  font-weight: bold;
 }
 
 .catalogBtn:hover {
-  background: var(--color-primary);
+  background: #b12a1c;
+  border-color: #b12a1c;
   color: #fff;
-  border-color: var(--color-primary);
 }
