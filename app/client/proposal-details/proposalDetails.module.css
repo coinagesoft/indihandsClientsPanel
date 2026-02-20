@@ -25,7 +25,12 @@
 
   opacity: 1; /* decorative only */
 }
-
+.clientBlock{
+  font-size: 14px !important;
+}
+.addressBlock{
+   font-size: 14px !important;
+}
 /* ================= WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
