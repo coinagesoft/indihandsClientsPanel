@@ -135,15 +135,12 @@ useEffect(() => {
             <input className="form-control" value={company.company_name} disabled />
           </div>
           <div className="col-md-6">
-            <label>Company Email</label>
-            <input className="form-control" value={company.company_email} disabled />
+            <label>Branch</label>
+        <input className="form-control" value={branchName} disabled />
           </div>
         </div>
 
-        {/* BRANCH INFO (READ ONLY) */}
-        <h6 className={styles.sectionTitle}>Branch</h6>
-        <input className="form-control" value={branchName} disabled />
-
+   
         {/* BILLING */}
         <h6 className={styles.sectionTitle}>Billing Address</h6>
         <textarea
@@ -163,7 +160,7 @@ useEffect(() => {
         />
 
         {/* CONTACT */}
-        <h6 className={styles.sectionTitle}>Primary Contact</h6>
+        {/* <h6 className={styles.sectionTitle}>Primary Contact</h6>
         <div className="row g-3">
           <div className="col-md-4">
             <input
@@ -199,7 +196,7 @@ useEffect(() => {
               }
             />
           </div>
-        </div>
+        </div> */}
 
         {/* ACTION */}
         <div className="text-end mt-4">
