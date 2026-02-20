@@ -346,9 +346,7 @@ const totals = data?.totals || {};
                         <button
                           className={`${styles.actionBtn} ${styles.secondaryBtn}`}
                           onClick={() =>
-                            window.open(
-                              `/api/client/proposal-download/${rfq.rfq_id}`
-                            )
+                           window.open(`/api/client/proposal-download/${rfq.proposal_id}`)
                           }
                         >
                           Download PDF
