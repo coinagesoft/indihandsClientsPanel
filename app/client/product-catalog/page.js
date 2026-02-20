@@ -46,7 +46,7 @@ export default function ProductCatalogPage() {
               No catalogs available
             </div>
           ) : (
-            categories.map(cat => (
+            [...categories].reverse().map(cat => (
   <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6 d-flex">
   <div className={styles.catalogCard}>
 
