@@ -8,7 +8,7 @@ import Toast from "../../../components/common/Toast";
 
 export default function QuoteCartPage() {
   const router = useRouter();
-
+const [submitting, setSubmitting] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
@@ -132,32 +132,47 @@ const removeItem = async (productId) => {
 
   /* ================= SUBMIT RFQ ================= */
 const submitRFQ = async () => {
+  if (submitting) return; // prevent double click
+
   const token = localStorage.getItem("client_token");
   if (!token) {
-   showToast("Unauthorized", "error");
+    showToast("Unauthorized", "error");
     return;
   }
 
-  const res = await fetch("/api/client/submit-rfq", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`, // 🔥 REQUIRED
-    },
-     body: JSON.stringify({
-      clientName: client.name,
-      clientPhone: client.phone,
-      clientEmail: client.email,
-    }),
-  });
+  setSubmitting(true); // 🔥 start loading
 
-  const data = await res.json();
+  try {
+    const res = await fetch("/api/client/submit-rfq", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        clientName: client.name,
+        clientPhone: client.phone,
+        clientEmail: client.email,
+      }),
+    });
 
-  if (!res.ok) {
-   showToast(data.error || "Failed to submit RFQ", "error");
-    return;
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.error || "Failed to submit RFQ", "error");
+      setSubmitting(false);
+      return;
+    }
+
+    showToast(
+      "RFQ submitted successfully. Confirmation email sent to your email 📧",
+      "success"
+    );
+
+    setRfqSubmitted(true);
+  } catch (err) {
+    showToast("Network error", "error");
+    setSubmitting(false);
   }
-  showToast("RFQ submitted successfully 🎉", "success");
-  setRfqSubmitted(true);
 };
 
 
@@ -179,9 +194,12 @@ const submitRFQ = async () => {
           <h4 className={styles.successTitle}>
             RFQ Submitted Successfully
           </h4>
-          <p className={styles.successText}>
-            Thank you for your request. Our team will get back to you shortly.
-          </p>
+         <p className={styles.successText}>
+  Thank you for your request. Our team will get back to you shortly.  
+  </p>
+<p className={styles.successEmail}>
+   A confirmation email has been sent to your email address.
+</p>
 
           <div className={styles.successActions}>
             <button
@@ -250,15 +268,18 @@ const maskAmountWithStars = (amount) => {
         <div className="col-lg-9">
           <div className={styles.cartBox}>
             <table className="table-custom mb-0">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Rate</th>
-                  <th className="text-center">Qty</th>
-                  <th>Total</th>
-                  <th />
-                </tr>
-              </thead>
+                 <thead>
+      <tr>
+        <th>Product</th>
+        <th>Rate</th>
+        <th className="text-center">Qty</th>
+        <th>
+          Est. Total
+          <span className={styles.infoInline}>*</span>
+        </th>
+        <th />
+      </tr>
+    </thead>
 
               <tbody>
                 {cartItems.map(item => {
@@ -321,6 +342,10 @@ const maskAmountWithStars = (amount) => {
                 })}
               </tbody>
             </table>
+              {/* 👇 FOOTNOTE HERE */}
+  <div className={styles.tableNote}>
+    *Indicative amount only. Final quotation will be shared after RFQ review.
+  </div>
           </div>
         </div>
 
@@ -379,12 +404,20 @@ const maskAmountWithStars = (amount) => {
     </div>
 
     {/* ACTION */}
-    <button
-      className={`btn-primary w-100 ${styles.submitBtn}`}
-      onClick={submitRFQ}
-    >
-      Request for Proposal
-    </button>
+   <button
+  className={`btn-primary w-100 ${styles.submitBtn}`}
+  onClick={submitRFQ}
+  disabled={submitting}
+>
+  {submitting ? (
+    <>
+      <span className={styles.spinner}></span>
+    Submitting RFQ...
+    </>
+  ) : (
+    "Request for Proposal"
+  )}
+</button>
 
   </div>
 </div>

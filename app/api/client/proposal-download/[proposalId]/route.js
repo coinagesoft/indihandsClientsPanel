@@ -95,26 +95,26 @@ const igstRate = x.igst > 0 ? (x.igstRate || 0) : 0;
 
   return `
 <tr>
-<td>${i + 1}</td>
+<td class="tr">${i + 1}</td>
 <td class="tdl">${x.description}</td>
-<td>${x.hsn}</td>
-<td>${x.qty}</td>
-<td>${x.rate.toFixed(2)}</td>
-<td>${x.discount.toFixed(2)}%</td>
-<td>${(x.qty * x.rate * x.discount / 100).toFixed(2)}</td>
-<td>${x.amount.toFixed(2)}</td>
-<td>${x.amount.toFixed(2)}</td>
+<td class="tr">${x.hsn ?? ""}</td>
+<td class="tr">${x.qty}</td>
+<td class="tr">${x.rate.toFixed(2)}</td>
+<td class="tr">${x.discount.toFixed(2)}%</td>
+<td class="tr">${(x.qty * x.rate * x.discount / 100).toFixed(2)}</td>
+<td class="tr">${x.amount.toFixed(2)}</td>
+<td class="tr">${x.amount.toFixed(2)}</td>
 
-<td>${sgstRate}</td>
-<td>${x.sgst.toFixed(2)}</td>
+<td class="tr">${sgstRate}</td>
+<td class="tr">${x.sgst.toFixed(2)}</td>
 
-<td>${cgstRate}</td>
-<td>${x.cgst.toFixed(2)}</td>
+<td class="tr">${cgstRate}</td>
+<td class="tr">${x.cgst.toFixed(2)}</td>
 
-<td>${igstRate}</td>
-<td>${x.igst.toFixed(2)}</td>
+<td class="tr">${igstRate}</td>
+<td class="tr">${x.igst.toFixed(2)}</td>
 
-<td>${x.total.toFixed(2)}</td>
+<td class="tr">${x.total.toFixed(2)}</td>
 </tr>`;
 }).join("");
 
@@ -129,19 +129,19 @@ const chargeRows = computedCharges.map(c => {
 <td class="tdl">${c.label}</td>
 <td></td><td></td><td></td><td></td><td></td>
 
-<td>${c.amount.toFixed(2)}</td>
-<td>${c.amount.toFixed(2)}</td>
+<td class="tr">${c.amount.toFixed(2)}</td>
+<td class="tr">${c.amount.toFixed(2)}</td>
 
-<td>${sgstRate}</td>
-<td>${c.sgst.toFixed(2)}</td>
+<td class="tr">${sgstRate}</td>
+<td class="tr">${c.sgst.toFixed(2)}</td>
 
-<td>${cgstRate}</td>
-<td>${c.cgst.toFixed(2)}</td>
+<td class="tr">${cgstRate}</td>
+<td class="tr">${c.cgst.toFixed(2)}</td>
 
-<td>${igstRate}</td>
-<td>${c.igst.toFixed(2)}</td>
+<td class="tr">${igstRate}</td>
+<td class="tr">${c.igst.toFixed(2)}</td>
 
-<td>${c.total.toFixed(2)}</td>
+<td class="tr" >${c.total.toFixed(2)}</td>
 </tr>`;
 }).join("");
 
@@ -203,10 +203,10 @@ body{
 }
 
 .hdr-right img{
-  width:180px;
+  width:190px;
   height:auto;
-  margin-end:20px;
-  margin-bottom:6px; /* gap logo→text */
+  margin-bottom:6px;
+   margin-right:35px;
 }
 
 .hdr-text{
@@ -246,6 +246,14 @@ body{
   --grid:#b7b7b7;
 }
 
+td.tr{
+  text-align:right !important;
+}
+
+td.tdl{
+  text-align:left !important;
+}
+  
 table{
   width:100%;
   border-collapse:collapse;   
@@ -382,9 +390,15 @@ th{
 .footer{
   background:#cfd84e;
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  padding:6px 12px;
+  padding:15px 12px;   /* reduce height */
   font-size:10px;
+
+  /* ⭐ stretch to paper edge */
+  margin-left:-10mm;
+  margin-right:-10mm;
+  margin-bottom:-10mm;
 }
 
 </style>
@@ -407,7 +421,7 @@ th{
   <!-- RIGHT BLOCK -->
   <div class="hdr-right">
     <img 
-      src="https://res.cloudinary.com/dxb1whlam/image/upload/v1771481107/design-studio_jm1fm9.png"
+      src="https://res.cloudinary.com/dxb1whlam/image/upload/v1771752355/manik_trifaley_logo_white_bgdbsp.png"
     >
 
   <div class="hdr-text">
@@ -439,7 +453,7 @@ State: ${senderStateName} | State Code: ${senderStateCode}
 
 <div class="sec">
 Contact Person: ${proposal.client_name}<br>
-Contact Details: ${proposal.client_phone}<br>
+Contact Number: ${proposal.client_phone}<br>
 Company name: ${proposal.company}<br>
 Address: ${proposal.billing_address}<br>
 <b>GSTIN: ${proposal.gstin || ""}</b><br>
@@ -752,7 +766,7 @@ const computedItems = items.map(i => {
       <tr>
         <td>${i + 1}</td>
         <td>${x.description}</td>
-        <td>${x.hsn}</td>
+        <td>${x.hsn }</td>
         <td>${x.qty}</td>
         <td>${x.rate.toFixed(2)}</td>
         <td>${x.discount}%</td>

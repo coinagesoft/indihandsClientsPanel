@@ -223,3 +223,16 @@
   color: var(--text-muted);
   margin-top: auto auto;
 }
+.btnLoader {
+  width:16px;
+  height:16px;
+  border:2px solid #fff;
+  border-top:2px solid transparent;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}

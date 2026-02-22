@@ -3,17 +3,21 @@
 import { useEffect, useState } from "react";
 import styles from "./proposalDetails.module.css";
 import PageWrapper from "../../../components/common/wrapper";
-
+import Toast from "../../../components/common/Toast";
 export default function ProposalDetailsPage() {
   const [rfqs, setRfqs] = useState([]);
   const [openRfq, setOpenRfq] = useState(null);
   const [proposalData, setProposalData] = useState({});
-  const [loadingRfq, setLoadingRfq] = useState(null);     // row-level
-  const [actionLoading, setActionLoading] = useState(false);
+  const [loadingRfq, setLoadingRfq] = useState(null);
+  const [actionLoading, setActionLoading] = useState(null);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [hasFetched, setHasFetched] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "" });
 
-  const [pageLoading, setPageLoading] = useState(true);   // ✅ ADD
-  const [hasFetched, setHasFetched] = useState(false);    // ✅ ADD
-
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast({ message: "", type: "" }), 3000);
+  };
   /* ================= RFQ LIST ================= */
   useEffect(() => {
     const token = localStorage.getItem("client_token");
@@ -85,14 +89,16 @@ export default function ProposalDetailsPage() {
 
     const token = localStorage.getItem("client_token");
     if (!token) {
-      alert("Unauthorized");
+      showToast("Unauthorized", "error");
       return;
     }
 
-    try {
-      setActionLoading(true);
+    const actionKey = `${status.toLowerCase()}-${rfqId}`;
+    setActionLoading(actionKey);
 
-      const res = await fetch("/api/client/proposal-status", {
+    try {
+      /* 1️⃣ proposal update */
+      const res1 = await fetch("/api/client/proposal-status", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,17 +107,39 @@ export default function ProposalDetailsPage() {
         body: JSON.stringify({ proposalId, status }),
       });
 
-      const data = await res.json();
-      console.log("🔄 Proposal status update response:", data); // ✅ LOG
+      const data1 = await res1.json();
 
-      if (!res.ok) {
-        alert("Failed to update status");
+      if (!res1.ok) {
+        showToast("Failed to update proposal", "error");
         return;
       }
 
-      await loadProposal(rfqId, true); // refresh proposal
+      /* 2️⃣ RFQ stock */
+      const rfqStatus =
+        status === "Approved" ? "Accepted" : "Rejected";
+
+      await fetch(`/api/client/rfqs/${rfqId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: rfqStatus }),
+      });
+
+      /* 3️⃣ Toast with email info */
+      if (status === "Approved") {
+        showToast(
+          data1.mailSent
+            ? "Proposal approved & email sent ✅"
+            : "Proposal approved (email failed)",
+          data1.mailSent ? "success" : "warning"
+        );
+      } else {
+        showToast("Proposal rejected", "warning");
+      }
+
+      await loadProposal(rfqId, true);
+
     } finally {
-      setActionLoading(false);
+      setActionLoading(null);
     }
   };
 
@@ -134,7 +162,13 @@ export default function ProposalDetailsPage() {
 
   /* ================= MAIN UI ================= */
   return (
+
     <PageWrapper loading={false}>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "", type: "" })}
+      />
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
 
@@ -147,8 +181,8 @@ export default function ProposalDetailsPage() {
             const proposal = data?.proposal;
 
             // ✅ ADD THESE
-const charges = data?.charges || [];
-const totals = data?.totals || {};
+            const charges = data?.charges || [];
+            const totals = data?.totals || {};
             const statusKey =
               proposal?.status?.toLowerCase()?.replace(/\s+/g, "") || "";
 
@@ -165,26 +199,26 @@ const totals = data?.totals || {};
                     if (!isOpen) loadProposal(rfq.rfq_id);
                   }}
                 >
-                <div>
-  <div className={styles.rfqTitle}>
-    {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
-  </div>
+                  <div>
+                    <div className={styles.rfqTitle}>
+                      {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
+                    </div>
 
-  <div className={styles.rfqMeta}>
-    {rfq.proposal_id ? "Proposal Sent" : "Waiting for Proposal"}
-  </div>
+                    <div className={styles.rfqMeta}>
+                      {rfq.proposal_id ? "Proposal Sent" : "Waiting for Proposal"}
+                    </div>
 
-  {proposal && (
-    <div className={styles.clientMini}>
-      {proposal.customerName && (
-        <span>{proposal.customerName}</span>
-      )}
-      {proposal.company && (
-        <span> • {proposal.company}</span>
-      )}
-    </div>
-  )}
-</div>
+                    {proposal && (
+                      <div className={styles.clientMini}>
+                        {proposal.customerName && (
+                          <span>{proposal.customerName}</span>
+                        )}
+                        {proposal.company && (
+                          <span> • {proposal.company}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
 
                   {/* <div className={styles.headerRight}>
@@ -202,33 +236,31 @@ const totals = data?.totals || {};
                       ❯
                     </span>
                   </div> */}
-<div className={styles.headerRight}>
-  {proposal && (
-    <>
-      <span className={`${styles.status} ${styles[statusKey]}`}>
-        <span className={styles.statusDot} />
-        {proposal.status}
-      </span>
+                  <div className={styles.headerRight}>
+                    {proposal && (
+                      <>
+                        <span className={`${styles.status} ${styles[statusKey]}`}>
+                          <span className={styles.statusDot} />
+                          {proposal.status}
+                        </span>
 
-      <span
-        className={`${styles.chevron} ${
-          isOpen ? styles.open : ""
-        }`}
-      >
-        ❯
-      </span>
-    </>
-  )}
-</div>
+                        <span
+                          className={`${styles.chevron} ${isOpen ? styles.open : ""
+                            }`}
+                        >
+                          ❯
+                        </span>
+                      </>
+                    )}
+                  </div>
 
 
                 </div>
 
                 {/* ================= BODY ================= */}
                 <div
-                  className={`${styles.accordionBody} ${
-                    isOpen ? styles.open : ""
-                  }`}
+                  className={`${styles.accordionBody} ${isOpen ? styles.open : ""
+                    }`}
                 >
                   {loadingRfq === rfq.rfq_id && (
                     <div className={styles.loading}>
@@ -251,28 +283,28 @@ const totals = data?.totals || {};
                         ).toLocaleDateString("en-IN")}
                       </div>
                       <div className={`${styles.clientBlock} row `}>
-  <div className="col-4"><strong>Client Name:</strong> {proposal.clientName}</div>
-    <div className="col-5"><strong>Client Email:</strong> {proposal.clientEmail}</div>
-      <div className="col-3"><strong>Client Phone:</strong> {proposal.clientPhone}</div>
-  {/* <div><strong>Company:</strong> {proposal.company}</div> */}
- 
-</div>
-<br></br>
-<div className={`${styles.addressBlock} row` }>
-  <div className="col-6">
-    <strong>Billing:</strong>
-    {proposal.billing_address}
-  </div>
+                        <div className="col-4"><strong>Client Name:</strong> {proposal.clientName}</div>
+                        <div className="col-5"><strong>Client Email:</strong> {proposal.clientEmail}</div>
+                        <div className="col-3"><strong>Client Phone:</strong> {proposal.clientPhone}</div>
+                        {/* <div><strong>Company:</strong> {proposal.company}</div> */}
 
-  <div className="col-6">
-    <strong>Shipping:</strong>
-    {proposal.shipping_address}
-  </div>
-</div>
- {proposal.gstin && (
-    <div><strong>GSTIN:</strong> {proposal.gstin}</div>
-  )} <br>
-  </br>
+                      </div>
+                      <br></br>
+                      <div className={`${styles.addressBlock} row`}>
+                        <div className="col-6">
+                          <strong>Billing:</strong>
+                          {proposal.billing_address}
+                        </div>
+
+                        <div className="col-6">
+                          <strong>Shipping:</strong>
+                          {proposal.shipping_address}
+                        </div>
+                      </div>
+                      {proposal.gstin && (
+                        <div><strong>GSTIN:</strong> {proposal.gstin}</div>
+                      )} <br>
+                      </br>
 
 
                       {/* ================= ITEMS TABLE ================= */}
@@ -301,85 +333,87 @@ const totals = data?.totals || {};
                           ))}
                         </tbody>
                       </table>
-      {charges.length > 0 && (
-  <div className={styles.chargesBox}>
-    {/* <h6 className={styles.sectionTitle}>Additional Charges</h6> */}
+                      {charges.length > 0 && (
+                        <div className={styles.chargesBox}>
+                          {/* <h6 className={styles.sectionTitle}>Additional Charges</h6> */}
 
-    <table className={`table ${styles.customTable}`}>
-      <thead>
-        <tr>
-          <th>Charges</th>
-          <th className="text-end">Amount (incl. tax)</th>
-        </tr>
-      </thead>
+                          <table className={`table ${styles.customTable}`}>
+                            <thead>
+                              <tr>
+                                <th>Charges</th>
+                                <th className="text-end">Amount (incl. tax)</th>
+                              </tr>
+                            </thead>
 
-      <tbody>
-        {charges.map((c, i) => {
-          const tax = (c.amount * c.taxPercent) / 100;
-          const total = c.amount + tax;
+                            <tbody>
+                              {charges.map((c, i) => {
+                                const tax = (c.amount * c.taxPercent) / 100;
+                                const total = c.amount + tax;
 
-          return (
-            <tr key={i}>
-              <td>
-                {c.label}
-                {c.taxPercent > 0 && (
-                  <div className={styles.taxHint}>
-                    Includes {c.taxPercent}% tax
-                  </div>
-                )}
-              </td>
+                                return (
+                                  <tr key={i}>
+                                    <td>
+                                      {c.label}
+                                      {c.taxPercent > 0 && (
+                                        <div className={styles.taxHint}>
+                                          Includes {c.taxPercent}% tax
+                                        </div>
+                                      )}
+                                    </td>
 
-              <td className="text-end fw-semibold">
-                ₹ {total.toLocaleString()}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  </div>
-)}
+                                    <td className="text-end fw-semibold">
+                                      ₹ {total.toLocaleString()}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
 
 
                       {/* ================= ACTION BAR ================= */}
                       <div className={styles.actionBar}>
-                        <button
-                          className={`${styles.actionBtn} ${styles.secondaryBtn}`}
-                          onClick={() =>
-                           window.open(`/api/client/proposal-download/${rfq.proposal_id}`)
-                          }
-                        >
-                          Download PDF
-                        </button>
+                        {proposal?.status !== "Rejected" && (
+                          <button
+                            className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+                            onClick={() =>
+                              window.open(`/api/client/proposal-download/${rfq.proposal_id}`)
+                            }
+                          >
+                            Download PDF
+                          </button>
+                        )}
 
                         {canTakeAction && (
                           <>
                             <button
                               className={`${styles.actionBtn} ${styles.rejectBtn}`}
-                              disabled={actionLoading}
+                              disabled={actionLoading === `rejected-${rfq.rfq_id}`}
                               onClick={() =>
-                                updateStatus(
-                                  proposal.id,
-                                  "Rejected",
-                                  rfq.rfq_id
-                                )
+                                updateStatus(proposal.id, "Rejected", rfq.rfq_id)
                               }
                             >
-                              Reject
+                              {actionLoading === `rejected-${rfq.rfq_id}` ? (
+                                <span className={styles.btnLoader}></span>
+                              ) : (
+                                "Reject"
+                              )}
                             </button>
 
                             <button
                               className={`${styles.actionBtn} ${styles.approveBtn}`}
-                              disabled={actionLoading}
+                              disabled={actionLoading === `approved-${rfq.rfq_id}`}
                               onClick={() =>
-                                updateStatus(
-                                  proposal.id,
-                                  "Approved",
-                                  rfq.rfq_id
-                                )
+                                updateStatus(proposal.id, "Approved", rfq.rfq_id)
                               }
                             >
-                              Approve
+                              {actionLoading === `approved-${rfq.rfq_id}` ? (
+                                <span className={styles.btnLoader}></span>
+                              ) : (
+                                "Approve"
+                              )}
                             </button>
                           </>
                         )}

@@ -81,9 +81,21 @@
 .successText {
   font-size: 14px;
   color: var(--text-muted);
-  margin-bottom: 26px;
+  /* margin-bottom: 14px; */
+}
+.successEmail{
+   font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 20px;
 }
 
+.tableNote {
+  font-size: 12px;
+  color: #7a7a7a;
+  margin-top: 6px;
+}
 /* ================= ACTIONS ================= */
 .successActions {
   display: flex;
@@ -91,7 +103,18 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+.infoInline {
+  font-size: 11px;
+  color: #8a8a8a;
+  font-weight: 500;
+  margin-left: 2px;
+}
 
+.tableNote {
+  font-size: 12px;
+  color: #7a7a7a;
+  margin-top: 6px;
+}
 .primaryBtn {
   background: var(--color-primary);
   color: #fff;
@@ -286,4 +309,21 @@
 .submitBtn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
+}
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
