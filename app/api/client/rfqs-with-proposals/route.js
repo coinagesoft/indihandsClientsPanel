@@ -36,7 +36,7 @@ export async function GET(req) {
       JOIN proposals p 
         ON p.rfq_id = r.id
        AND p.company_id = ?
-       AND p.status IN ('Pending','Approved')
+       AND p.status IN ('Pending','Approved','Sent','Rejected')
       WHERE r.company_id = ?
         AND r.branch_id = ?
       ORDER BY r.id DESC
