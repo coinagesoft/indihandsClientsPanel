@@ -7,13 +7,37 @@ import { verifyToken } from "../../../lib/auth";
 //   const dateStr = today.toISOString().slice(0, 10).replace(/-/g, "");
 //   return `RFQIndihand${dateStr}-${String(id).padStart(4, "0")}`;
 // }
-function formatRFQNumber(id) {
+
+
+async function formatRFQNumber(companyId) {
   const today = new Date();
   const dateStr = today.toISOString().slice(0, 10).replace(/-/g, "");
-  return `RFQ-INDIHAND-${dateStr}-${id}`;
+
+  /* 1️⃣ get company short */
+  const [[company]] = await db.query(
+    `SELECT short_name FROM companies WHERE id = ?`,
+    [companyId]
+  );
+
+  if (!company) throw new Error("Company not found");
+
+  const short = company.short_name;
+
+  /* 2️⃣ count today's RFQ for company */
+  const [[row]] = await db.query(
+    `
+    SELECT COUNT(*) AS count
+    FROM rfqs
+    WHERE company_id = ?
+      AND DATE(created_at) = CURDATE()
+    `,
+    [companyId]
+  );
+
+  const seq = row.count + 1;
+
+  return `RFQ-${short}-${dateStr}-${seq}`;
 }
-
-
 
 export async function GET(req) {
   try {
@@ -137,7 +161,7 @@ export async function POST(req) {
       );
 
       const rfqId = result.insertId;
-      const rfqNumber = formatRFQNumber(rfqId);
+      const rfqNumber =await formatRFQNumber(companyId);
 
       // 🔥 STORE FORMATTED RFQ NUMBER IN DB
       await db.query(
