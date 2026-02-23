@@ -17,6 +17,11 @@ const [client, setClient] = useState({
   phone: "",
   email: ""
 });
+const [errors, setErrors] = useState({
+  name: "",
+  phone: "",
+  email: ""
+});
 
   // 🔍 image zoom
   const [zoomImg, setZoomImg] = useState(null);
@@ -31,6 +36,38 @@ const showToast = (message, type = "success") => {
   toastTimer.current = setTimeout(() => {
     setToast({ message: "", type: "" });
   }, 3000);
+};
+const validateClient = () => {
+  if (!client.name.trim()) {
+    showToast("Please enter client name", "warning");
+    return false;
+  }
+
+  if (!client.phone.trim()) {
+    showToast("Please enter phone number", "warning");
+    return false;
+  }
+
+  if (!/^[6-9]\d{9}$/.test(client.phone.trim())) {
+    showToast("Enter valid 10-digit phone number", "warning");
+    return false;
+  }
+
+  if (!client.email.trim()) {
+    showToast("Please enter email", "warning");
+    return false;
+  }
+
+  if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+      client.email.trim()
+    )
+  ) {
+    showToast("Enter valid email address", "warning");
+    return false;
+  }
+
+  return true;
 };
 
 /* ================= FETCH CART ================= */
@@ -133,7 +170,7 @@ const removeItem = async (productId) => {
   /* ================= SUBMIT RFQ ================= */
 const submitRFQ = async () => {
   if (submitting) return; // prevent double click
-
+  if (!validateClient()) return; 
   const token = localStorage.getItem("client_token");
   if (!token) {
     showToast("Unauthorized", "error");
@@ -372,36 +409,36 @@ const maskAmountWithStars = (amount) => {
     </div>
 
     {/* CLIENT BLOCK */}
-    <div className={styles.clientSection}>
-      <div className={styles.sectionLabel}>Client Details</div>
+<div className={styles.clientSection}>
+  <div className={styles.sectionLabel}>Client Details</div>
 
-      <input
-        className={`form-control ${styles.input}`}
-        placeholder="Client Name"
-        value={client.name}
-        onChange={(e) =>
-          setClient({ ...client, name: e.target.value })
-        }
-      />
+  <input
+    className={`form-control ${styles.input}`}
+    placeholder="Client Name"
+    value={client.name}
+    onChange={(e) =>
+      setClient({ ...client, name: e.target.value })
+    }
+  />
 
-      <input
-        className={`form-control ${styles.input}`}
-        placeholder="Phone Number"
-        value={client.phone}
-        onChange={(e) =>
-          setClient({ ...client, phone: e.target.value })
-        }
-      />
+  <input
+    className={`form-control ${styles.input}`}
+    placeholder="Phone Number"
+    value={client.phone}
+    onChange={(e) =>
+      setClient({ ...client, phone: e.target.value })
+    }
+  />
 
-      <input
-        className={`form-control ${styles.input}`}
-        placeholder="Email ID"
-        value={client.email}
-        onChange={(e) =>
-          setClient({ ...client, email: e.target.value })
-        }
-      />
-    </div>
+  <input
+    className={`form-control ${styles.input}`}
+    placeholder="Email ID"
+    value={client.email}
+    onChange={(e) =>
+      setClient({ ...client, email: e.target.value })
+    }
+  />
+</div>
 
     {/* ACTION */}
    <button

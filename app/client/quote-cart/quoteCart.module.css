@@ -8,8 +8,8 @@
   background-image:
     url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
-    url("/images/page3_bottom_left_logo.png"),
-    url("/images/parrot.png");
+    url("/images/page3_bottom_left_logo.png");
+    /* url("/images/parrot.png"); */
 
   background-repeat: no-repeat;
   background-position:
@@ -21,8 +21,8 @@
   background-size:
     90px auto,
     90px auto,
-    130px auto,
-    100px auto;
+    130px auto;
+    /* 100px auto; */
 
   opacity: 1; /* decorative only */
 }
