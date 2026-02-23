@@ -271,9 +271,9 @@ const maskAmountWithStars = (amount) => {
                  <thead>
       <tr>
         <th>Product</th>
-        <th>Rate</th>
+        <th colSpan={2}>Rate</th>
         <th className="text-center">Qty</th>
-        <th>
+        <th colSpan={2}>
           Est. Total
           <span className={styles.infoInline}>*</span>
         </th>
@@ -302,7 +302,7 @@ const maskAmountWithStars = (amount) => {
                         </div>
                       </td>
 
-                      <td>₹ {Number(item.price).toLocaleString()}</td>
+                      <td colSpan={2}>₹ {Number(item.price).toLocaleString()}</td>
 
                       <td className="text-center">
                         <div className={styles.qtyControl}>
@@ -325,7 +325,7 @@ const maskAmountWithStars = (amount) => {
                         </div>
                       </td>
 
-                      <td>₹ {itemTotal.toLocaleString()}</td>
+                      <td colSpan={2}>₹ {itemTotal.toLocaleString()}</td>
 
                       <td>
                         <button

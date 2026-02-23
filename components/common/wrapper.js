@@ -19,8 +19,13 @@ export default function PageWrapper({ loading, children }) {
 
   return (
     <>
-      {children}
+      <div className={styles.pageWrapper}>
+      <div className={styles.pageContent}>
+        {children}
+      </div>
+
       <Footer />
+    </div>
     </>
   );
 }
