@@ -386,6 +386,7 @@ export async function POST(req) {
         subject: `Proposal ${row.proposal_number} Approved`,
         html: clientHtml
       });
+      mailSent = true;
 
      const adminHtml = `
 <div style="font-family:Segoe UI,Arial,sans-serif;color:#333">
@@ -438,6 +439,7 @@ export async function POST(req) {
         subject: `Proposal approved by ${row.client_name} (${row.branch_name})`,
         html: adminHtml
       });
+      mailSent = true;
     }
 
     /* ================= REJECTED ================= */
@@ -464,6 +466,7 @@ export async function POST(req) {
         subject: `Proposal Rejected by ${row.client_name} (${row.branch_name})`,
         html: adminHtml
       });
+      mailSent = true;
     }
 
     return Response.json({ success: true });

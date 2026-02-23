@@ -19,37 +19,46 @@ export default function ProposalDetailsPage() {
     setTimeout(() => setToast({ message: "", type: "" }), 3000);
   };
   /* ================= RFQ LIST ================= */
-  useEffect(() => {
-    const token = localStorage.getItem("client_token");
-    if (!token) {
+ useEffect(() => {
+  const token = localStorage.getItem("client_token");
+
+  if (!token) {
+    setRfqs([]);
+    setPageLoading(false);
+    setHasFetched(true);
+    return;
+  }
+
+  fetch("/api/client/rfqs-with-proposals", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        console.error("RFQ API error:", res.status);
+        throw new Error("Unauthorized");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log("📦 RFQs with proposals response:", data);
+
+      const list =
+        Array.isArray(data) ? data :
+        Array.isArray(data.rfqs) ? data.rfqs :
+        Array.isArray(data.data) ? data.data :
+        [];
+
+      setRfqs(list);
+    })
+    .catch((err) => {
+      console.error("❌ RFQ list fetch error:", err);
       setRfqs([]);
+    })
+    .finally(() => {
       setPageLoading(false);
       setHasFetched(true);
-      return;
-    }
-
-    fetch("/api/client/rfqs-with-proposals", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Unauthorized");
-        return res.json();
-      })
-      .then((data) => {
-        console.log("📦 RFQs with proposals response:", data); // ✅ LOG
-        setRfqs(Array.isArray(data) ? data : []);
-      })
-      .catch((err) => {
-        console.error("❌ RFQ list fetch error:", err);
-        setRfqs([]);
-      })
-      .finally(() => {
-        setPageLoading(false);
-        setHasFetched(true); // ✅ mark fetch completed
-      });
-  }, []);
+    });
+}, []);
 
   /* ================= LOAD PROPOSAL ================= */
   const loadProposal = async (rfqId, force = false) => {
