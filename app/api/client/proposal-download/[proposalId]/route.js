@@ -199,14 +199,15 @@ body{
   display:flex;
   flex-direction:column;
   align-items:flex-end; /* logo + text right */
-  max-width:220px; /* control width */
+  max-width:200px; /* control width */
 }
 
 .hdr-right img{
   width:190px;
   height:auto;
   margin-bottom:6px;
-   margin-right:35px;
+   margin-right:15px;
+   text-align:left;
 }
 
 .hdr-text{
