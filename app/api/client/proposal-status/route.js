@@ -294,6 +294,7 @@ export async function POST(req) {
       return Response.json({ message: "Invalid" }, { status: 400 });
     }
 
+     let mailSent = false;  
     /* 1️⃣ UPDATE */
     await db.query(
       `UPDATE proposals SET status=? WHERE id=?`,
@@ -469,7 +470,7 @@ export async function POST(req) {
       mailSent = true;
     }
 
-    return Response.json({ success: true });
+    return Response.json({ success: true,mailSent });
 
   } catch (e) {
     console.error(e);
