@@ -66,6 +66,7 @@ export default function DashboardPage() {
     "Under Review": "underreview",
     Accepted: "accepted",
     Rejected: "rejected",
+    Draft:"draft",
   };
 
  

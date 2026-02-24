@@ -380,7 +380,52 @@ export default function ProposalDetailsPage() {
                           </table>
                         </div>
                       )}
+{proposal && (
+  <div className={styles.totalBox}>
+    <table className={`table ${styles.customTable}`}>
+      <tbody>
+        <tr>
+          <td>Subtotal</td>
+          <td className="text-end">
+            ₹ {Number(totals.subtotal || 0).toLocaleString()}
+          </td>
+        </tr>
 
+        <tr>
+          <td>Item Tax</td>
+          <td className="text-end">
+            ₹ {Number(totals.itemTax || 0).toLocaleString()}
+          </td>
+        </tr>
+
+        {totals.chargesAmount > 0 && (
+          <tr>
+            <td>Charges</td>
+            <td className="text-end">
+              ₹ {Number(totals.chargesAmount).toLocaleString()}
+            </td>
+          </tr>
+        )}
+
+        {totals.chargesTax > 0 && (
+          <tr>
+            <td>Charges Tax</td>
+            <td className="text-end">
+              ₹ {Number(totals.chargesTax).toLocaleString()}
+            </td>
+          </tr>
+        )}
+
+        <tr className={styles.grandTotalRow}>
+          <th>Grand Total</th>
+          <th className="text-end">
+            ₹ {Number(totals.grandTotal || proposal.grand_total || 0).toLocaleString()}
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)}
 
                       {/* ================= ACTION BAR ================= */}
                       <div className={styles.actionBar}>

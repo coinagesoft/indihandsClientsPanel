@@ -213,7 +213,11 @@
 .rejected .statusDot {
   background: var(--color-danger);
 }
-
+.draft{
+  background-color: aliceblue;
+  color:black ;
+    padding: 6px 30px;
+}
 /* ================= STATES ================= */
 .emptyState,
 .loading {
@@ -235,4 +239,14 @@
 
 @keyframes spin {
   to { transform:rotate(360deg); }
+}
+.totalBox {
+  margin-top: 16px;
+  max-width: 420px;
+  margin-left: auto;
+}
+
+.grandTotalRow {
+  font-size: 18px;
+  border-top: 2px solid #ddd;
 }

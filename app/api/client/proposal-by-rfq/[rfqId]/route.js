@@ -75,18 +75,35 @@ export async function GET(req, { params }) {
 
     /* ================= CHARGES ================= */
  /* ================= COMPANY CHARGES ================= */
-    const [charges] = await db.query(
-      `
-      SELECT
-        label,
-        amount,
-        tax_percent AS taxPercent
-      FROM company_charges
-      WHERE company_id = ?
-      ORDER BY id ASC
-      `,
-      [proposal.company_id]
-    );
+  /* ================= PROPOSAL CHARGES (PRIORITY) ================= */
+let [charges] = await db.query(
+  `
+  SELECT
+    label,
+    amount,
+    tax_percent AS taxPercent
+  FROM proposal_charges
+  WHERE proposal_id = ?
+  ORDER BY id ASC
+  `,
+  [proposal.id]
+);
+
+/* fallback to company default */
+if (!charges.length) {
+  [charges] = await db.query(
+    `
+    SELECT
+      label,
+      amount,
+      tax_percent AS taxPercent
+    FROM company_charges
+    WHERE company_id = ?
+    ORDER BY id ASC
+    `,
+    [proposal.company_id]
+  );
+}
 
     let chargesAmount = 0;
     let chargesTax = 0;

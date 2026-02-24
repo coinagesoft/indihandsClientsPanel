@@ -185,3 +185,8 @@
   background: rgba(162, 20, 24, 0.25);
   color: var(--color-danger);
 }
+.draft{
+  background-color: aliceblue;
+  color:black ;
+    padding: 6px 30px;
+}
