@@ -2,6 +2,7 @@ export const runtime = "nodejs";
 import { db } from "../../../../db";
 import { verifyToken } from "../../../../lib/auth";
 
+
 export async function GET(req, { params }) {
   try {
     const { rfqId } = await params;
@@ -26,21 +27,16 @@ export async function GET(req, { params }) {
       SELECT
         p.id,
         p.rfq_id,
-        p.company_id, 
+        p.company_id,
         r.rfq_number,
-         r.client_name,
-  r.client_phone,
-  r.client_email,
+        r.client_name,
+        r.client_phone,
+        r.client_email,
         p.proposal_number,
         p.proposal_date,
         p.billing_address,
         p.shipping_address,
         p.place,
-        p.subtotal,
-        p.cgst_total,
-        p.sgst_total,
-        p.igst_total,
-        p.grand_total,
         p.status
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
@@ -55,7 +51,7 @@ export async function GET(req, { params }) {
     }
 
     /* ================= ITEMS ================= */
-    const [items] = await db.query(
+    const [dbItems] = await db.query(
       `
       SELECT
         pr.product_name AS description,
@@ -63,8 +59,7 @@ export async function GET(req, { params }) {
         pr.hsn,
         pr.featured_image,
         pi.quantity AS qty,
-        pi.rate,
-        pi.line_total AS total
+        pi.rate
       FROM proposal_items pi
       JOIN products pr ON pr.id = pi.product_id
       WHERE pi.proposal_id = ?
@@ -73,93 +68,101 @@ export async function GET(req, { params }) {
       [proposal.id]
     );
 
-    /* ================= CHARGES ================= */
- /* ================= COMPANY CHARGES ================= */
-  /* ================= PROPOSAL CHARGES (PRIORITY) ================= */
-let [charges] = await db.query(
-  `
-  SELECT
-    label,
-    amount,
-    tax_percent AS taxPercent
-  FROM proposal_charges
-  WHERE proposal_id = ?
-  ORDER BY id ASC
-  `,
-  [proposal.id]
-);
+    /* ================= CALCULATE ITEMS ================= */
+    let itemsSubtotal = 0;
+    let itemsTax = 0;
 
-/* fallback to company default */
-if (!charges.length) {
-  [charges] = await db.query(
-    `
-    SELECT
-      label,
-      amount,
-      tax_percent AS taxPercent
-    FROM company_charges
-    WHERE company_id = ?
-    ORDER BY id ASC
-    `,
-    [proposal.company_id]
-  );
-}
+    const items = dbItems.map(i => {
+      const qty = Number(i.qty || 0);
+      const rate = Number(i.rate || 0);
+
+      const taxable = qty * rate;
+
+      // assume intra-state 18% GST split
+      const cgst = taxable * 0.09;
+      const sgst = taxable * 0.09;
+
+      const total = taxable + cgst + sgst;
+
+      itemsSubtotal += taxable;
+      itemsTax += cgst + sgst;
+
+      return {
+        ...i,
+        qty,
+        rate,
+        total
+      };
+    });
+
+    /* ================= CHARGES ================= */
+    let [charges] = await db.query(
+      `
+      SELECT label, amount, tax_percent AS taxPercent
+      FROM proposal_charges
+      WHERE proposal_id = ?
+      ORDER BY id ASC
+      `,
+      [proposal.id]
+    );
+
+    if (!charges.length) {
+      [charges] = await db.query(
+        `
+        SELECT label, amount, tax_percent AS taxPercent
+        FROM company_charges
+        WHERE company_id = ?
+        ORDER BY id ASC
+        `,
+        [proposal.company_id]
+      );
+    }
 
     let chargesAmount = 0;
     let chargesTax = 0;
 
-    charges.forEach(c => {
+    const computedCharges = charges.map(c => {
       const amt = Number(c.amount || 0);
-      const tax = (amt * Number(c.taxPercent || 0)) / 100;
+      const taxPercent = Number(c.taxPercent || 0);
+      const tax = (amt * taxPercent) / 100;
+
       chargesAmount += amt;
       chargesTax += tax;
+
+      return {
+        label: c.label,
+        amount: amt,
+        taxPercent
+      };
     });
+
+    /* ================= TOTALS ================= */
+    const grandTotal =
+      itemsSubtotal +
+      itemsTax +
+      chargesAmount +
+      chargesTax;
 
     /* ================= RESPONSE ================= */
     return Response.json({
       proposal: {
         ...proposal,
-          clientName: proposal.client_name || "",
-  clientPhone: proposal.client_phone || "",
-  clientEmail: proposal.client_email || "",
-        subtotal: Number(proposal.subtotal),
-        cgst_total: Number(proposal.cgst_total),
-        sgst_total: Number(proposal.sgst_total),
-        igst_total: Number(proposal.igst_total),
-        grand_total: Number(proposal.grand_total),
+        clientName: proposal.client_name || "",
+        clientPhone: proposal.client_phone || "",
+        clientEmail: proposal.client_email || "",
       },
 
-      items: items.map(i => ({
-        ...i,
-        qty: Number(i.qty),
-        rate: Number(i.rate),
-        total: Number(i.total),
-      })),
+      items,
 
-      charges: charges.map(c => ({
-        label: c.label,
-        amount: Number(c.amount),
-        taxPercent: Number(c.taxPercent || 0),
-      })),
+      charges: computedCharges,
 
       totals: {
-        subtotal: Number(proposal.subtotal),
-        itemTax:
-          Number(proposal.cgst_total) +
-          Number(proposal.sgst_total) +
-          Number(proposal.igst_total),
-
+        subtotal: itemsSubtotal,
+        itemTax: itemsTax,
         chargesAmount,
         chargesTax,
-
-        grandTotal:
-          Number(proposal.subtotal) +
-          Number(proposal.cgst_total) +
-          Number(proposal.sgst_total) +
-          Number(proposal.igst_total) +
-          chargesAmount +
-          chargesTax,
-      },
+        grandTotal
+      }
     });
 
   } catch (err) {
