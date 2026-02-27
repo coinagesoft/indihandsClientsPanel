@@ -331,7 +331,6 @@ const maskAmountWithStars = (amount) => {
                             src={item.featured_image}
                             alt={item.name}
                             className={styles.productImg}
-                            onClick={() => setZoomImg(item.featured_image)}
                           />
                           <div className={styles.productName}>
                             {item.name}
