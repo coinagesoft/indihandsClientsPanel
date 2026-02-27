@@ -43,7 +43,7 @@ export async function POST(req) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "2h",
         issuer: "indihands",
       }
     );
