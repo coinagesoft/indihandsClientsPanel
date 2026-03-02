@@ -1,6 +1,7 @@
 "use client";
 
 import PageWrapper from "../../../components/common/wrapper";
+import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./processPacking.module.css";
 
 export default function ProcessPackingPage() {
