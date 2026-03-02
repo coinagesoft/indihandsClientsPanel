@@ -5,9 +5,10 @@ import Link from "next/link";
 import styles from "./products.module.css";
 import { useSearchParams } from "next/navigation";
 import PageWrapper from "../../../components/common/wrapper";
+import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function ProductListingPage() {
-
+   useAuthGuard();
   /* ================= STATE ================= */
   const searchParams = useSearchParams();
   const catalogId = searchParams.get("catalogId");

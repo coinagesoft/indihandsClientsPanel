@@ -5,9 +5,11 @@ import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 
 export default function ProductDetailsPage() {
+     useAuthGuard();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);

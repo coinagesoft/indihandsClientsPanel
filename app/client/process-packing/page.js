@@ -4,6 +4,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import styles from "./processPacking.module.css";
 
 export default function ProcessPackingPage() {
+     useAuthGuard();
   const steps = [
     {
       title: "Order Confirmation",
