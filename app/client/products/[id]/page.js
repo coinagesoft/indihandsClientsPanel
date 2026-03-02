@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
-import useAuthGuard from "../../hooks/useAuthGuard";
+// import useAuthGuard from "../../hooks/useAuthGuard";
 
 
 export default function ProductDetailsPage() {
@@ -352,7 +352,7 @@ useEffect(() => {
                       type="number"
                       min="1"
                       max={product.stock_qty}
-                      value={qty ?? ""}
+                      value={qty}
 onChange={(e) => {
   const raw = e.target.value;
 

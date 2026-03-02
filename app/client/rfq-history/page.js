@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./rfqHistory.module.css";
 import React from "react";
 import PageWrapper from "../../../components/common/wrapper";
-import useAuthGuard from "../hooks/useAuthGuard";
+// import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function RFQHistoryPage() {
     //  useAuthGuard();
