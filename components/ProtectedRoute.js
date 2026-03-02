@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 export default function ProtectedRoute({
   children,
-  tokenKey = "token",        // admin default
+  tokenKey = "client_token",        // admin default
   redirectTo = "/login",     // admin default
 }) {
   const router = useRouter();
