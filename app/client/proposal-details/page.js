@@ -6,7 +6,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
 export default function ProposalDetailsPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const [rfqs, setRfqs] = useState([]);
   const [openRfq, setOpenRfq] = useState(null);
   const [proposalData, setProposalData] = useState({});

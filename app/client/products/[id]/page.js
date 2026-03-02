@@ -9,7 +9,7 @@ import useAuthGuard from "../../hooks/useAuthGuard";
 
 
 export default function ProductDetailsPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);

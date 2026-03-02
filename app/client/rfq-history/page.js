@@ -8,7 +8,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function RFQHistoryPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const router = useRouter();
 
   const [rfqs, setRfqs] = useState([]);

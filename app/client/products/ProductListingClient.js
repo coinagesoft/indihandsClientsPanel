@@ -8,7 +8,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function ProductListingPage() {
-   useAuthGuard();
+  //  useAuthGuard();
   /* ================= STATE ================= */
   const searchParams = useSearchParams();
   const catalogId = searchParams.get("catalogId");

@@ -8,7 +8,7 @@ import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function QuoteCartPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const router = useRouter();
 const [submitting, setSubmitting] = useState(false);
   const [cartItems, setCartItems] = useState([]);

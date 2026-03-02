@@ -7,7 +7,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function ProductCatalogPage() {
-   useAuthGuard();
+  //  useAuthGuard();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 

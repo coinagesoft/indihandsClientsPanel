@@ -5,7 +5,7 @@ import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./processPacking.module.css";
 
 export default function ProcessPackingPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const steps = [
     {
       title: "Order Confirmation",

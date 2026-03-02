@@ -7,7 +7,7 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function ProfilePage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);

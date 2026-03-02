@@ -7,7 +7,7 @@ import PageWrapper from "../../../../components/common/wrapper";
 import useAuthGuard from "../../hooks/useAuthGuard";
 
 export default function RFQDetailsPage() {
-     useAuthGuard();
+    //  useAuthGuard();
   const params = useParams();
   const rfqId = Array.isArray(params.rfqId)
     ? params.rfqId[0]
