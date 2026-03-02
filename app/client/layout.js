@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 export default function ClientLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -27,7 +28,12 @@ export default function ClientLayout({ children }) {
       >
       
           <>
+            <ProtectedRoute
+      tokenKey="client_token"
+      redirectTo="/login"
+    >
             {children}
+            </ProtectedRoute>
           </>
       </main>
     </div>
