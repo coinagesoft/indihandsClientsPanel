@@ -155,6 +155,17 @@ useEffect(() => {
   // };
 
   const addToQuote = async () => {
+
+      if (qty === "" || qty === null || qty === undefined) {
+    showToast("Please enter quantity", "warning");
+    return;
+  }
+
+  // 🚫 invalid quantity
+  if (Number(qty) < 1) {
+    showToast("Quantity must be at least 1", "warning");
+    return;
+  }
   if (!id || qty < 1) return;
 
   const alreadyInCart = cartQtyMap[id] || 0;
@@ -339,24 +350,36 @@ useEffect(() => {
                       type="number"
                       min="1"
                       max={product.stock_qty}
-                      value={qty}
+                      value={qty ?? ""}
                       onChange={(e) => {
-                        const value = Number(e.target.value);
+  const raw = e.target.value;
 
-                        // below 1 ignore
-                        if (value < 1) return;
+  // allow empty while typing
+  if (raw === "") {
+    setQty("");
+    return;
+  }
 
-                        // 🚫 above stock → toaster
-                        if (value > product.stock_qty) {
-                          showToast(
-                            "Requested quantity exceeds available stock",
-                            "warning"
-                          );
-                          return;
-                        }
+  const value = Number(raw);
 
-                        setQty(value);
-                      }}
+  if (isNaN(value)) return;
+
+  if (value < 1) {
+    setQty(1);
+    return;
+  }
+
+  if (value > product.stock_qty) {
+    showToast(
+      "Requested quantity exceeds available stock",
+      "warning"
+    );
+    setQty(product.stock_qty);
+    return;
+  }
+
+  setQty(value);
+}}
                     />
 
 
