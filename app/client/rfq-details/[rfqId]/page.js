@@ -4,10 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./rfqDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
-// import useAuthGuard from "../../hooks/useAuthGuard";
 
 export default function RFQDetailsPage() {
-    //  useAuthGuard();
   const params = useParams();
   const rfqId = Array.isArray(params.rfqId)
     ? params.rfqId[0]

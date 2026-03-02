@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
+
 export default function ClientLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,6 @@ export default function ClientLayout({ children }) {
       >
       
           <>
-   
             {children}
           </>
       </main>

@@ -1,20 +1,4 @@
-// "use client";
-// import { useEffect } from "react";
-// import { useRouter } from "next/navigation";
-
-// export default function useAuthGuard() {
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     const token = localStorage.getItem("client_token");
-
-//     if (!token) {
-//       router.replace("/login");
-//     }
-//   }, [router]);
-// }
 "use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -22,9 +6,10 @@ export default function useAuthGuard() {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const token = localStorage.getItem("client_token");
-    if (!token) router.replace("/login");
+
+    if (!token) {
+      router.replace("/login");
+    }
   }, [router]);
 }
