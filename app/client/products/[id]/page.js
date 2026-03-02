@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-// import { useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
@@ -10,7 +10,7 @@ import useAuthGuard from "../../hooks/useAuthGuard";
 
 export default function ProductDetailsPage() {
     //  useAuthGuard();
- const id = params?.id;
+  const { id } = useParams();
 
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
@@ -113,123 +113,123 @@ useEffect(() => {
   }, [id]);
 
   /* ================= ADD TO QUOTE ================= */
-  // const addToQuote = async () => {
-  //   if (!id || qty < 1) return;
+  const addToQuote = async () => {
+    if (!id || qty < 1) return;
 
 
     
-  //   if (qty > product.stock_qty) {
-  //     showToast("Requested quantity exceeds stock", "warning");
-  //     return;
-  //   }
-  //   const token = localStorage.getItem("client_token");
-  //   if (!token) {
-  //     showToast("Please login to continue", "warning");
-  //     return;
-  //   }
-
-  //   setAdding(true);
-
-  //   try {
-  //     const res = await fetch("/api/client/quote-cart", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         productId: Number(id),
-  //         quantity: qty,
-  //       }),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       showToast(data?.error || "Failed to add product", "error");
-  //       return;
-  //     }
-
-  //     showToast("Added to Quote successfully", "success");
-  //   } finally {
-  //     setAdding(false);
-  //   }
-  // };
-
-  const addToQuote = async () => {
-
-      if (qty === "" || qty === null || qty === undefined) {
-    showToast("Please enter quantity", "warning");
-    return;
-  }
-
-  // 🚫 invalid quantity
-  if (Number(qty) < 1) {
-    showToast("Quantity must be at least 1", "warning");
-    return;
-  }
-  if (!id || qty < 1) return;
-
-  const alreadyInCart = cartQtyMap[id] || 0;
-  const remainingStock = product.stock_qty - alreadyInCart;
-
-  // 🚫 already fully consumed
-  if (remainingStock <= 0) {
-    showToast(
-      "This product is already fully added to your quote",
-      "warning"
-    );
-    return;
-  }
-
-  // 🚫 user asking more than remaining
-  if (qty > remainingStock) {
-    showToast(
-      `Only ${remainingStock} item(s) available (already in quote)`,
-      "warning"
-    );
-    return;
-  }
-
-  const token = localStorage.getItem("client_token");
-  if (!token) {
-    showToast("Please login to continue", "warning");
-    return;
-  }
-
-  setAdding(true);
-
-  try {
-    const res = await fetch("/api/client/quote-cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        productId: Number(id),
-        quantity: qty,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showToast(data?.error || "Failed to add product", "error");
+    if (qty > product.stock_qty) {
+      showToast("Requested quantity exceeds stock", "warning");
+      return;
+    }
+    const token = localStorage.getItem("client_token");
+    if (!token) {
+      showToast("Please login to continue", "warning");
       return;
     }
 
-    // ✅ immediately reflect in UI cart state
-    setCartQtyMap(prev => ({
-      ...prev,
-      [id]: alreadyInCart + qty,
-    }));
+    setAdding(true);
 
-    showToast("Added to Quote successfully", "success");
-  } finally {
-    setAdding(false);
-  }
-};
+    try {
+      const res = await fetch("/api/client/quote-cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: Number(id),
+          quantity: qty,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data?.error || "Failed to add product", "error");
+        return;
+      }
+
+      showToast("Added to Quote successfully", "success");
+    } finally {
+      setAdding(false);
+    }
+  };
+
+//   const addToQuote = async () => {
+
+//       if (qty === "" || qty === null || qty === undefined) {
+//     showToast("Please enter quantity", "warning");
+//     return;
+//   }
+
+//   // 🚫 invalid quantity
+//   if (Number(qty) < 1) {
+//     showToast("Quantity must be at least 1", "warning");
+//     return;
+//   }
+//   if (!id || qty < 1) return;
+
+//   const alreadyInCart = cartQtyMap[id] || 0;
+//   const remainingStock = product.stock_qty - alreadyInCart;
+
+//   // 🚫 already fully consumed
+//   if (remainingStock <= 0) {
+//     showToast(
+//       "This product is already fully added to your quote",
+//       "warning"
+//     );
+//     return;
+//   }
+
+//   // 🚫 user asking more than remaining
+//   if (qty > remainingStock) {
+//     showToast(
+//       `Only ${remainingStock} item(s) available (already in quote)`,
+//       "warning"
+//     );
+//     return;
+//   }
+
+//   const token = localStorage.getItem("client_token");
+//   if (!token) {
+//     showToast("Please login to continue", "warning");
+//     return;
+//   }
+
+//   setAdding(true);
+
+//   try {
+//     const res = await fetch("/api/client/quote-cart", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({
+//         productId: Number(id),
+//         quantity: qty,
+//       }),
+//     });
+
+//     const data = await res.json();
+
+//     if (!res.ok) {
+//       showToast(data?.error || "Failed to add product", "error");
+//       return;
+//     }
+
+//     // ✅ immediately reflect in UI cart state
+//     setCartQtyMap(prev => ({
+//       ...prev,
+//       [id]: alreadyInCart + qty,
+//     }));
+
+//     showToast("Added to Quote successfully", "success");
+//   } finally {
+//     setAdding(false);
+//   }
+// };
 
 
 
@@ -353,10 +353,9 @@ useEffect(() => {
                       min="1"
                       max={product.stock_qty}
                       value={qty ?? ""}
-                      onChange={(e) => {
+onChange={(e) => {
   const raw = e.target.value;
 
-  // allow empty while typing
   if (raw === "") {
     setQty("");
     return;
@@ -371,12 +370,12 @@ useEffect(() => {
     return;
   }
 
-  if (value > product.stock_qty) {
+  if (value > (product?.stock_qty ?? 0)) {
     showToast(
       "Requested quantity exceeds available stock",
       "warning"
     );
-    setQty(product.stock_qty);
+    setQty(product?.stock_qty ?? 1);
     return;
   }
 

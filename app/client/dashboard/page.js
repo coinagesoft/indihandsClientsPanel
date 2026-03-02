@@ -6,7 +6,7 @@ import useAuthGuard from "../hooks/useAuthGuard";
 import PageWrapper from "../../../components/common/wrapper";
 
 export default function DashboardPage() {
-  useAuthGuard();
+  // useAuthGuard();
 
   const [stats, setStats] = useState([]);
   const [recentRFQs, setRecentRFQs] = useState([]);
