@@ -344,10 +344,16 @@ export default function ProductDetailsPage() {
                       max={product.stock_qty}
                       step="1"
                       value={qty ?? ""}
+
+                      onKeyDown={(e) => {
+                        if (["e", "E", "+", "-", "."].includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+
                       onChange={(e) => {
                         const value = e.target.value;
 
-                        // allow empty while typing
                         if (value === "") {
                           setQty("");
                           return;
