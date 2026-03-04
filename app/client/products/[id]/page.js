@@ -5,11 +5,13 @@ import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 
 export default function ProductDetailsPage() {
+  
   const { id } = useParams();
-
+ useAuthGuard();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);

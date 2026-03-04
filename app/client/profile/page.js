@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
 import PageWrapper from "../../../components/common/wrapper";
+import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function ProfilePage() {
+   useAuthGuard();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);

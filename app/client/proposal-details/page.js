@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import styles from "./proposalDetails.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import Toast from "../../../components/common/Toast";
+import useAuthGuard from "../hooks/useAuthGuard";
 export default function ProposalDetailsPage() {
+   useAuthGuard();
   const [rfqs, setRfqs] = useState([]);
   const [openRfq, setOpenRfq] = useState(null);
   const [proposalData, setProposalData] = useState({});

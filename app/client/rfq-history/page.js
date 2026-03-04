@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import styles from "./rfqHistory.module.css";
 import React from "react";
 import PageWrapper from "../../../components/common/wrapper";
+import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function RFQHistoryPage() {
+    useAuthGuard();
   const router = useRouter();
 
   const [rfqs, setRfqs] = useState([]);
   const [expanded, setExpanded] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ ADD
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const token = localStorage.getItem("client_token");
