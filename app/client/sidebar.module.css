@@ -126,13 +126,6 @@
   white-space: nowrap;
 }
 
-/* ACTIVE */
-.active .menuLink {
-  background: #9b2c2c;
-  color: #fff;
-  border-radius: 6px;
-  margin: 0px 4px;
-}
 
 /* FOOTER */
 /* .footerLogo {
