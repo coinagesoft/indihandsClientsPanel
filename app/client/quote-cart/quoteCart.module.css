@@ -2,7 +2,7 @@
 .dashboardCanvas {
   position: absolute;
   inset: 0;
-  z-index: 9999;
+  z-index: 10;
   pointer-events: none;
 
   background-image:
@@ -32,7 +32,7 @@
   position: relative;
   min-height: 100vh;
   padding: 32px 28px;
-
+z-index: 1;
 }
 
 /* ================= PAGE TITLE ================= */
