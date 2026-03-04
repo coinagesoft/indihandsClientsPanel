@@ -9,9 +9,9 @@ import useAuthGuard from "../../hooks/useAuthGuard";
 
 
 export default function ProductDetailsPage() {
-  
+
   const { id } = useParams();
- useAuthGuard();
+  useAuthGuard();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -46,35 +46,35 @@ export default function ProductDetailsPage() {
   ];
 
 
-useEffect(() => {
-  const token = localStorage.getItem("client_token");
-  if (!token || !id) return;
+  useEffect(() => {
+    const token = localStorage.getItem("client_token");
+    if (!token || !id) return;
 
-  fetch("/api/client/quote-cart", {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then(res => res.json())
-    .then(data => {
-      const map = {};
-      data?.items?.forEach(item => {
-        map[item.productId] = item.qty;
+    fetch("/api/client/quote-cart", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        const map = {};
+        data?.items?.forEach(item => {
+          map[item.productId] = item.qty;
+        });
+        setCartQtyMap(map);
       });
-      setCartQtyMap(map);
-    });
-}, [id]); // 🔥 VERY IMPORTANT
+  }, [id]); // 🔥 VERY IMPORTANT
 
-useEffect(() => {
-  if (!product) return;
+  useEffect(() => {
+    if (!product) return;
 
-  const alreadyInCart = cartQtyMap[id] || 0;
-  const remainingStock = product.stock_qty - alreadyInCart;
+    const alreadyInCart = cartQtyMap[id] || 0;
+    const remainingStock = product.stock_qty - alreadyInCart;
 
-  if (remainingStock <= 0) {
-    setQty(1); // or 0
-  } else if (qty > remainingStock) {
-    setQty(remainingStock);
-  }
-}, [cartQtyMap, product, id]);
+    if (remainingStock <= 0) {
+      setQty(1); // or 0
+    } else if (qty > remainingStock) {
+      setQty(remainingStock);
+    }
+  }, [cartQtyMap, product, id]);
 
 
 
@@ -117,7 +117,7 @@ useEffect(() => {
   //   if (!id || qty < 1) return;
 
 
-    
+
   //   if (qty > product.stock_qty) {
   //     showToast("Requested quantity exceeds stock", "warning");
   //     return;
@@ -157,68 +157,68 @@ useEffect(() => {
   // };
 
   const addToQuote = async () => {
-  if (!id || qty < 1) return;
+    if (!id || qty < 1) return;
 
-  const alreadyInCart = cartQtyMap[id] || 0;
-  const remainingStock = product.stock_qty - alreadyInCart;
+    const alreadyInCart = cartQtyMap[id] || 0;
+    const remainingStock = product.stock_qty - alreadyInCart;
 
-  // 🚫 already fully consumed
-  if (remainingStock <= 0) {
-    showToast(
-      "This product is already fully added to your quote",
-      "warning"
-    );
-    return;
-  }
-
-  // 🚫 user asking more than remaining
-  if (qty > remainingStock) {
-    showToast(
-      `Only ${remainingStock} item(s) available (already in quote)`,
-      "warning"
-    );
-    return;
-  }
-
-  const token = localStorage.getItem("client_token");
-  if (!token) {
-    showToast("Please login to continue", "warning");
-    return;
-  }
-
-  setAdding(true);
-
-  try {
-    const res = await fetch("/api/client/quote-cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        productId: Number(id),
-        quantity: qty,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showToast(data?.error || "Failed to add product", "error");
+    // 🚫 already fully consumed
+    if (remainingStock <= 0) {
+      showToast(
+        "This product is already fully added to your quote",
+        "warning"
+      );
       return;
     }
 
-    // ✅ immediately reflect in UI cart state
-    setCartQtyMap(prev => ({
-      ...prev,
-      [id]: alreadyInCart + qty,
-    }));
+    // 🚫 user asking more than remaining
+    if (qty > remainingStock) {
+      showToast(
+        `Only ${remainingStock} item(s) available (already in quote)`,
+        "warning"
+      );
+      return;
+    }
 
-    showToast("Added to Quote successfully", "success");
-  } finally {
-    setAdding(false);
-  }
-};
+    const token = localStorage.getItem("client_token");
+    if (!token) {
+      showToast("Please login to continue", "warning");
+      return;
+    }
+
+    setAdding(true);
+
+    try {
+      const res = await fetch("/api/client/quote-cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: Number(id),
+          quantity: qty,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data?.error || "Failed to add product", "error");
+        return;
+      }
+
+      // ✅ immediately reflect in UI cart state
+      setCartQtyMap(prev => ({
+        ...prev,
+        [id]: alreadyInCart + qty,
+      }));
+
+      showToast("Added to Quote successfully", "success");
+    } finally {
+      setAdding(false);
+    }
+  };
 
 
 
@@ -339,17 +339,25 @@ useEffect(() => {
                     <label className="me-2">Quantity</label>
                     <input
                       type="number"
+                      inputMode="numeric"
                       min="1"
                       max={product.stock_qty}
-                      value={qty}
+                      step="1"
+                      value={qty ?? ""}
                       onChange={(e) => {
-                        const value = Number(e.target.value);
+                        const value = e.target.value;
 
-                        // below 1 ignore
-                        if (value < 1) return;
+                        // allow empty while typing
+                        if (value === "") {
+                          setQty("");
+                          return;
+                        }
 
-                        // 🚫 above stock → toaster
-                        if (value > product.stock_qty) {
+                        const num = Number(value);
+
+                        if (num < 1) return;
+
+                        if (num > product.stock_qty) {
                           showToast(
                             "Requested quantity exceeds available stock",
                             "warning"
@@ -357,7 +365,7 @@ useEffect(() => {
                           return;
                         }
 
-                        setQty(value);
+                        setQty(num);
                       }}
                     />
 
