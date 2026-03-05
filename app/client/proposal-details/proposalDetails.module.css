@@ -6,20 +6,17 @@
 
   background-image:
     url("/images/motif-top-right.png"),
-    url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
     url("/images/page3_bottom_left_logo.png");
 
   background-repeat: no-repeat;
   background-position:
     top 10px right 40px,
-    top 40px left -20px,
     bottom -10px right 40px,
-    bottom -10px left 40px;
+    bottom -20px left 40px;
 
   background-size:
     100px auto,
-    90px auto,
     220px auto,
     120px auto;
 

@@ -443,7 +443,7 @@ const maskAmountWithStars = (amount) => {
 
     {/* ACTION */}
    <button
-  className={`btn-primary w-100 ${styles.submitBtn}`}
+  className={` w-100 ${styles.primaryBtn}`}
   onClick={submitRFQ}
   disabled={submitting}
 >

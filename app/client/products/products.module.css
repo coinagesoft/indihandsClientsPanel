@@ -143,20 +143,17 @@ padding:12px;
 .addBtn {
   background: linear-gradient(
     135deg,
-    var(--color-primary),
-    var(--color-primary-hover)
+    var( --text-heading)
   );
   color: #fff;
 
   border: none;
-  border-radius: 2px;
+ font-size: 12.5px;
   padding: 6px 14px;
-
+  border-radius: 5px;
   font-family: var(--font-ui);
-  font-size: 12px;
 
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(220, 102, 30, 0.35);
 
   transition:
     transform 0.2s ease,
@@ -165,7 +162,6 @@ padding:12px;
 
 .addBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(220, 102, 30, 0.45);
 }
 @media (max-width: 768px) {
   .filterBar {

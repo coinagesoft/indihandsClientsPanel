@@ -25,14 +25,7 @@
   opacity:0.7;
 }
 
-/* ================= WRAPPER ================= */
-/* .dashboardWrapper {
-  position: relative;
-  min-height: 100vh;
- padding: 32px 28px 0px;
-  overflow: auto;
 
-} */
 .dashboardWrapper {
   position: relative;
   min-height: calc(100vh - 170px);
@@ -45,7 +38,7 @@
 /* ===== CARD ===== */
 .catalogCard {
   background: #efe4d7;                 /* exact beige */
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 14px 14px 16px;
    height: 170px;  
   width: 300px;
@@ -56,13 +49,7 @@
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.catalogCard {
-  background: #efe4d7;
-  border-radius: 12px;
-  padding: 10px 12px 12px;
-  height: 170px;      /* 200 → 170 */
-  width: 100%;
-}
+
 
 .catalogCard:hover {
   transform: translateY(-3px);
@@ -73,7 +60,7 @@
 .catalogImgWrap {
   width: 65%;
  height: 95px;                     /* ref height */
-  border-radius: 8px;
+  border-radius: 5px;
   overflow: hidden;
   background: #ddd3c7;
   

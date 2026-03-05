@@ -128,7 +128,7 @@
   justify-content: space-between;
   align-items: center;
 
-  background: rgba(199, 204, 107, 0.22);
+  background:  rgba(251, 241, 230, 0.95);
   border-radius: var(--radius-md);
 
   font-family: var(--font-ui);

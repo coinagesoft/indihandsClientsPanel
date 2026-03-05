@@ -112,49 +112,6 @@ export default function ProductDetailsPage() {
       });
   }, [id]);
 
-  /* ================= ADD TO QUOTE ================= */
-  // const addToQuote = async () => {
-  //   if (!id || qty < 1) return;
-
-
-
-  //   if (qty > product.stock_qty) {
-  //     showToast("Requested quantity exceeds stock", "warning");
-  //     return;
-  //   }
-  //   const token = localStorage.getItem("client_token");
-  //   if (!token) {
-  //     showToast("Please login to continue", "warning");
-  //     return;
-  //   }
-
-  //   setAdding(true);
-
-  //   try {
-  //     const res = await fetch("/api/client/quote-cart", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         productId: Number(id),
-  //         quantity: qty,
-  //       }),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       showToast(data?.error || "Failed to add product", "error");
-  //       return;
-  //     }
-
-  //     showToast("Added to Quote successfully", "success");
-  //   } finally {
-  //     setAdding(false);
-  //   }
-  // };
 
   const addToQuote = async () => {
     if (!id || qty < 1) return;

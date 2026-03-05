@@ -36,7 +36,6 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 22px;
-  box-shadow: var(--shadow-card);
   transition: box-shadow 0.2s ease;
 }
 
@@ -74,7 +73,6 @@
   break-inside: avoid;
   margin-bottom: 16px;
   overflow: hidden;                 /* IMPORTANT */
-  border-radius: 14px;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
@@ -130,17 +128,22 @@
 
 .addBtn {
   padding: 10px 24px;
-  border-radius: 999px;
-  background: linear-gradient(
+  border-radius: 5px;
+ background: linear-gradient(
     135deg,
-    var(--color-primary),
-    var(--color-primary-hover)
+    var( --text-heading)
   );
+    font-family: var(--font-ui);
   color: #fff;
   border: none;
   cursor: pointer;
+   transition: all 0.2s ease;
 }
 
+.addBtn:hover{
+   transform: translateY(-2px);
+
+}
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
