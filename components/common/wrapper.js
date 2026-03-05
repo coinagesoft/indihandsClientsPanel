@@ -19,8 +19,8 @@ export default function PageWrapper({ loading, children }) {
 
   return (
     <>
-      <div className={styles.pageWrapper}>
-      <div className={styles.pageContent}>
+      <div >
+      <div >
         {children}
       </div>
 

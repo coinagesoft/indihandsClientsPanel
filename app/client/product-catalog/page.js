@@ -31,62 +31,61 @@ export default function ProductCatalogPage() {
 
 
   return (
-    <PageWrapper loading={loading}>
-      <div className={`${styles.dashboardWrapper} container-fluid   `}>
-        <div className={styles.dashboardCanvas} ></div>
-        {/* TITLE */}
+  <PageWrapper loading={loading}>
+  <div className={`${styles.dashboardWrapper} container-fluid`}>
 
-        <h4 className='pageTitle'>Product Catalog</h4>
+    {/* BACKGROUND CANVAS */}
+    <div className={styles.dashboardCanvas}></div>
 
+    {/* PAGE CONTENT */}
+    <div className={styles.dashboardContent}>
 
+      <h4 className="pageTitle">Product Catalog</h4>
 
+      <div className="row g-3 mt-1">
+        {!loading && categories.length === 0 ? (
+          <div className="col-12 text-center mt-4">
+            No catalogs available
+          </div>
+        ) : (
+          [...categories].reverse().map(cat => (
+            <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6 d-flex">
 
-        {/* CATALOG GRID */}
-        <div className="row g-4 mt-1">
-          {!loading && categories.length === 0 ? (
-            <div className="col-12 text-center mt-4">
-              No catalogs available
+              <div className={styles.catalogCard}>
+
+                <div className={styles.catalogImgWrap}>
+                  <img
+                    src={cat.image}
+                    alt={cat.title}
+                    className={styles.catalogImg}
+                  />
+                </div>
+
+                <div className={styles.catalogContent}>
+                  <h6 className={styles.catalogTitle}>{cat.title}</h6>
+
+                  <div className={styles.catalogBottom}>
+                    <p className={styles.catalogDesc}>{cat.desc}</p>
+
+                    <Link
+                      href={`/client/products?catalogId=${cat.id}`}
+                      className={styles.catalogBtn}
+                    >
+                      View Products
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
-          ) : (
-            [...categories].reverse().map(cat => (
-  <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6 d-flex">
-  <div className={styles.catalogCard}>
+          ))
+        )}
+      </div>
 
-
-    {/* IMAGE */}
-    <div className={styles.catalogImgWrap}>
-      <img
-        src={cat.image}
-        alt={cat.title}
-        className={styles.catalogImg}
-      />
     </div>
 
-    {/* CONTENT */}
-   <div className={styles.catalogContent}>
-  <h6 className={styles.catalogTitle}>{cat.title}</h6>
-
-  <div className={styles.catalogBottom}>
-    <p className={styles.catalogDesc}>{cat.desc}</p>
-
-    <Link
-      href={`/client/products?catalogId=${cat.id}`}
-      className={styles.catalogBtn}
-    >
-      View Products
-    </Link>
   </div>
-</div>
-
-
-  </div>
-</div>
-
-            ))
-          )}
-        </div>
-
-      </div>
-    </PageWrapper>
+</PageWrapper>
   );
 }
