@@ -6,7 +6,7 @@
   pointer-events: none;
 
   background-image:
-    url("/images/motif-top-right.png"),
+    /* url("/images/motif-top-right.png"), */
     url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png"),
     url("/images/page3_bottom_left_logo.png");
