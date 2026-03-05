@@ -24,24 +24,13 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
       {/* LOGO + ARROW */}
       <div className={styles.logoRow}>
         {!collapsed && (
-           <a href="/client/dashboard" className="app-brand-link d-flex align-items-center justify-content-center text-center">
-    {/* PNG Logo */}
-   <div className='d-flex justify-content-center'>
-     <img
-      src="/images/faviconSidebar.png"  // <-- put your PNG file path here
-      alt="Logo"
-      style={{ height: 50, width: "auto" }} // adjust height/width as needed
-      className=""
-    />
-     <img
-      src="/images/name.png"  // <-- put your PNG file path here
-      alt="Logo"
-      style={{ height: 40, width: "auto" }} // adjust height/width as needed
-      className="me-2 mt-1"
-    />
-   </div>
- 
-  </a>
+ <a href="/client/dashboard" className={styles.logoLink}>
+  <img
+    src="/images/favicon.png"
+    alt="Logo"
+    className={styles.logoImg}
+  />
+</a>
         )}
           
         <button

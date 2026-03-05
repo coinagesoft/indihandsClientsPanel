@@ -93,9 +93,9 @@ export default function ClientLoginPage() {
               </span>
             </div>
 
-            {error && (
-              <p className={styles.errorText}>{error}</p>
-            )}
+          <p className={styles.errorText}>
+  {error || "\u00A0"}
+</p>
 
             <button
               type="submit"
@@ -111,6 +111,12 @@ export default function ClientLoginPage() {
             >
               Forgot Password?
             </p>
+
+            <img
+  src="/images/line_img.png"
+  alt="decorative line"
+  className={styles.lineLogo}
+/>
           </form>
         </div>
 

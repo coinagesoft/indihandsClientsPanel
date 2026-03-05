@@ -29,7 +29,13 @@
   overflow: hidden; /* 🔑 critical */
 }
 
-
+.lineLogo{
+  width:70px;
+  margin-top:8px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
 /* Mandala */
 .mandala {
   position: absolute;
@@ -169,8 +175,9 @@
 /* ERROR */
 .errorText {
   color: #c0392b;
-  font-size: 12px;
-  margin-top: 0;
+  font-size: 11px;
+  margin: 0;
+  font-weight: 500;
 }
 
 /* Bottom fixed section */

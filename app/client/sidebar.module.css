@@ -127,11 +127,7 @@
 }
 
 
-/* FOOTER */
-/* .footerLogo {
-  padding: 12px;
-  text-align: center;
-} */
+
 /* LAYOUT */
 .layout {
   display: flex;
@@ -173,33 +169,43 @@
 
 /* ================= LOGO ROW ================= */
 
-.logoRow {
+/* .logoRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: 14px 12px;
   border-bottom: 1px solid rgba(68, 45, 10, 0.08);
+} */
+
+.logoRow{
+  position: relative;
+  padding-top: 30px;   /* space from top */
+  padding-bottom: 10px;
+
+  display: flex;
+  justify-content: center;   /* center logo */
+  align-items: center;
+}
+
+/* center container */
+.logoLink{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* logo size */
+.logoImg{
+  width: 140px;
+  height: auto;
 }
 
 /* Arrow toggle */
-.arrowBtn {
-  width: 30px;
-  height: 30px;
-
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-
-  background: #fff;
-  color: var(--text-heading);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: 0 4px 10px rgba(68, 45, 10, 0.18);
-  transition: all 0.2s ease;
+.arrowBtn{
+  position: absolute;
+  right: 12px;
+  top: 15px;
 }
 
 .arrowBtn:hover {
