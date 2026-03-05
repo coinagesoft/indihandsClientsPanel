@@ -80,7 +80,7 @@
   font-family: var(--font-light);
   font-size: 14px;
   letter-spacing: 0.3;
-  color: var(--text-muted);
+  color: var(--color-secondary);
   text-transform: uppercase;
   margin-bottom: 6px;
   font-weight: 600;
@@ -89,7 +89,7 @@
 .statValue {
   font-family: var(--font-heading);
   font-size: 34px;
-  color: var(--text-heading);
+  color: var(--text-muted);
   line-height: 1;
   margin-top: 8px;
 }
