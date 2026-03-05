@@ -1,8 +1,17 @@
 
 
 
+/* MENU TAKES REMAINING SPACE */
+.menu {
+  list-style: none;
+  padding: 12px 6px;
+  margin: 0;
 
-
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* centers menu vertically */
+}
 
 /* FOOTER LOGO FIX */
 .footerLogo {

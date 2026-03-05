@@ -11,7 +11,7 @@
 
   background-repeat: no-repeat;
   background-position:
-    top 40px right 40px,
+    top 20px right 40px,
     bottom 10px left 30px,
     bottom 50px right 40px;
 
@@ -36,7 +36,7 @@
 .filterBar {
   background: rgba(255, 255, 255, 0.9);
   border-radius: var(--radius-lg);
-  padding: 22px;
+  padding: 8px;
   box-shadow: var(--shadow-card);
 }
 
@@ -122,10 +122,11 @@ padding:12px;
 }
 .productName {
   font-family: var(--font-ui);
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-heading);
   margin-top: 12px;
   line-height: 1.4;
+  font-weight: 600;
 }
 .bottomRow {
   display: flex;
@@ -148,7 +149,7 @@ padding:12px;
   color: #fff;
 
   border: none;
-  border-radius: 999px;
+  border-radius: 2px;
   padding: 6px 14px;
 
   font-family: var(--font-ui);

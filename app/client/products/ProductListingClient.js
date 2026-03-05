@@ -86,7 +86,7 @@ export default function ProductListingPage() {
         </div>
 
         {/* FILTER BAR */}
-        <div className={`${styles.filterBar} row g-4 mt-3 mx-1`}>
+        <div className={`${styles.filterBar} row g-1 mt-0 mx-1`}>
 
           <div className="col-xl-5 col-md-6">
             <label className={styles.label}>Search</label>
@@ -129,6 +129,8 @@ export default function ProductListingPage() {
         </div>
 
         {/* PRODUCTS GRID */}
+        <div className={styles.catalogBox}>
+
         <div className="row g-4 mt-4">
 
           {loading && (
@@ -191,6 +193,8 @@ export default function ProductListingPage() {
           ))}
 
         </div>
+          </div>
+
       </div>
     </PageWrapper>
   );
