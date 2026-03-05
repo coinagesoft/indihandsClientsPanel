@@ -17,13 +17,13 @@
   --color-danger: #A21418;
 
   /* ================= Backgrounds ================= */
-  --bg-page: #FBF1E6;          /* softened warm yellow */
-  --bg-card: #FFFFFF;
+  --bg-page: #ffffff;          /* softened warm yellow */
+  --bg-card: #FBF1E6;
   --bg-soft: rgba(199, 204, 107, 0.25);
 
   /* ================= Text ================= */
-  --text-heading: #442D0A;
-  --text-primary: rgba(68, 45, 10, 0.88);
+  --text-heading: #000000;
+  --text-primary: rgba(0, 0, 0, 0.88);
   --text-muted: #549B8D;
 
   /* ================= UI ================= */
