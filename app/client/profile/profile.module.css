@@ -69,7 +69,7 @@
   color: var(--color-white);
   border: none;
   padding: 7px 16px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   font-size: var(--fs-sm);
 }
 .dashboardCanvas {
@@ -162,9 +162,8 @@
   font-size: 14px;
 
   padding: 10px 22px;
-  border-radius: 999px;
+  border-radius: 5px;
 
-  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -172,7 +171,6 @@
 
 .saveBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(220, 102, 30, 0.45);
 }
 
 .saveBtn:disabled {
@@ -186,7 +184,7 @@
   color: var(--color-danger);
 
   border: 1.5px solid rgba(162, 20, 24, 0.35);
-  border-radius: 999px;
+  border-radius: 5px;
 
   font-family: var(--font-ui);
   font-size: 13px;
@@ -203,8 +201,9 @@
 
 }
 .logoutBtn:hover {
-  background: rgba(162, 20, 24, 0.18);
+  background:  var(--color-primary);
   transform: translateY(-1px);
+  color: #ffffff;
 }
 @media (max-width: 768px) {
   .profileBox {
