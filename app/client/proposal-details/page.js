@@ -5,6 +5,8 @@ import styles from "./proposalDetails.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
+import css from "../Footer/Footer.module.css";
+import Footer from "../Footer/page";
 export default function ProposalDetailsPage() {
    useAuthGuard();
   const [rfqs, setRfqs] = useState([]);
@@ -165,8 +167,9 @@ export default function ProposalDetailsPage() {
       <PageWrapper loading={false}>
         <div className={styles.emptyState}>
           <h5>No proposals found</h5>
-          <p>Proposals sent by the admin will appear here.</p>
+          <p className="pb-0 mb-0">Proposals sent by the admin will appear here.</p>
         </div>
+        <Footer/>
       </PageWrapper>
     );
   }
@@ -182,10 +185,10 @@ export default function ProposalDetailsPage() {
       />
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
+<div className={styles.pageContent}>
+   <h4 className="pageTitle">Proposal Details</h4>
 
-        <h4 className="pageTitle">Proposal Details</h4>
-
-        <div className="mt-4">
+   <div className="mt-4">
           {rfqs.map((rfq) => {
             const isOpen = openRfq === rfq.rfq_id;
             const data = proposalData[rfq.rfq_id];
@@ -481,7 +484,26 @@ export default function ProposalDetailsPage() {
             );
           })}
         </div>
+</div>
+       
+                  <footer className={`${css.proposalDetails_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
       </div>
+
+    </footer>
+   
+      </div>
+   
     </PageWrapper>
   );
 }

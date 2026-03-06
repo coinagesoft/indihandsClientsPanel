@@ -91,10 +91,7 @@
 
 }
 
-.icon {
-  font-size: 20px;
-  min-width: 20px;
-}
+
 
 .menuLink span {
   white-space: nowrap;
@@ -110,7 +107,7 @@
 /* MAIN CONTENT */
 .mainContent {
   margin-left: 240px;
-  transition: margin-left 0.25s ease;
+  transition: margin-left 0.20s ease;
   width: 100%;
 }
 /* ================= SIDEBAR ================= */
@@ -132,12 +129,14 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+   transition: width 0.35s ease;   /* ⭐ ADD THIS */
   z-index: 1000;
 }
 
 .collapsed {
   width: 80px;
-  margin: 0px;
+  margin: 0px ;
+  
 }
 /* COLLAPSED SIDEBAR */
 .collapsed .menuLink{
@@ -180,6 +179,12 @@
 .arrowBtn{
   position: absolute;
   right: 12px;
+  top: 15px;
+}
+
+.collapsed .arrowBtn{
+  position: absolute;
+  right: 25px;
   top: 15px;
 }
 
@@ -272,9 +277,7 @@ padding: 10px 15px;
   transition: margin-left 0.28s ease;
 }
 
-.collapsedLayout .mainContent {
-  margin-left: 64px;
-}
+
 
 /* WHEN SIDEBAR IS COLLAPSED */
 .collapsedLayout .mainContent {
@@ -282,5 +285,5 @@ padding: 10px 15px;
 }
 .collapsed .icon{
   margin: auto;
-  font-size:20px;
+  font-size:18px;
 }

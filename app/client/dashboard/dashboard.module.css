@@ -8,21 +8,18 @@
   background-image:
     url("/images/mandala-large-left.png"),
     url("/images/motif-top-right.png"),
-    url("/images/bottom-right-mandala.png"),
-    url("/images/motif-bottom-left.png");
+    url("/images/bottom-right-mandala.png");
 
   background-repeat: no-repeat;
   background-position:
     top 10px left 30px,
-    top 30px right 40px,
-    bottom 40px right 30px,
-    bottom 30px left 40px;
+    top 10px right 40px,
+    bottom 0px right -80px;
 
   background-size:
     120px auto,
     80px auto,
-    260px auto,
-    90px auto;
+    260px auto;
 
   opacity: 1; /* MUCH softer */
 }

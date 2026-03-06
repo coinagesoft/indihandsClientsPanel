@@ -5,18 +5,18 @@
   pointer-events: none;
  overflow: auto;
   background-image:
-    url("/images/elephant.png"),
-    url("/images/motif-bottom-left.png"),
+  url("/images/motif-bottom-left.png"),
+  url("/images/elephant.png"),
     url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
   background-position:
     top 20px right 40px,
-    bottom 10px left 30px,
-    bottom 50px right 40px;
+    bottom 30px left 30px,
+    bottom 0px right 40px;
 
   background-size:
-    90px auto,
+    70px auto,
     70px auto,
     200px auto;
 
@@ -25,9 +25,10 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px 140px;
+  padding: 32px 28px 20px 28px;
 
 }
+
 .pageSubTitle {
   font-size: 14px;
   color: var(--text-muted);
@@ -37,12 +38,14 @@
   background: rgba(255, 255, 255, 0.9);
   border-radius: var(--radius-lg);
   padding: 8px;
+  max-width: 900px !important;
+  min-width: 700px;
   box-shadow: var(--shadow-card);
 }
 
 /* label */
 .label {
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--font-ui);
   color: var(--text-muted);
   margin-bottom: 6px;
@@ -57,7 +60,7 @@
   border-radius: var(--radius-md);
   border: 1px solid rgba(68, 45, 10, 0.25);
  background-position: right 1.5rem center !important;
-  font-size: 14px;
+  font-size: 12px;
   background: #fff;
 appearance: auto;
   transition:

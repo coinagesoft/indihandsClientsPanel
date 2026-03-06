@@ -17,7 +17,7 @@
   --color-danger: #A21418;
 
   /* ================= Backgrounds ================= */
-  --bg-page: #ffffff;          /* softened warm yellow */
+  --bg-page: #FFFFFF;          /* softened warm yellow */
   --bg-card: #FBF1E6;
   --bg-soft: rgba(199, 204, 107, 0.25);
 
@@ -27,11 +27,11 @@
   --text-muted: #000000;
 
   /* ================= UI ================= */
-  --radius-sm: 6px;
+  --radius-sm: 5px;
   --radius-md: 10px;
   --radius-lg: 16px;
 
-  --shadow-card: 0 12px 30px rgba(68, 45, 10, 0.16);
+--shadow-card: 0 6px 16px rgba(68, 45, 10, 0.05);
   --shadow-hover: 0 18px 40px rgba(68, 45, 10, 0.22);
 }
 
@@ -55,7 +55,7 @@ p {
 }
 
 /* ================= BUTTONS ================= */
-.btn-primary{
+/* .btn-primary{
   background: var(--color-primary);
   color:#fff;
   font-family: var(--font-ui);
@@ -69,16 +69,36 @@ p {
   box-shadow:0 3px 8px rgba(0,0,0,0.08);
 
  transition: all 0.2s ease;
-}
+} */
 
-.btn-primary:hover{
+/* .btn-primary:hover{
   background: var(--color-primary-hover);
   transform: translateY(-3px);
   box-shadow:0 10px 18px rgba(0,0,0,0.18);
 
  transition: all 0.2s ease;
+} */
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-ui);
+   font-size: 15px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transform: translateY(0);
+  box-shadow:0 3px 8px rgba(0,0,0,0.08);
+
+ transition: all 0.2s ease;
 }
 
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-3px);
+
+ transition: all 0.2s ease;
+}
 
 
 /* ================= CARDS ================= */

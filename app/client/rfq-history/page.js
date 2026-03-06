@@ -6,7 +6,8 @@ import styles from "./rfqHistory.module.css";
 import React from "react";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
-
+import css from "../Footer/Footer.module.css";
+import Footer from "../Footer/page";
 export default function RFQHistoryPage() {
     useAuthGuard();
   const router = useRouter();
@@ -51,8 +52,9 @@ export default function RFQHistoryPage() {
       <PageWrapper loading={false}>
         <div className={styles.emptyState}>
           <h5>No RFQs found</h5>
-          <p>Your submitted RFQs will appear here.</p>
+          <p className="mb-0 pb-0">Your submitted RFQs will appear here.</p>
         </div>
+        <Footer/>
       </PageWrapper>
     );
   }
@@ -187,6 +189,22 @@ export default function RFQHistoryPage() {
             </div>
           </div>
         </div>
+
+               <footer className={`${css.rfqhistory_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
       </div>
     </PageWrapper>
   );

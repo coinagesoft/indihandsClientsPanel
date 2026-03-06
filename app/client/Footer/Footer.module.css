@@ -1,17 +1,76 @@
 .footer {
   padding: 20px 0 20px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 
-position: relative;
-z-index: 2;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
+.productListing_Footer{
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
 }
 
+.productDetails_Footer{
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 20px;
 
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.rfqhistory_Footer{
+  margin-top: auto;   /* ⭐ pushes footer to bottom */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 20px;
+
+  position: relative;
+  z-index: 3;
+}
+
+.rfqDetails_Footer{
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 20px;
+
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.proposalDetails_Footer{
+ 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
 .logo {
   width: 280px;
   max-width: 90%;
@@ -22,4 +81,92 @@ z-index: 2;
   color: #000;
   font-family: "Times New Roman", serif;
   text-align: center;
+}
+
+/* DESIGN LAYER */
+.designLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ===== DESIGN TYPE 1 ===== */
+
+.type1 .designLayer {
+  background-image:
+    url("/images/motif-bottom-left.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+    bottom 30px left 40px;
+
+  background-size:
+    90px auto;
+}
+
+/* ===== DESIGN TYPE 2 ===== */
+
+.type2 .designLayer {
+  background-image:
+      url("/images/page3_bottom_right_logo.png"),
+    url("/images/page3_bottom_left_logo.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+    bottom 0px right 20px,
+    bottom 10px left 20px;
+
+  background-size:
+    150px auto,
+    100px auto;
+}
+
+.type3 .designLayer {
+  background-image:
+  url("/images/elephant.png"),
+    url("/images/page3_bottom_right_logo.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+   bottom 10px left 30px,
+    bottom 50px right 40px;
+
+  background-size:
+    70px auto,
+    200px auto;
+}
+
+.type4 .designLayer {
+  background-image:
+  url("/images/elephant.png"),
+    url("/images/page3_bottom_right_logo.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+   bottom 10px left 30px,
+    bottom 50px right 40px;
+
+  background-size:
+    70px auto,
+    200px auto;
+}
+
+.type5 .designLayer {
+  background-image:
+  url("/images/elephant.png"),
+    url("/images/page3_bottom_right_logo.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+   bottom 10px left 30px,
+    bottom 50px right 40px;
+
+  background-size:
+    70px auto,
+    200px auto;
 }

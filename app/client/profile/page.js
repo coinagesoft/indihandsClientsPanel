@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
+import Footer from "../Footer/page";
 
 export default function ProfilePage() {
    useAuthGuard();
@@ -213,6 +214,7 @@ useEffect(() => {
 
       </div>
     </div>
+    <Footer/>
     </PageWrapper>
   );
 }

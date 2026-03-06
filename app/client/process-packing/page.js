@@ -1,6 +1,7 @@
 "use client";
 
 import PageWrapper from "../../../components/common/wrapper";
+import Footer from "../Footer/page";
 import styles from "./processPacking.module.css";
 
 export default function ProcessPackingPage() {
@@ -63,6 +64,7 @@ export default function ProcessPackingPage() {
         </div>
       </div>
     </div>
+    <Footer/>
     </PageWrapper>
   );
 }

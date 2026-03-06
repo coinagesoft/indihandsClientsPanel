@@ -6,22 +6,19 @@
   pointer-events: none;
 
   background-image:
-    /* url("/images/motif-top-right.png"), */
-    url("/images/sun.png"),
+    url("/images/motif-top-right.png"),
     url("/images/page3_bottom_right_logo.png"),
     url("/images/page3_bottom_left_logo.png");
 
   background-repeat: no-repeat;
   background-position:
     top 10px right 40px,
-    top 90px left -20px,
-    bottom -10px right 40px,
-    bottom -10px left 40px;
+    bottom 10px right -40px,
+    bottom 20px left 40px;
 
   background-size:
     100px auto,
-    90px auto,
-    90px auto,
+    190px auto,
     120px auto;
 
   opacity: 1; /* decorative only */
@@ -31,8 +28,11 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px;
 
+  display: flex;
+  flex-direction: column;
+
+  padding: 32px 28px 0px 28px;
 }
 
 /* ================= TITLES ================= */
@@ -179,7 +179,7 @@
   font-family: var(--font-ui);
   font-size: 14px;
   padding: 10px 20px;
-  border-radius: 999px; /* pill */
+  border-radius: 5px; /* pill */
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
@@ -188,8 +188,6 @@
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
     color 0.2s ease;
 }
 
@@ -214,12 +212,10 @@
   );
   color: #fff;
   border: none;
-  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
 }
 
 .primaryBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(220, 102, 30, 0.45);
 }
 
 /* ================= DISABLED (SAFE) ================= */
@@ -232,10 +228,9 @@
 .emptyState,
 .loading {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 20%;
   font-size: 14px;
   color: var(--text-muted);
-  margin-top: auto auto;
 }
 /* ================= STATUS ================= */
 .status {

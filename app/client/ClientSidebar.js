@@ -44,10 +44,16 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
       {/* MENU */}
       <ul className={styles.menu}>
         {menu.map((item) => {
-          const active =
-            pathname === item.path ||
-            (item.path === "/client/product-catalog" &&
-              pathname.startsWith("/client/products"));
+        const active =
+  pathname === item.path ||
+
+  // product details highlight catalog
+  (item.path === "/client/product-catalog" &&
+    pathname.startsWith("/client/products")) ||
+
+  // rfq details highlight rfq history
+  (item.path === "/client/rfq-history" &&
+    pathname.startsWith("/client/rfq-details"));
 
           return (
             <li key={item.path} className={active ? styles.active : ""}>

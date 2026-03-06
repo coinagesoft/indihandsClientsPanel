@@ -24,7 +24,6 @@ export default function PageWrapper({ loading, children }) {
         {children}
       </div>
 
-      <Footer />
     </div>
     </>
   );

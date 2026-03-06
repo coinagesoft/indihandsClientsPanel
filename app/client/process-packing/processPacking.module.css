@@ -95,7 +95,8 @@
   padding: 16px;
   border-radius: var(--radius-md);
   font-size: var(--fs-sm);
-  color: var(--color-gray-dark);
+  color: black;
+  font-weight: 600;
   line-height: 1.6;
   margin-bottom: 50px;
 }

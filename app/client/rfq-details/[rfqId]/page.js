@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import styles from "./rfqDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import useAuthGuard from "../../hooks/useAuthGuard";
+import css from "../../Footer/Footer.module.css";
 
 export default function RFQDetailsPage() {
    useAuthGuard();
@@ -165,6 +166,22 @@ export default function RFQDetailsPage() {
             Download PDF
           </button>
         </div>
+
+              <footer className={`${css.rfqDetails_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
       </div>
     </PageWrapper>
   );

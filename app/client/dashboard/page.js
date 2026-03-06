@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
 import PageWrapper from "../../../components/common/wrapper";
+import Footer from "../Footer/page";
 
 export default function DashboardPage() {
   useAuthGuard();
@@ -129,6 +130,7 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+    <Footer variant="type1"/>
     </PageWrapper>
   );
 }

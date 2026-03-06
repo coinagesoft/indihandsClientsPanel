@@ -1,24 +1,24 @@
 .dashboardCanvas {
   position: absolute;
   inset: 0;
-  z-index: 9999;
+  z-index: 999;
   pointer-events: none;
 
   background-image:
     url("/images/motif-top-right.png"),
     url("/images/page3_bottom_right_logo.png"),
-    url("/images/page3_bottom_left_logo.png");
+    url("/images/sun.png");
 
   background-repeat: no-repeat;
   background-position:
     top 10px right 40px,
-    bottom -10px right 40px,
-    bottom -20px left 40px;
+    bottom 0px right -40px,
+    bottom 10px left 40px;
 
   background-size:
-    100px auto,
-    220px auto,
-    120px auto;
+    70px auto,
+    250px auto,
+    80px auto;
 
   opacity: 1; /* decorative only */
 }
@@ -28,12 +28,18 @@
 .addressBlock{
    font-size: 14px !important;
 }
+.pageContent {
+  flex: 1;
+}
 /* ================= WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px;
 
+  display: flex;
+  flex-direction: column;
+
+  padding: 32px 28px 0px 28px;
 }
 /* ================= ACCORDION CARD ================= */
 .accordionCard {
@@ -219,10 +225,9 @@
 .emptyState,
 .loading {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 20%;
   font-size: 14px;
   color: var(--text-muted);
-  margin-top: auto auto;
 }
 .btnLoader {
   width:16px;

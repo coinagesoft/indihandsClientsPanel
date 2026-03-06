@@ -6,21 +6,18 @@
   pointer-events:none;
 
   background-image:
-    url("/images/motif-top-right.png"),
-    url("/images/page3_bottom_right_logo.png"),
-    url("/images/page3_bottom_left_logo.png");
+    url("/images/motif-top-right.png");
+ 
 
   background-repeat:no-repeat;
 
   background-position:
-    top 25px right 50px,
-    bottom -40px right 40px,
-    bottom -50px left 40px;
+    top 15px right 50px;
+ 
 
   background-size:
-    70px auto,
-    260px auto,
-    120px auto;
+    70px auto;
+
 
   opacity:0.7;
 }
@@ -29,7 +26,7 @@
 .dashboardWrapper {
   position: relative;
   min-height: calc(100vh - 170px);
-  padding: 32px 28px 0px;
+  padding: 32px 28px 0px 28px;
 }
 
 
@@ -39,9 +36,9 @@
 .catalogCard {
   background: #efe4d7;                 /* exact beige */
   border-radius: 5px;
-  padding: 14px 14px 16px;
+  padding: 12px 20px 12px 20px;
    height: 170px;  
-  width: 300px;
+  width: 350px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -58,8 +55,8 @@
 
 /* ===== IMAGE ===== */
 .catalogImgWrap {
-  width: 65%;
- height: 95px;                     /* ref height */
+  width: 55%;
+ height: 140px;                     /* ref height */
   border-radius: 5px;
   overflow: hidden;
   background: #ddd3c7;
@@ -69,13 +66,12 @@
 .catalogImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
 
 /* CONTENT */
 .catalogContent {
-  padding-top: 8px;
+  padding-top: 3px;
    position:relative;
   z-index:2;
 }
@@ -118,7 +114,7 @@
   padding: 6px 14px;
   border-radius: 5px;
   text-decoration: none;
-  font-weight: bold;
+  
 }
 
 .catalogBtn:hover {
@@ -126,3 +122,4 @@
   border-color: #b12a1c;
   color: #fff;
 }
+

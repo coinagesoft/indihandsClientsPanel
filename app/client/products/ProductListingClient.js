@@ -6,6 +6,9 @@ import styles from "./products.module.css";
 import { useSearchParams } from "next/navigation";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
+import Footer from "../Footer/page";
+import css from "../Footer/Footer.module.css";
+
 
 export default function ProductListingPage() {
  useAuthGuard();
@@ -86,9 +89,11 @@ export default function ProductListingPage() {
         </div>
 
         {/* FILTER BAR */}
-        <div className={`${styles.filterBar} row g-1 mt-0 mx-1`}>
+        <div className="d-flex justify-content-center">
 
-          <div className="col-xl-5 col-md-6">
+        <div className={`${styles.filterBar} row g-3 mt-0 mx-1`}>
+
+          <div className="col-xl-5 col-md-4">
             <label className={styles.label}>Search</label>
             <input
               className={`form-control ${styles.input}`}
@@ -100,7 +105,7 @@ export default function ProductListingPage() {
 
       
 
-          <div className="col-xl-3 col-md-6">
+          <div className="col-xl-3 col-md-4">
             <label className={styles.label}>Availability</label>
             <select
               className={`form-select ${styles.select}`}
@@ -113,7 +118,7 @@ export default function ProductListingPage() {
             </select>
           </div>
 
-          <div className="col-xl-4 col-md-6">
+          <div className="col-xl-4 col-md-4">
             <label className={styles.label}>Sort</label>
             <select
               className={`form-select ${styles.select}`}
@@ -126,6 +131,7 @@ export default function ProductListingPage() {
             </select>
           </div>
 
+        </div>
         </div>
 
         {/* PRODUCTS GRID */}
@@ -195,7 +201,24 @@ export default function ProductListingPage() {
         </div>
           </div>
 
+         <footer className={`${css.productListing_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
       </div>
+
+    </footer>
+    
+      </div>
+   
     </PageWrapper>
   );
 }

@@ -121,7 +121,7 @@
   bottom: -6px;
   left: 0;
   width: 36px;
-  height: 1px;
+  height: 0.8px;
   border-radius: 2px;
   background: var(--color-primary);
 }

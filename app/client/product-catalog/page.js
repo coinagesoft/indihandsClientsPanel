@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "./productCatalog.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
+import Footer from "../Footer/page";
 
 export default function ProductCatalogPage() {
     useAuthGuard();
@@ -85,6 +86,7 @@ export default function ProductCatalogPage() {
 
     </div>
 
+  <Footer  variant="type2"/>
   </div>
 </PageWrapper>
   );
