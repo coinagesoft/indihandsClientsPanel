@@ -79,7 +79,7 @@ export default function ProductListingPage() {
         <div className={styles.dashboardCanvas} ></div>
 
         {/* HEADER */}
-        <div className="row mt-2">
+        <div className="row ">
           <div className="col-12">
             <h4 className='pageTitle'>Products</h4>
             <p className={styles.pageSubTitle}>

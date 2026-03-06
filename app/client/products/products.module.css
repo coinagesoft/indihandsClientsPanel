@@ -28,7 +28,12 @@
   padding: 32px 28px 20px 28px;
 
 }
-
+.pageTitle {
+ color: var(--color-primary);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
 .pageSubTitle {
   font-size: 14px;
   color: var(--text-muted);

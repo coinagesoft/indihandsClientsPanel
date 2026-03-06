@@ -8,10 +8,11 @@
 }
 
 .subTitle {
-  font-size: var(--fs-sm);
-  opacity: 0.85;
-  color: var(--color-gray);
+ font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
+
 
 
 .dashboardCanvas {
@@ -20,24 +21,7 @@
   z-index: 9999;
   pointer-events: none;
 
-  background-image:
-    url("/images/mandala-large-left.png"),
-    url("/images/motif-top-right.png"),
-    url("/images/bottom-right-mandala.png"),
-    url("/images/motif-bottom-left.png");
 
-  background-repeat: no-repeat;
-  background-position:
-    top 10px left 30px,
-    top 30px right 40px,
-    bottom 80px right 30px,
-    bottom 90px left 40px;
-
-  background-size:
-    120px auto,
-    80px auto,
-    260px auto,
-    90px auto;
 
   opacity: 1; /* MUCH softer */
 }
@@ -46,7 +30,7 @@
   position: relative;
   z-index: 1;
   min-height: 100vh; /* ensure wrapper covers full viewport */
-   padding: 32px 28px;
+   padding: 32px 28px 0px 28px;
 }
 /* ================= STEP CARDS ================= */
 
@@ -98,7 +82,7 @@
   color: black;
   font-weight: 600;
   line-height: 1.6;
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 .dashboardCanvas {
   position: absolute;
@@ -106,23 +90,6 @@
   z-index: 0;
   pointer-events: none;
 
-  background-image:
-    url("/images/parrot.png"),
-    url("/images/sun.png"),
-    url("/images/page3_bottom_right_logo.png");
-
-  background-repeat: no-repeat;
-  background-position:
-    top 30px right 40px,
-    top 60px left 30px,
-    bottom 50px right 40px;
-
-  background-size:
-    80px auto,
-    90px auto,
-    220px auto;
-
-  opacity: 0.18;
 }
 .pageTitle {
   font-family: var(--font-heading);
