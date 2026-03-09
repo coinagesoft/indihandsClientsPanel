@@ -17,6 +17,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
     { name: "Profile", path: "/client/profile", icon: "ri-user-3-line" },
     { name: "Process of Packing", path: "/client/process-packing", icon: "ri-box-3-line" },
     { name: "Terms & Conditions", path: "/client/terms", icon: "ri-file-shield-2-line" },
+{ name: "Contact Us", path: "/client/contactus", icon: "ri-customer-service-2-line" }
   ];
 
   return (
@@ -70,7 +71,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
       {!collapsed && (
         <>
         <div className={styles.footerLogo}>
-          <img src="/images/trifoley-logo.png" alt="trifoley" />
+          <img src="/images/MTDS-pvt-ltd.png" alt="trifoley" />
         </div>
         </>
       )}

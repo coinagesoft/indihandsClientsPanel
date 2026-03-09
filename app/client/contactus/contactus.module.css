@@ -1,0 +1,83 @@
+.dashboardWrapper {
+  position: relative;
+  z-index: 1;
+  max-height: 100vh; /* ensure wrapper covers full viewport */
+   padding: 32px 28px 0px 28px;
+}
+
+/* ================= CONTACT SECTION ================= */
+
+.contactContainer{
+
+  margin-top:100px;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+}
+
+/* ================= LOGO + ADDRESS ================= */
+
+.contactRow{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:30px;
+}
+
+.contactLogo{
+
+  width:120px;
+}
+
+/* ================= ADDRESS ================= */
+
+.address{
+
+  text-align:left;
+
+  font-family:var(--font-body);
+padding-left: 20px;
+  font-size:16px;
+font-weight: 500;
+  line-height:1.4;
+border-left:2px rgb(181, 180, 180) solid ;
+}
+
+/* ================= CONTACT LINE ================= */
+
+.contactLine{
+
+  font-family:var(--font-body);
+
+  font-size:16px;
+
+  margin-top:10px;
+}
+
+/* ================= DECORATIVE LINE ================= */
+
+.decorLine{
+
+  margin-top:60px;
+  width:200px;
+
+}
+.linedesign{
+    width: 100%;
+    height: 100%;
+}
+
+.line{
+padding-left: 10px;
+margin-left: 10px;
+border-left:2px rgb(53, 52, 52) solid ;
+}

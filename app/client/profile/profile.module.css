@@ -180,8 +180,8 @@
   box-shadow: none;
 }
 .logoutBtn {
-  background: rgba(162, 20, 24, 0.12);
-  color: var(--color-danger);
+  background: var(--color-danger);
+  color: white;
 
   border: 1.5px solid rgba(162, 20, 24, 0.35);
   border-radius: 5px;
@@ -201,9 +201,7 @@
 
 }
 .logoutBtn:hover {
-  background:  var(--color-primary);
-  transform: translateY(-1px);
-  color: #ffffff;
+  transform: translateY(-2px);
 }
 @media (max-width: 768px) {
   .profileBox {

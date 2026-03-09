@@ -1,21 +1,113 @@
-.dashboardWrapper {
-  position: relative;
-  min-height: 100vh;
+.dashboardWrapper{
   padding: 32px 28px 0px 28px;
+}
+
+/* ================= GRID ================= */
+.cardGrid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:10px;
+
+  margin-top:30px;
+justify-content:center;
+  max-width:900px;   /* controls exact width like design */
+  margin-left:auto;
+  margin-right:auto;
+}
+.wp5{
+  width: 200px !important;
+}
+
+/* ================= CARD ================= */
+
+.termCard{
+
+  background:var(--bg-card);
+
+  border-radius:var(--radius-sm);
+
+  padding:20px;
+
+  box-shadow:var(--shadow-card);
+
+  min-height:140px;
+
+  transition:all .25s ease;
+}
+
+.termCard:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-hover);
+}
+
+/* ================= TITLE ================= */
+
+.termCard h3{
+
+  font-family:var(--font-heading);
+  color:var(--text-heading);
+ font-weight: 500;
+  font-size:18px;
+
+  margin-bottom:8px;
+}
+
+/* ================= TEXT ================= */
+
+.termCard p{
+
+  font-family:var(--font-body);
+
+  font-size:14px;
+
+  line-height:1.6;
+}
+
+/* ================= NOTE ================= */
+
+.note{
+
+  margin-top:30px;
+
+  text-align:center;
+
+  font-family:var(--font-light);
+
+  font-style: italic;
+  font-size:13px;
+
+  color:var(--text-muted);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1200px){
+
+.cardGrid{
+grid-template-columns:repeat(3,1fr);
+}
 
 }
 
+@media(max-width:900px){
 
-
-
-.termsText{
-  font-family:  "MyriadPro-Regular", Arial, sans-serif;;
-  font-size: 14px;
-  white-space: pre-wrap;
-  color: #666666;
+.cardGrid{
+grid-template-columns:repeat(2,1fr);
 }
 
-.dashboardWrapper b{
-  font-size: 20px;
-  color: black;
+}
+
+@media(max-width:600px){
+
+.cardGrid{
+grid-template-columns:1fr;
+}
+
+}
+
+.dashboardContent{
+
+max-width:1200px;
+margin:auto;
+
 }

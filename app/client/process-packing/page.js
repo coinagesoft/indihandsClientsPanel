@@ -1,70 +1,95 @@
 "use client";
-
-import PageWrapper from "../../../components/common/wrapper";
-import Footer from "../Footer/page";
+import React from "react";
+import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./processPacking.module.css";
+import css from "../Footer/Footer.module.css";
+const Page = () => {
 
-export default function ProcessPackingPage() {
-  const steps = [
-    {
-      title: "Order Confirmation",
-      desc: "Once your order is placed, our team verifies specifications and confirms the request.",
-    },
-    {
-      title: "Artisan Crafting",
-      desc: "Products are carefully handcrafted by skilled artisans using traditional techniques.",
-    },
-    {
-      title: "Quality Check",
-      desc: "Each item goes through a detailed quality inspection to ensure premium standards.",
-    },
-    {
-      title: "Eco-Friendly Packing",
-      desc: "We use sustainable, plastic-free packaging to protect both products and nature.",
-    },
-    {
-      title: "Secure Dispatch",
-      desc: "Orders are securely packed and dispatched with reliable logistics partners.",
-    },
-  ];
+  useAuthGuard();
 
   return (
-  <PageWrapper>
+    <div className={styles.wrapper}>
 
-    <div className={`${styles.dashboardWrapper} container-fluid  `}>
-      <div className={styles.dashboardCanvas} ></div>
-      {/* Page Header */}
-    
-          <h4 className='pageTitle '>Process of Packing</h4>
-          <p className={styles.subTitle}>
-            From artisan hands to your workspace — carefully packed at every step
-          </p>
-    
+      <div className="pageTitle">Process of Packing</div>
 
-      {/* Steps */}
-      <div className="row mt-4 g-4">
-        {steps.map((step, index) => (
-          <div key={index} className="col-lg-4 col-md-6">
-            <div className={styles.stepCard}>
-              <div className={styles.stepNumber}>{index + 1}</div>
-              <h6 className={styles.stepTitle}>{step.title}</h6>
-              <p className={styles.stepDesc}>{step.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* FIRST ROW */}
+      <div className={styles.row}>
 
-      {/* Bottom Note */}
-      <div className="row mb-5 mt-5">
-        <div className="col-lg-10 mb-5">
-          <div className={styles.noteBox}>
-            Every IndiHands product is packed with care, respect for craftsmanship,
-            and responsibility towards sustainability.
-          </div>
+        <div className={styles.step}>
+          <img src="/images/packing1.jpeg"/>
+          <span className={styles.arrow}></span>
         </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing2.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing3.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing4.jpeg"/>
+        </div>
+
       </div>
+
+
+      {/* SECOND ROW */}
+      <div className={styles.row}>
+
+        <div className={styles.step}>
+          <img src="/images/packing5.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing6.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing7.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing8.jpeg"/>
+        </div>
+
+      </div>
+
+
+      {/* QUOTE */}
+      <div className={styles.quote}>
+
+        <span className={styles.qMark}>“</span>
+
+        Every IndiHands product is packed with care, respect for craftsmanship,
+        and responsibility towards sustainability.
+
+        <span className={styles.qMark}>”</span>
+
+      </div>
+<footer className={`${css.packing_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
     </div>
-    <Footer/>
-    </PageWrapper>
   );
-}
+};
+
+export default Page;

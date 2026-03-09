@@ -20,13 +20,13 @@
   justify-content: center;
   align-items: center;
 
-  height: 72px;      
-  margin-bottom: 20px;
+  height: 82px;      
+  /* margin-bottom: 20px; */
 }
 
 /* FOOTER IMAGE */
 .footerLogo img {
-  max-height: 70px;  
+  max-height: 55px;  
   width: auto;
   object-fit: contain;
 }
@@ -141,7 +141,7 @@
 /* COLLAPSED SIDEBAR */
 .collapsed .menuLink{
   justify-content: center;
-  padding: 10px 0;
+  /* padding: 10px 0; */
 }
 
 .collapsed .menuLink span{
@@ -155,7 +155,7 @@
 .logoRow{
   position: relative;
   padding-top: 30px;   /* space from top */
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 
   display: flex;
   justify-content: center;   /* center logo */
@@ -212,7 +212,7 @@
   align-items: center;
   gap: 14px;
 
-  padding: 10px 14px;
+  padding: 8px 14px;
 
   text-decoration: none;
   color: var(--text-primary);
@@ -251,7 +251,7 @@
   );
    border-radius: 3px;
   color: #fff;
-padding: 10px 15px;
+padding: 8px 15px;
 }
 
 /* ================= FOOTER ================= */

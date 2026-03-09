@@ -60,13 +60,37 @@
   overflow: hidden;
 }
 
+.contactus_Footer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  margin-top: 70px;
+    padding-bottom: 20px;
+}
+
 .proposalDetails_Footer{
  
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
 
+.packing_Footer{
+ 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 20px;
   position: relative;
   z-index: 3;
   overflow: hidden;

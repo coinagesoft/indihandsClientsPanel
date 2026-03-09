@@ -1,195 +1,91 @@
-/* ================= PAGE TITLE ================= */
-
-.pageTitle {
- color: var(--color-primary);
-  font-size: var(--fs-lg);
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.subTitle {
- font-size: 14px;
-  color: var(--text-muted);
-  margin-top: 4px;
+.wrapper{
+  padding: 32px 28px 0px 28px;
 }
 
 
 
-.dashboardCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
+/* ROW GRID */
 
+.row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
 
+  gap:30px;
 
-  opacity: 1; /* MUCH softer */
-}
-/* ================= DASHBOARD WRAPPER ================= */
-.dashboardWrapper {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh; /* ensure wrapper covers full viewport */
-   padding: 32px 28px 0px 28px;
-}
-/* ================= STEP CARDS ================= */
-
-.stepCard {
-  background: #faecd9; /* keep exact theme */
-  padding: 20px;
-  border-radius: var(--radius-lg);
-  height: 100%;
+  margin-top:30px;
 }
 
-/* Step number circle */
-.stepNumber {
-  width: 36px;
-  height: 36px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
+
+/* CARD */
+
+.step{
+  position:relative;
 }
 
-/* Step title */
-.stepTitle {
-  font-size: var(--fs-md);
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--color-gray-dark);
+.step img{
+  width:100%;
+  aspect-ratio: 4 / 3;   /* controls exact shape */
+  object-fit:cover;
+
+  border-radius:3px;
+  box-shadow:var(--shadow-card);
 }
 
-/* Step description */
-.stepDesc {
-  font-size: var(--fs-sm);
-  opacity: 0.9;
-  color: var(--color-gray);
-  line-height: 1.6;
+
+/* ARROW */
+
+.arrow{
+  position:absolute;
+
+  right:-22px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  width:0;
+  height:0;
+
+  border-top:12px solid transparent;
+  border-bottom:12px solid transparent;
+  border-left:13px solid #E87C2A;
 }
 
-/* ================= BOTTOM NOTE ================= */
+/* HIDE LAST ARROW */
 
-.noteBox {
-  background: #f3e2cf; /* keep theme */
-  padding: 16px;
-  border-radius: var(--radius-md);
-  font-size: var(--fs-sm);
-  color: black;
-  font-weight: 600;
-  line-height: 1.6;
-  margin-bottom: 0px;
-}
-.dashboardCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-
-}
-.pageTitle {
-  font-family: var(--font-heading);
-  font-size: 26px;
-  color: var(--text-heading);
-  margin-bottom: 6px;
+.step:last-child .arrow{
+  display:none;
 }
 
-.subTitle {
-  font-size: 14px;
-  color: var(--text-muted);
-  max-width: 520px;
-}
-.stepCard {
-  position: relative;
-  background: var(--bg-card);
-  padding: 22px 22px 26px;
-  border-radius: var(--radius-lg);
-  height: 100%;
 
-  box-shadow: var(--shadow-card);
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
-}
+/* QUOTE */
 
-.stepCard::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(220, 102, 30, 0.08),
-    rgba(199, 204, 107, 0.10)
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
+.quote{
+  margin-top:40px;
+
+  text-align:center;
+
+  font-family:var(--font-heading);
+
+  color:var(--text-heading);
+
+  font-size:26px;
+
+  line-height:0.6;
+margin-bottom: 30px;
+  max-width:810px;
+
+  margin-left:auto;
+  margin-right:auto;
 }
 
-.stepCard:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-hover);
-}
+/* BIG QUOTES */
 
-.stepCard:hover::after {
-  opacity: 1;
-}
-.stepTitle {
-  font-family: var(--font-ui);
-  font-size: 15px;
-  color: var(--text-heading);
-  margin-bottom: 6px;
-}
+.qMark{
+  font-size:60px;
 
-.stepDesc {
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.65;
-}
-.stepNumber {
-  width: 42px;
-  height: 42px;
+  vertical-align:middle;
 
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-primary-hover)
-  );
+  margin:0 5px;
 
-  color: #fff;
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
-
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: 0 6px 16px rgba(220, 102, 30, 0.35);
-  margin-bottom: 12px;
-}
-.noteBox {
-  background: rgba(199, 204, 107, 0.22);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.65;
-
-  box-shadow: inset 0 0 0 1px rgba(68, 45, 10, 0.12);
-}
-@media (max-width: 768px) {
-  .pageTitle {
-    font-size: 22px;
-  }
-
-  .stepCard {
-    padding: 18px;
-  }
+  color:var(--text-heading);
 }

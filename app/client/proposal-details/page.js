@@ -486,6 +486,7 @@ export default function ProposalDetailsPage() {
         </div>
 </div>
        
+   
                   <footer className={`${css.proposalDetails_Footer} `}>
       
       <div className={css.designLayer}></div>
@@ -501,7 +502,6 @@ export default function ProposalDetailsPage() {
       </div>
 
     </footer>
-   
       </div>
    
     </PageWrapper>

@@ -59,12 +59,7 @@
   cursor: pointer;
 }
 
-.dashboardWrapper {
-  position: relative;
-  min-height: 100vh;
-  padding: 32px 28px;
 
-}
 
 .rfqMeta {
   font-size: 13px;

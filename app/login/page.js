@@ -122,7 +122,7 @@ export default function ClientLoginPage() {
 
         <div className={styles.bottomSection}>
           <img
-            src="/images/design-studio.png"
+            src="/images/MTDS-pvt-ltd.png"
             className={styles.designStudio}
             alt="mandala"
           />

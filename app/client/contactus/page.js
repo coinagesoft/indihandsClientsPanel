@@ -1,0 +1,73 @@
+"use client";
+import React from "react";
+import useAuthGuard from "../hooks/useAuthGuard";
+import styles from "./contactus.module.css";
+import css from "../Footer/Footer.module.css";
+const Page = () => {
+
+  useAuthGuard();
+
+  return (
+   <>
+
+    <div className={styles.dashboardWrapper}>
+
+      <div className="pageTitle">
+        Contact Us
+      </div>
+
+      <div className={styles.contactContainer}>
+
+        <div className={styles.contactRow}>
+
+          <img
+            src="/images/favicon.png"
+            className={styles.contactLogo}
+          />
+
+          <div className={styles.address}>
+            Manik Trifaley Design Studio,<br/>
+            303, Meghana, DSK Ranwara, NDA-Pashan Road,<br/>
+            Bavdhan, Pune - 411021. India
+          </div>
+
+        </div>
+
+        <div className={styles.contactLine}>
+          +91 9822513937  <span className={styles.line}></span>  manik@mtds.co.in <span className={styles.line}></span>  www.indihands.com
+        </div>
+
+        <div className={styles.decorLine}>
+
+      <img
+        src="/images/line_design.jpeg"
+        alt="IndiHands"
+        className={styles.linedesign}
+      />       
+       </div>
+
+      </div>
+
+ <footer className={`${css.contactus_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
+    </div>
+
+     
+    </>
+  );
+};
+
+export default Page;
