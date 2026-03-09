@@ -66,7 +66,7 @@ export default function RFQHistoryPage() {
 
         <h4 className="pageTitle">RFQ History</h4>
 
-        <div className="row mt-3">
+        <div className="row ">
           <div className="col">
             <p className={styles.subtitle}>
               Track your submitted requests and their progress
