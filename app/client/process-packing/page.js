@@ -16,12 +16,7 @@ const Page = () => {
       <div className={styles.row}>
 
         <div className={styles.step}>
-          <img src="/images/packing1.jpeg"/>
-          <span className={styles.arrow}></span>
-        </div>
-
-        <div className={styles.step}>
-          <img src="/images/packing2.jpeg"/>
+          <img src="/images/packing4.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
 
@@ -31,7 +26,12 @@ const Page = () => {
         </div>
 
         <div className={styles.step}>
-          <img src="/images/packing4.jpeg"/>
+          <img src="/images/packing1.jpeg"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing2.jpeg"/>
         </div>
 
       </div>
@@ -39,11 +39,6 @@ const Page = () => {
 
       {/* SECOND ROW */}
       <div className={styles.row}>
-
-        <div className={styles.step}>
-          <img src="/images/packing5.jpeg"/>
-          <span className={styles.arrow}></span>
-        </div>
 
         <div className={styles.step}>
           <img src="/images/packing6.jpeg"/>
@@ -56,7 +51,12 @@ const Page = () => {
         </div>
 
         <div className={styles.step}>
-          <img src="/images/packing8.jpeg"/>
+          <img src="/images/packing7.png"/>
+          <span className={styles.arrow}></span>
+        </div>
+
+        <div className={styles.step}>
+          <img src="/images/packing8.png"/>
         </div>
 
       </div>
