@@ -10,7 +10,7 @@ const Page = () => {
   return (
    <>
 
-    <div className={styles.dashboardWrapper}>
+    <div className={`${styles.dashboardWrapper} container-fluid`}>
       <div className={styles.dashboardCanvas} />
 
       <div className="pageTitle">
