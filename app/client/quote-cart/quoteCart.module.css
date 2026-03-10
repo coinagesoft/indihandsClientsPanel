@@ -188,7 +188,7 @@
 
 .productName {
   font-family: var(--font-ui);
-  color: var(--text-heading);
+  color: var(--text-primary);
 }
 
 /* ================= QTY ================= */
@@ -291,7 +291,7 @@
   font-size: 12px;
   letter-spacing: 0.4px;
   text-transform: uppercase;
-  color: var(--color-secondary);
+ color: var(--text-primary);
   margin-bottom: 2px;
 }
 

@@ -31,6 +31,10 @@
   display: flex;
   flex-direction: column;
 }
+.link{
+  text-decoration: none;
+  color: black;
+}
 
 /* ================= CONTACT SECTION ================= */
 
@@ -104,7 +108,7 @@ border-left:2px rgb(181, 180, 180) solid ;
 }
 
 .line{
-padding-left: 10px;
-margin-left: 10px;
+padding-left: 8px;
+margin-left: 8px;
 border-left:2px rgb(53, 52, 52) solid ;
 }

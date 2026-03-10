@@ -42,7 +42,8 @@
 .filterBar {
   background: rgba(255, 255, 255, 0.9);
   border-radius: var(--radius-lg);
-  padding: 8px;
+padding-top: 5px;
+padding-bottom: 10px;
   max-width: 900px !important;
   min-width: 700px;
   box-shadow: var(--shadow-card);
@@ -173,7 +174,7 @@ padding:12px;
 }
 @media (max-width: 768px) {
   .filterBar {
-    padding: 16px;
+    padding: 4px;
   }
 
   .productImageBox {

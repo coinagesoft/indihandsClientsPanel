@@ -5,6 +5,7 @@ import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
 import PageWrapper from "../../../components/common/wrapper";
 import Footer from "../Footer/page";
+import css from "../Footer/Footer.module.css";
 
 export default function DashboardPage() {
   useAuthGuard();
@@ -129,8 +130,22 @@ export default function DashboardPage() {
           </table>
         </div>
       </div>
+    <footer className={`${css.dashboard_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
     </div>
-    <Footer variant="type1"/>
     </PageWrapper>
   );
 }

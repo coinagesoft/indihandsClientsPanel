@@ -6,7 +6,9 @@ import css from "../Footer/Footer.module.css";
 const Page = () => {
 
   useAuthGuard();
-
+const phone = "+919822513937";
+const email = "manik@mtds.co.in";
+const website = "https://www.indihands.com";
   return (
    <>
 
@@ -34,9 +36,23 @@ const Page = () => {
 
         </div>
 
-        <div className={styles.contactLine}>
-          +91 9822513937  <span className={styles.line}></span>  manik@mtds.co.in <span className={styles.line}></span>  www.indihands.com
-        </div>
+       <div className={styles.contactLine}>
+  <a href={`tel:${phone}`} className={styles.link}>
+    {phone}
+  </a>
+
+  <span className={styles.line}></span>
+
+  <a href={`mailto:${email}`} className={styles.link}>
+    {email}
+  </a>
+
+  <span className={styles.line}></span>
+
+  <a href={website} target="_blank" rel="noopener noreferrer" className={styles.link}>
+    {website.replace("https://", "")}
+  </a>
+</div>
 
         <div className={styles.decorLine}>
 

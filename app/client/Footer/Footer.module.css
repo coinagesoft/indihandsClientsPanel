@@ -75,6 +75,21 @@
   padding-bottom: 20px;
 }
 
+.dashboard_Footer{
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: auto;   /* 🔥 pushes footer to bottom */
+
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+
+  padding-bottom: 20px; 
+}
+
 .proposalDetails_Footer{
  
   display: flex;
