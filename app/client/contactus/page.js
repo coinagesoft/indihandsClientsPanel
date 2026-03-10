@@ -11,6 +11,7 @@ const Page = () => {
    <>
 
     <div className={styles.dashboardWrapper}>
+      <div className={styles.dashboardCanvas} />
 
       <div className="pageTitle">
         Contact Us

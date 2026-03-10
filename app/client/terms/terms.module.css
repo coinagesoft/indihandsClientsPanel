@@ -1,5 +1,38 @@
-.dashboardWrapper{
-  padding: 32px 28px 0px 28px;
+/* ================= DASHBOARD CANVAS ================= */
+.dashboardCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+
+  background-image:
+ url("/images/page3_bottom_right_logo.png"),
+    url("/images/leaf_design.png"),
+   url("/images/page3_bottom_right_logo.png"),
+      url("/images/circle_design.png");
+
+  background-repeat: no-repeat;
+  background-position:
+   top 10px left 0px,
+    top 0px right 30px,
+    bottom -30px right -60px,
+      bottom 10px left 10px;
+
+  background-size:
+    90px auto,
+    70px auto,
+    260px auto,
+    90px auto;
+
+  opacity: 1; 
+}
+
+/* ================= DASHBOARD WRAPPER ================= */
+.dashboardWrapper {
+  position: relative;
+  min-height: 100vh;
+  padding: 32px 28px 0px 32px;
+
 }
 
 /* ================= GRID ================= */
@@ -7,10 +40,9 @@
   display:grid;
   grid-template-columns:1.5fr 1fr 1fr 1fr;
   gap:10px;
-
   margin-top:30px;
-justify-content:center;
-  max-width:900px;   /* controls exact width like design */
+  justify-content:center;
+  max-width:900px; 
   margin-left:auto;
   margin-right:auto;
 }
@@ -35,10 +67,7 @@ justify-content:center;
   transition:all .25s ease;
 }
 
-.termCard:hover{
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-hover);
-}
+
 
 /* ================= TITLE ================= */
 

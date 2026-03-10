@@ -57,7 +57,12 @@
   border-radius: var(--radius-lg);
   transition: box-shadow 0.2s ease;
 }
-
+.activeCrumb{
+  background:#efe3d6;
+  padding:3px 8px;
+  color:#5a3d1a;
+  font-weight:500;
+}
 
 .rightBox.is-stuck {
   box-shadow: 0 12px 28px rgba(0,0,0,0.12);

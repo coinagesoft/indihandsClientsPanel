@@ -8,7 +8,8 @@ const Page = () => {
   useAuthGuard();
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.dashboardWrapper}>
+      <div className={styles.dashboardCanvas} />
 
       <div className="pageTitle">Process of Packing</div>
 

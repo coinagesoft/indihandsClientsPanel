@@ -1,5 +1,38 @@
-.wrapper{
-  padding: 32px 28px 0px 28px;
+/* ================= DASHBOARD CANVAS ================= */
+.dashboardCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+
+  background-image:
+ url("/images/page3_bottom_right_logo.png"),
+    url("/images/leaf_design.png"),
+   url("/images/page3_bottom_right_logo.png"),
+      url("/images/circle_design.png");
+
+  background-repeat: no-repeat;
+  background-position:
+    top 10px left 0px,
+    top 0px right 30px,
+    bottom -30px right -60px,
+      bottom 10px left 10px;
+
+  background-size:
+    90px auto,
+    70px auto,
+    260px auto,
+    90px auto;
+
+  opacity: 1; 
+}
+
+/* ================= DASHBOARD WRAPPER ================= */
+.dashboardWrapper {
+  position: relative;
+  min-height: 100vh;
+  padding: 32px 28px 0px 32px;
+
 }
 
 

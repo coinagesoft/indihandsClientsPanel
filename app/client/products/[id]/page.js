@@ -231,7 +231,9 @@ export default function ProductDetailsPage() {
                 {product.breadcrumb.dashboard} &gt;{" "}
                 {product.breadcrumb.catalog} &gt;{" "}
                 {product.breadcrumb.catalogName} &gt;{" "}
-               <b>{product.breadcrumb.productName}</b> 
+                <span className={styles.activeCrumb}>
+    {product.breadcrumb.productName}
+  </span>
               </div>
             </div>
           </div>

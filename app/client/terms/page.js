@@ -9,8 +9,8 @@ const Page = () => {
   useAuthGuard();
 
   return (
-    <div className={styles.dashboardWrapper}>
-
+    <div className={` ${styles.dashboardWrapper} container-fluid`} >
+   <div className={styles.dashboardCanvas} />
       <div className="pageTitle">
         Terms & Conditions
       </div>
