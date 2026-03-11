@@ -279,16 +279,16 @@ Pune’s regal legacy.</p>
 
                   <div className="row">
                     <div className="col-6">
-                      <p><b>Code:</b> {product.details.code}</p>
-                      <p><b>Size:</b> {product.details.size}</p>
-                      <p><b>Weight:</b> {product.details.weight}</p>
+                      <p className="mt-0 mb-0"><b>Code:</b> {product.details.code}</p>
+                      <p className="mt-0 mb-0"><b>Size:</b> {product.details.size}</p>
+                      <p className="mt-0 mb-0"><b>Weight:</b> {product.details.weight}</p>
                     </div>
-                    <div className="col-6">
-                      <p><b>Price:</b> ₹ {Number(product.price).toFixed(2)}</p>
-                      <p><b>HSN:</b> {product.hsn || "-"}</p>
+                    <div className="col-6 ">
+                      <p className="mt-0 mb-0"><b>Price:</b> ₹ {Number(product.price).toFixed(2)}</p>
+                      <p className="mt-0 mb-0"><b>HSN:</b> {product.hsn || "-"}</p>
                       {/* ✅ STOCK */}
                       <p>
-                        <b>Stock:</b>{" "}
+                        <b className="mt-0 mb-0">Stock:</b>{" "}
                         {product.stock_qty > 0 ? (
                           <span className={styles.inStock}>
                             {product.stock_qty} Available
