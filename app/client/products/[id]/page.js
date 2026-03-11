@@ -239,10 +239,10 @@ export default function ProductDetailsPage() {
           </div>
 
           {/* CONTENT */}
-          <div className="row mt-4 g-4">
+          <div className="row mt-0 g-4">
 
             {/* IMAGES – MIXED HEIGHT MASONRY */}
-            <div className="col-lg-6">
+            <div className="col-lg-6 mt-2 ">
               <div className={styles.masonry}>
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
@@ -259,16 +259,23 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* DETAILS */}
-            <div className="col-lg-6">
+            <div className="col-lg-6 mt-1 ">
               <div className={styles.rightBox}>
 
                 <div className={styles.section}>
-                  <h6 className={styles.sectionTitle}>Description</h6>
-                  <p className={styles.descText}>{product.description}</p>
+                  <h6 className={styles.sectionTitle}><b>Description</b></h6>
+                  <p className={styles.descText}>This premium handmade paper diary honours the timeless grandeur of 
+Shaniwar Wada, built in 1732 as the seat of the Peshwas. Once a centre of authority, 
+artistry, and ceremony, its mighty gates and intricate carvings still speak of Maratha 
+power and resilience despite the fire of 1828. Crafted with artisanal care, the diary’s 
+handmade texture reflects the fort’s enduring strength, making it a treasured canvas 
+for your own ideas. Each page turns like a chapter of history, blending heritage with 
+creativity. Let this diary inspire you to record thoughts with the same permanence as 
+Pune’s regal legacy.</p>
                 </div>
 
                 <div className={styles.section}>
-                  <h6 className={styles.sectionTitle}>Product Details</h6>
+                  <h6 className={styles.sectionTitle}><b>Product Details</b></h6>
 
                   <div className="row">
                     <div className="col-6">
