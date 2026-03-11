@@ -32,6 +32,8 @@
   position: relative;
   min-height: 100vh;
   padding: 32px 28px 0px 28px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ================= PAGE TITLE ================= */
@@ -232,11 +234,12 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 18px 18px 20px;
+  padding: 18px 18px 0px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   height: fit-content;
+  margin-bottom: 0px;
 }
 
 /* HEADER */
