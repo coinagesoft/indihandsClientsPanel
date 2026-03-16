@@ -261,3 +261,185 @@
   background: rgba(162, 20, 24, 0.25);
   color: var(--color-danger);
 }
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .dashboardWrapper {
+    padding: 20px 16px 0;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .tableBox {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+
+  .customTable {
+    font-size: 13px;
+    border-collapse: collapse;
+    min-width: auto;
+  }
+
+  .customTable thead {
+    display: none; /* Hide headers on mobile */
+  }
+
+  .customTable tbody,
+  .customTable tr,
+  .customTable td {
+    display: block;
+  }
+
+  .rowClickable {
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    padding: 16px;
+  }
+
+  .rowClickable:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .rowClickable td {
+    padding: 8px 12px 8px 50%;
+    text-align: right;
+    position: relative;
+    border: none;
+    min-height: 44px; /* Touch target */
+  }
+
+  .rowClickable td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: left;
+    font-size: 12px;
+  }
+
+  .rowClickable td:first-child:before {
+    content: "RFQ";
+  }
+
+  .rowClickable td:nth-child(2):before {
+    content: "Date";
+  }
+
+  .rowClickable td:nth-child(3):before {
+    content: "Items";
+  }
+
+  .rowClickable td:nth-child(4):before {
+    content: "Amount";
+  }
+
+  .rowClickable td:nth-child(5):before {
+    content: "Status";
+  }
+
+  .rowClickable td:last-child {
+    padding-right: 12px !important;
+    text-align: center;
+  }
+
+  .rfqBadge {
+    font-size: 12px;
+    padding: 4px 12px;
+    width: auto;
+  }
+
+  .status {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+
+  .statusDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .expandIcon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+  }
+
+  /* Expand Row Mobile */
+  .expandRow.open .expandBox {
+    max-height: 300px;
+    padding: 16px;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .expandBox > div:first-child {
+    max-width: 100%;
+    order: 2;
+  }
+
+  .expandActions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 0;
+    order: 1;
+  }
+
+  .actionBtn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  /* Canvas mobile adjustments */
+  .dashboardCanvas {
+    background-size:
+      60px auto,
+      120px auto,
+      80px auto;
+    background-position:
+      top 8px right 16px,
+      bottom 8px right -20px,
+      bottom 12px left 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardWrapper {
+    padding: 16px 12px 0;
+  }
+
+  .tableBox {
+    padding: 10px;
+  }
+
+  .rowClickable td {
+    padding-left: 45%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .rowClickable td:before {
+    width: 42%;
+    font-size: 11px;
+  }
+
+  .actionBtn {
+    min-width: 120px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
