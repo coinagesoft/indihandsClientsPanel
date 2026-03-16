@@ -1,17 +1,24 @@
 .wrapper {
   display: flex;
-
+  min-height: 100vh;
 }
 
-/* MAIN CONTENT */
+/* MAIN CONTENT - DEFAULT OPEN STATE */
 .pageContent {
+  transition: margin-left 0.3s ease-in-out;
   width: 100%;
-position: relative;
-  z-index: 5;  
-  /* margin-bottom: 40px; */
+  /* position: relative; */
+  /* z-index: 5; */
 }
 
-/* WHEN SIDEBAR IS COLLAPSED */
+/* OPEN STATE (default) */
+.openContent {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+}
+
+/* COLLAPSED STATE */
 .collapsedContent {
-  margin-left: 80px;
+  margin-left: 80px !important;
+  width: calc(100% - 80px);
 }

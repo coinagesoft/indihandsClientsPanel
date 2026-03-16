@@ -263,15 +263,15 @@ padding: 8px 14px;
 
 .mainContent {
   margin-left: 240px;
-  width: 100%;
+  width: calc(100% - 240px);
   transition: margin-left 0.28s ease;
 }
-
 
 
 /* WHEN SIDEBAR IS COLLAPSED */
 .collapsedLayout .mainContent {
   margin-left: 64px;
+  width: calc(100% - 64px);
 }
 .collapsed .icon{
   margin: auto;

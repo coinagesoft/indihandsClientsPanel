@@ -6,25 +6,22 @@
   pointer-events: none;
 
   background-image:
- url("/images/page3_bottom_right_logo.png"),
-    url("/images/leaf_design.png"),
-   url("/images/page3_bottom_right_logo.png"),
-      url("/images/circle_design.png");
+    url("/images/page3_bottom_right_logo.png");
+    /* url("/images/leaf_design.png"),
+    url("/images/circle_design.png"); */
 
-  background-repeat: no-repeat;
+  background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
-    top 10px left 0px,
-    top 0px right 30px,
+    top 5px right 30px,
     bottom -30px right -60px,
-      bottom 10px left 10px;
+    bottom 10px left 10px;
 
   background-size:
     90px auto,
     70px auto,
-    260px auto,
     90px auto;
 
-  opacity: 1; 
+  opacity: 1;
 }
 
 /* ================= DASHBOARD WRAPPER ================= */
@@ -32,93 +29,175 @@
   position: relative;
   min-height: 100vh;
   padding: 32px 28px 0px 32px;
-
 }
 
-
-
 /* ROW GRID */
-
 .row{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-
-  gap:30px;
-
+  gap:27px;
   margin-top:30px;
 }
 
-
 /* CARD */
-
 .step{
   position:relative;
+  transform: scale(0.9);
+  transform-origin: center;
 }
 
 .step img{
   width:100%;
-  aspect-ratio: 4 / 3;   /* controls exact shape */
+  aspect-ratio: 4 / 3;
   object-fit:cover;
-
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
   border-radius:3px;
   box-shadow:var(--shadow-card);
 }
 
-
 /* ARROW */
-
 .arrow{
   position:absolute;
-
-  right:-22px;
+  right:-45px;
   top:50%;
-
   transform:translateY(-50%);
-
   width:0;
   height:0;
-
-  border-top:12px solid transparent;
-  border-bottom:12px solid transparent;
-  border-left:13px solid #E87C2A;
+  border-top:18px solid transparent;
+  border-bottom:18px solid transparent;
+  border-left:20px solid #E87C2A;
 }
 
 /* HIDE LAST ARROW */
-
 .step:last-child .arrow{
   display:none;
 }
 
-
 /* QUOTE */
-
 .quote{
   margin-top:40px;
-
   text-align:center;
-
   font-family:var(--font-heading);
-
   color:var(--text-heading);
-
   font-size:26px;
-
   line-height:0.6;
-margin-bottom: 30px;
+  margin-bottom: 30px;
   max-width:810px;
-
   margin-left:auto;
   margin-right:auto;
 }
 
 /* BIG QUOTES */
-
 .qMark{
   font-size:60px;
-
   vertical-align:middle;
-
   margin:0 5px;
-
   color:var(--text-heading);
 }
+
+/* TABLET RESPONSIVE */
+@media (max-width: 768px) {
+  .dashboardWrapper {
+    padding: 20px 16px 0px 20px;
+  }
+
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 25px;
+  }
+
+  .arrow {
+    right: -25px;
+    border-top-width: 12px;
+    border-bottom-width: 12px;
+    border-left-width: 14px;
+  }
+
+  .step {
+    transform: scale(0.95);
+  }
+
+  .quote {
+    font-size: 22px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+  }
+
+  .qMark {
+    font-size: 45px;
+    margin: 0 4px;
+  }
+
+  .dashboardCanvas {
+    background-size: 70px auto, 200px auto, 70px auto;
+    background-position: top 5px right 20px, bottom -20px right -40px, bottom 10px left 10px;
+  }
+}
+
+/* MOBILE RESPONSIVE - VERTICAL STACK */
+@media (max-width: 480px) {
+  .dashboardWrapper {
+    padding: 16px 12px 0px 16px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .step {
+    transform: scale(1);
+     margin-bottom:20px;
+  }
+
+  .step img {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* ARROW BELOW IMAGE FOR VERTICAL MODE */
+   .arrow{
+    position:absolute;
+    top:auto;
+    bottom:-26px;
+    left:50%;
+    transform:translateX(-50%);
+
+    width:0;
+    height:0;
+
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-top:16px solid #E87C2A;   /* DOWNWARD ARROW */
+
+    border-bottom:none;
+  }
+
+
+  /* HIDE LAST ARROW */
+  .step:last-child .arrow {
+    display: none;
+  }
+
+  .quote {
+    font-size: 20px;
+    line-height: 1.3;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .qMark {
+    font-size: 40px;
+  }
+
+  .dashboardCanvas {
+    background-size: 50px auto, 150px auto, 50px auto;
+    background-position: top 5px right 10px, bottom -10px right -20px, bottom 10px left 5px;
+  }
+}
+

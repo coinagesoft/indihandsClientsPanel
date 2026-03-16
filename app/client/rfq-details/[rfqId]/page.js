@@ -90,12 +90,15 @@ export default function RFQDetailsPage() {
               {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}
             </p>
 
-            {/* ✅ CLIENT INFO */}
-            <div className={styles.clientInfo}>
-              <div><strong>Client Name:</strong> {rfq.client_name}</div>
-              <div><strong>Phone:</strong> {rfq.client_phone}</div>
-              <div><strong>Email:</strong> {rfq.client_email}</div>
-            </div>
+            {/* CLIENT INFO */}
+            <dl className={styles.clientInfo}>
+              <dt><strong>Client:</strong></dt>
+              <dd>{rfq.client_name}</dd>
+              <dt><strong>Phone:</strong></dt>
+              <dd>{rfq.client_phone}</dd>
+              <dt><strong>Email:</strong></dt>
+              <dd>{rfq.client_email}</dd>
+            </dl>
           </div>
 
           <span className={`${styles.status} ${styles[statusKey]}`}>
@@ -108,31 +111,47 @@ export default function RFQDetailsPage() {
         <div className={styles.card}>
           <h6 className={styles.sectionTitle}>Requested Products</h6>
 
-          <table className="table mb-0">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th className="text-end">Rate</th>
-                <th className="text-center">Qty</th>
-                <th className="text-end">Total</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {items.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.product_name}</td>
-                  <td className="text-end">
-                    ₹ {Number(item.quoted_price).toLocaleString()}
-                  </td>
-                  <td className="text-center">{item.quantity}</td>
-                  <td className="text-end fw-semibold">
-                    ₹ {Number(item.total).toLocaleString()}
-                  </td>
+          <div className={styles.tableResponsive}>
+            <table className="table mb-0">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th className="text-end">Rate</th>
+                  <th className="text-center">Qty</th>
+                  <th className="text-end">Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {items.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>{item.product_name}</td>
+                    <td className="text-end">
+                      ₹ {Number(item.quoted_price).toLocaleString()}
+                    </td>
+                    <td className="text-center">{item.quantity}</td>
+                    <td className="text-end fw-semibold">
+                      ₹ {Number(item.total).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Items Cards */}
+          <div className={styles.mobileItems}>
+            {items.map((item, idx) => (
+              <div key={idx} className={styles.itemCard}>
+                <div className={styles.itemName}>{item.product_name}</div>
+                <div className={styles.itemDetails}>
+                  <div>Rate: ₹{Number(item.quoted_price).toLocaleString()}</div>
+                  <div>Qty: {item.quantity}</div>
+                  <div className={styles.itemTotal}>Total: ₹{Number(item.total).toLocaleString()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* SUMMARY */}
@@ -167,7 +186,7 @@ export default function RFQDetailsPage() {
           </button>
         </div>
 
-              <footer className={`${css.rfqDetails_Footer} `}>
+          <footer className={`${css.rfqDetails_Footer} ${styles.rfqFooter}`}>
       
       <div className={css.designLayer}></div>
 

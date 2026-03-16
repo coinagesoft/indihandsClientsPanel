@@ -21,9 +21,7 @@ export default function ClientLayout({ children }) {
       />
 
       <main
-        className={`${styles.pageContent} ${
-          collapsed ? styles.collapsedContent : ""
-        }`}
+        className={`${styles.pageContent} ${!collapsed ? styles.openContent : styles.collapsedContent}`}
       >
       
           <>
