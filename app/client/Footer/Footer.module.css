@@ -251,7 +251,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-padding-bottom: 20px;
+padding: 20px 0px;
   margin-top: auto;
   position: relative;
   z-index: 3;
