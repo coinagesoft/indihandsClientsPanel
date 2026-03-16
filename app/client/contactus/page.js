@@ -6,6 +6,15 @@ import css from "../Footer/Footer.module.css";
 const Page = () => {
 
   useAuthGuard();
+      const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 const phone = "+919822513937";
 const email = "manik@mtds.co.in";
 const website = "https://www.indihands.com";
@@ -15,8 +24,17 @@ const website = "https://www.indihands.com";
     <div className={`${styles.dashboardWrapper} container-fluid`}>
       <div className={styles.dashboardCanvas} />
 
+       <div className="d-flex justify-content-between">
       <div className="pageTitle">
         Contact Us
+      </div>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
       </div>
 
       <div className={styles.contactContainer}>

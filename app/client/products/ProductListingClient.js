@@ -8,10 +8,11 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 import Footer from "../Footer/page";
 import css from "../Footer/Footer.module.css";
-
+import { useRouter } from "next/navigation";
 
 export default function ProductListingPage() {
  useAuthGuard();
+   const router = useRouter();
   /* ================= STATE ================= */
   const searchParams = useSearchParams();
   const catalogId = searchParams.get("catalogId");
@@ -69,7 +70,15 @@ export default function ProductListingPage() {
 
   }, [search, stock, sort, catalogId]);
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
 
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 
   /* ================= UI ================= */
   return (
@@ -81,7 +90,16 @@ export default function ProductListingPage() {
         {/* HEADER */}
         <div className="row ">
           <div className="col-12">
+             <div className="d-flex justify-content-between">
             <h4 className='pageTitle'>Products</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
+      </div>
             <p className={styles.pageSubTitle}>
               Art-led desk essentials for leadership spaces
             </p>

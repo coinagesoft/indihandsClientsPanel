@@ -7,8 +7,10 @@ import PageWrapper from "../../../components/common/wrapper";
 import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
 import css from "../Footer/Footer.module.css";
+
 export default function QuoteCartPage() {
   useAuthGuard();
+  
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -66,6 +68,15 @@ export default function QuoteCartPage() {
     }
 
     return true;
+  };
+    const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
   };
 
   /* ================= FETCH CART ================= */
@@ -279,8 +290,17 @@ export default function QuoteCartPage() {
         <div className={`${styles.dashboardWrapper} container-fluid  `}>
           <div className={styles.dashboardCanvas}></div>
 
-          <h4 className="pageTitle">Quote Cart</h4>
 
+ <div className="d-flex justify-content-between ">
+          <h4 className="pageTitle">Quote Cart</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
+      </div>
           <div className="row mt-3">
             {/* CART TABLE */}
             <div className="col-lg-9">

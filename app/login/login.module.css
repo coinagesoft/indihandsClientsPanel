@@ -3,6 +3,7 @@
   width:100%;
   height:100dvh;   /* modern viewport height */
   overflow:hidden; /* prevents scrollbar */
+   font-family: var(--font-body);
 }
 
 /* LEFT PANEL */
@@ -58,10 +59,9 @@
   width:78%;
   padding:10px 12px;
   margin-bottom:14px;
-
+   font-family: var(--font-body);
   border-radius:2px;
   border:1px solid #ead7b7;
-
   font-size:13px;
   background:#fdf0cc;
   color:#3b2a1a;

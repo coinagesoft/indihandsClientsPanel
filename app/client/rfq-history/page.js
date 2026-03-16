@@ -8,6 +8,8 @@ import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 import css from "../Footer/Footer.module.css";
 import Footer from "../Footer/page";
+
+
 export default function RFQHistoryPage() {
     useAuthGuard();
   const router = useRouter();
@@ -58,14 +60,30 @@ export default function RFQHistoryPage() {
       </PageWrapper>
     );
   }
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
 
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
   return (
     <PageWrapper loading={loading}>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
 
+ <div className="d-flex justify-content-between ">
         <h4 className="pageTitle">RFQ History</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
 
+         </div>
+
+      </div>
         <div className="row ">
           <div className="col">
             <p className={styles.subtitle}>

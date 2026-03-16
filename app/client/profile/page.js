@@ -121,11 +121,15 @@ useEffect(() => {
         {/* <div className={styles.dashboardCanvas} ></div> */}
 
       {/* HEADER */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex justify-content-between mb-3">
         <h4 className="pageTitle">Company Profile</h4>
-        {/* <button className={styles.logoutBtn} onClick={handleLogout}>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
           Logout
-        </button> */}
+        </button>
+
+         </div>
+
       </div>
 
       <div className={styles.profileBox}>

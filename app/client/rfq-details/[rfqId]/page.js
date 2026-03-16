@@ -6,7 +6,6 @@ import styles from "./rfqDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import useAuthGuard from "../../hooks/useAuthGuard";
 import css from "../../Footer/Footer.module.css";
-
 export default function RFQDetailsPage() {
    useAuthGuard();
   const params = useParams();
@@ -47,6 +46,17 @@ export default function RFQDetailsPage() {
       })
       .finally(() => setLoading(false));
   }, [rfqId]);
+
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 
   if (loading) return <PageWrapper loading />;
 

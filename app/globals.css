@@ -239,3 +239,18 @@ td strong {
   color: var(--text-heading);
   margin-bottom: 6px;
 }
+.logoutBtn {
+  background: var(--color-danger);
+  color: white;
+
+  border: 1.5px solid rgba(162, 20, 24, 0.35);
+  border-radius: 5px;
+
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 4px 24px;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+    margin-right:100px !important;
+}

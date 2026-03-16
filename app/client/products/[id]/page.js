@@ -7,12 +7,13 @@ import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
 import useAuthGuard from "../../hooks/useAuthGuard";
 import css from "../../Footer/Footer.module.css";
-
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailsPage() {
 
   const { id } = useParams();
   useAuthGuard();
+    const router = useRouter();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -45,7 +46,15 @@ export default function ProductDetailsPage() {
     "https://images.unsplash.com/photo-1711871124431-836d92aed0d9?q=80&w=478&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // tall
     "https://images.unsplash.com/photo-1647107349002-85e66a39abd3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   ];
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
 
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("client_token");
@@ -215,12 +224,22 @@ export default function ProductDetailsPage() {
           {/* TITLE */}
           <div className="row mt-3">
             <div className="col-12">
-              <h4 className="pageTitle">
+            
+               <div className="d-flex justify-content-between">
+       <h4 className="pageTitle">
                 {product.title}
                 {product.subtitle && (
                   <span className={styles.subTitle}>{product.subtitle}</span>
                 )}
               </h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
+      </div>
             </div>
           </div>
 

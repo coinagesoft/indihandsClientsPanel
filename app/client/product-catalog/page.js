@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./productCatalog.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
@@ -9,8 +10,19 @@ import Footer from "../Footer/page";
 
 export default function ProductCatalogPage() {
     useAuthGuard();
+    
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+ const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 
   useEffect(() => {
     fetch("/api/client/catalogs")
@@ -41,8 +53,16 @@ export default function ProductCatalogPage() {
     {/* PAGE CONTENT */}
     <div className={styles.dashboardContent}>
 
+ <div className="d-flex justify-content-between">
       <h4 className="pageTitle">Product Catalog</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
 
+         </div>
+
+      </div>
 <div className={styles.catalogGrid}>
           {!loading && categories.length === 0 ? (
           <div className="col-12 text-center mt-4">

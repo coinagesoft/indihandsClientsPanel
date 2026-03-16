@@ -7,8 +7,12 @@ import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
 import css from "../Footer/Footer.module.css";
 import Footer from "../Footer/page";
+import { useRouter } from "next/navigation";
+
+
 export default function ProposalDetailsPage() {
-   useAuthGuard();
+ useAuthGuard();
+ const router = useRouter();
   const [rfqs, setRfqs] = useState([]);
   const [openRfq, setOpenRfq] = useState(null);
   const [proposalData, setProposalData] = useState({});
@@ -96,6 +100,16 @@ export default function ProposalDetailsPage() {
     }
   };
 
+
+    const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
   /* ================= APPROVE / REJECT ================= */
   const updateStatus = async (proposalId, status, rfqId) => {
     if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
@@ -186,8 +200,18 @@ export default function ProposalDetailsPage() {
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
 <div className={styles.pageContent}>
-   <h4 className="pageTitle">Proposal Details</h4>
+  
 
+ <div className="d-flex justify-content-between ">
+   <h4 className="pageTitle">Proposal Details</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
+      </div>
    <div className="mt-4">
           {rfqs.map((rfq) => {
             const isOpen = openRfq === rfq.rfq_id;

@@ -3,16 +3,34 @@ import React from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./processPacking.module.css";
 import css from "../Footer/Footer.module.css";
+import { useRouter } from "next/navigation";
 const Page = () => {
 
   useAuthGuard();
+  const router = useRouter();
+    const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
 
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
   return (
     <div className={styles.dashboardWrapper}>
       <div className={styles.dashboardCanvas} />
 
+  <div className="d-flex justify-content-between">
       <div className="pageTitle">Process of Packing</div>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
 
+         </div>
+
+      </div>
       {/* FIRST ROW */}
       <div className={styles.row}>
 

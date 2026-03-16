@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./dashboard.module.css";
 import useAuthGuard from "../hooks/useAuthGuard";
 import PageWrapper from "../../../components/common/wrapper";
@@ -9,11 +10,11 @@ import css from "../Footer/Footer.module.css";
 
 export default function DashboardPage() {
   useAuthGuard();
+  const router = useRouter();
 
   const [stats, setStats] = useState([]);
   const [recentRFQs, setRecentRFQs] = useState([]);
   const [loading, setLoading] = useState(true);
-
  useEffect(() => {
   async function loadDashboard() {
     const token = localStorage.getItem("client_token");
@@ -62,6 +63,16 @@ export default function DashboardPage() {
   loadDashboard();
 }, []);
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
+
 
   const statusClassMap = {
     Submitted: "submitted",
@@ -79,7 +90,16 @@ export default function DashboardPage() {
       <div className={styles.dashboardCanvas} />
 
       {/* ================= STATS ================= */}
+      <div className="d-flex justify-content-between mt-0">
          <h4 className='pageTitle'>Dashboard</h4>
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
+
+         </div>
+
+      </div>
       <div className="row g-4 mt-2">
         {stats.map((item, index) => (
           <div key={index} className="col-xl-3 col-lg-4 col-md-6">
