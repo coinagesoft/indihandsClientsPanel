@@ -1,12 +1,23 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./sidebar.module.css";
 
 export default function ClientSidebar({ collapsed, setCollapsed }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/client/auth/logout", { method: "POST" });
+    } catch {}
+
+    localStorage.removeItem("client_token");
+    localStorage.removeItem("client_user");
+    router.push("/login");
+  };
 
   const menu = [
     { name: "Dashboard", path: "/client/dashboard", icon: "ri-home-4-line" },
@@ -60,6 +71,17 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
           );
         })}
       </ul>
+
+      {/* LOGOUT BUTTON - Separate from menu */}
+      <div className={styles.logoutContainer}>
+        <button 
+          className={styles.logoutBtn} 
+          onClick={handleLogout}
+        >
+          <i className={`ri ri-logout-box-r-line ${styles.icon}`} />
+          {!collapsed && <span>Logout</span>}
+        </button>
+      </div>
 
       {/* FOOTER */}
       {!collapsed && (
