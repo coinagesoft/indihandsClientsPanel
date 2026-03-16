@@ -230,6 +230,8 @@
   margin-top: 20%;
   font-size: 14px;
   color: var(--text-muted);
+    font-family: var(--font-ui);
+
 }
 .btnLoader {
   width:16px;
