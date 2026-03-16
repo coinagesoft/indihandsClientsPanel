@@ -253,8 +253,8 @@
 }
 
 .accepted {
-  background: rgba(144, 172, 48, 0.3);
-  color: #3f4f14;
+   background: #A21418;
+  color: #fff;
 }
 
 .rejected {

@@ -59,14 +59,14 @@
 /* ARROW */
   .arrow{
     position:absolute;
-    left: calc(100% + 13.5px);
+    left: calc(100% + 28.5px);
     top:50%;
     transform: translateX(-50%) translateY(-50%);
     width:0;
     height:0;
-    border-top:18px solid transparent;
-    border-bottom:18px solid transparent;
-    border-left:20px solid #E87C2A;
+    border-top:22px solid transparent;
+    border-bottom:22px solid transparent;
+    border-left:18px solid #E87C2A;
   }
 
 /* HIDE LAST ARROW */

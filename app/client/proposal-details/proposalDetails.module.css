@@ -152,7 +152,7 @@
 
 /* APPROVE */
 .approveBtn {
-  background: linear-gradient(135deg, #90ac30, #7f9928);
+   background: #A21418;
   color: #fff;
    border-radius: 5px;
   box-shadow: 0 6px 14px rgba(144, 172, 48, 0.35);
@@ -200,11 +200,13 @@
 }
 
 .approved {
-  background: rgba(144, 172, 48, 0.28);
-  color: #3f4f14;
+   color: #fff;
+   background: #A21418;
+
 }
 .approved .statusDot {
-  background: #3f4f14;
+  background:  #fff;
+;
 }
 
 .rejected {

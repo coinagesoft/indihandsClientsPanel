@@ -80,7 +80,7 @@
 .statLabel {
   font-family: var(--font-light);
   font-size: 14px;
-  letter-spacing: 0.3;
+  letter-spacing: 0.5;
   color: var(--text-primary);
   text-transform: uppercase;
   margin-bottom: 6px;
@@ -176,8 +176,8 @@
 }
 
 .accepted {
-  background: rgba(144, 172, 48, 0.3);
-  color: #3f4f14;
+  color: #fff;
+   background: #A21418;
 }
 
 .rejected {

@@ -54,14 +54,15 @@ export async function GET(req, { params }) {
     );
 
     /* ================= FONTS ================= */
-    const openSansRegular = path.join(
-      process.cwd(),
-      "public/fonts/OpenSans_Condensed-Regular.ttf"
-    );
-    const openSansBold = path.join(
-      process.cwd(),
-      "public/fonts/OpenSans_Condensed-Bold.ttf"
-    );
+ const openSansRegular = path.join(
+  process.cwd(),
+  "public/fonts/Myreid/MyriadPro-Regular.otf"
+);
+
+const openSansBold = path.join(
+  process.cwd(),
+  "public/fonts/Philosopher/Philosopher-Bold.ttf"
+);
 
     /* ================= PDF ================= */
     const doc = new PDFDocument({
@@ -74,20 +75,32 @@ export async function GET(req, { params }) {
     doc.on("data", buffers.push.bind(buffers));
 
     /* ================= LOGO ================= */
-    const logoPath = path.join(
-      process.cwd(),
-      "public/images/favicon.png"
-    );
-    if (fs.existsSync(logoPath)) {
-      doc.image(logoPath, 40, 40, { width: 55 });
-    }
+/* ================= HEADER ================= */
 
-    /* ================= TITLE ================= */
-    doc.font(openSansBold)
-       .fontSize(14)
-       .text("REQUEST FOR QUOTATION", 0, 50, {
-         align: "center",
-       });
+const headerY = 40;
+
+const logoPath = path.join(
+  process.cwd(),
+  "public/images/MTDS-pvt-ltd.png"
+);
+
+if (fs.existsSync(logoPath)) {
+  doc.image(logoPath, 40, headerY, { width: 90 });
+}
+
+/* ================= TITLE ================= */
+
+doc.font(openSansBold)
+  .fontSize(16)
+  .text(
+    "REQUEST FOR QUOTATION",
+    0,
+    headerY + 25,     // align vertically with logo center
+    {
+      align: "center",
+      width: doc.page.width
+    }
+  );
 
     /* ================= META ================= */
     let y = 110;
@@ -144,8 +157,8 @@ export async function GET(req, { params }) {
         i + 1,
         item.product_name,
         qty,
-        `₹ ${rate.toFixed(2)}`,
-        `₹ ${total.toFixed(2)}`,
+        ` ${rate.toFixed(2)}`,
+        ` ${total.toFixed(2)}`,
       ];
 
       row.forEach((val, c) => {
@@ -177,7 +190,7 @@ export async function GET(req, { params }) {
     return new Response(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="RFQ-${rfq.rfq_number || rfq.id}.pdf"`,
+        "Content-Disposition": `attachment; filename="${rfq.rfq_number || rfq.id}.pdf"`,
       },
     });
 
