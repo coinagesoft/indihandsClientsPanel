@@ -13,6 +13,7 @@
   background: #faecd9; /* keep theme */
   padding: 22px;
   border-radius: var(--radius-lg);
+  font-family: var(--font-body);
 }
 
 /* ================= SECTION TITLES ================= */
@@ -22,6 +23,7 @@
   font-weight: 600;
   margin: 18px 0 10px;
   color: var(--color-gray-dark);
+    font-family: var(--font-body);
 }
 
 /* ================= LABELS ================= */
@@ -31,6 +33,7 @@
   font-weight: 500;
   margin-bottom: 4px;
   color: var(--color-gray);
+    font-family: var(--font-body);
 }
 
 /* ================= INPUTS ================= */
@@ -39,6 +42,7 @@
   font-size: var(--fs-md);
   border-radius: var(--radius-md);
   border: none;
+    font-family: var(--font-body ) !important;
 }
 
 /* ================= ADD ADDRESS ================= */

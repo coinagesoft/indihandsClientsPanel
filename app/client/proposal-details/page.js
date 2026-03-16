@@ -306,17 +306,17 @@ export default function ProposalDetailsPage() {
                       <br></br>
                       <div className={`${styles.addressBlock} row`}>
                         <div className="col-6">
-                          <strong>Billing:</strong>
+                          <strong>Billing: </strong>
                           {proposal.billing_address}
                         </div>
 
                         <div className="col-6">
-                          <strong>Shipping:</strong>
+                          <strong>Shipping:  </strong>
                           {proposal.shipping_address}
                         </div>
                       </div>
                       {proposal.gstin && (
-                        <div><strong>GSTIN:</strong> {proposal.gstin}</div>
+                        <div><strong>GSTIN: </strong> {proposal.gstin}</div>
                       )} <br>
                       </br>
 

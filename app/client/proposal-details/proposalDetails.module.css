@@ -35,7 +35,7 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-
+ font-family: var(--font-body);
   display: flex;
   flex-direction: column;
 

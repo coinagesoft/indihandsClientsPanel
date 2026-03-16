@@ -121,7 +121,7 @@
 .text {
   font-size: 12px;
   color: #000;
-  font-family: "Times New Roman", serif;
+   font-family: var(--font-body); 
   text-align: center;
 }
 
