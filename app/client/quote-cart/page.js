@@ -484,7 +484,7 @@ const maskAmountWithStars = (amount) => {
           </div>
         </div>
       )}
-          <footer className={`${css.productDetails_Footer} `}>
+          <footer className={`${css.quotecart_Footer} `}>
       
       <div className={css.designLayer}></div>
 

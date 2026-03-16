@@ -34,11 +34,15 @@
   font-weight: 600;
   margin-bottom: 10px;
 }
+
+
 .pageSubTitle {
   font-size: 14px;
   color: var(--text-muted);
   margin-top: 4px;
 }
+
+
 .filterBar {
   background: rgba(255, 255, 255, 0.9);
   border-radius: var(--radius-lg);
@@ -55,16 +59,7 @@ padding-bottom: 10px;
   font-family: var(--font-ui);
   color: var(--text-muted);
   margin-bottom: 6px;
-}
-
-/* input + select */
-.input,
-.select {
-  height: 44px;
-  padding: 0 12px;
-
   border-radius: var(--radius-md);
-  border: 1px solid rgba(68, 45, 10, 0.25);
  background-position: right 1.5rem center !important;
   font-size: 12px;
   background: #fff;
@@ -72,12 +67,20 @@ appearance: auto;
   transition:
     border 0.25s ease,
     box-shadow 0.25s ease;
+      margin-left: 6px;
+  padding-left: 6px;
 }
 
 .input:focus,
 .select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(220, 102, 30, 0.18);
+     margin-left: 6px;
+  padding-left: 6px;
+}
+
+.input,.select{
+  font-size: 12px;
 }
 
 .select:disabled {

@@ -43,15 +43,14 @@ export default function ProductCatalogPage() {
 
       <h4 className="pageTitle">Product Catalog</h4>
 
-      <div className="row g-3 mt-1">
-        {!loading && categories.length === 0 ? (
+<div className={styles.catalogGrid}>
+          {!loading && categories.length === 0 ? (
           <div className="col-12 text-center mt-4">
             No catalogs available
           </div>
         ) : (
           [...categories].reverse().map(cat => (
-            <div key={cat.id} className="col-xl-4 col-lg-4 col-md-6 d-flex">
-
+<div key={cat.id} className={styles.catalogItem}>
               <div className={styles.catalogCard}>
 
                 <div className={styles.catalogImgWrap}>

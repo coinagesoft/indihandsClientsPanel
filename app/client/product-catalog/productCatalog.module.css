@@ -22,31 +22,50 @@
   opacity:0.7;
 }
 
+.dashboardWrapper{
+  position:relative;
 
-.dashboardWrapper {
-  position: relative;
-  min-height: calc(100vh - 170px);
-  padding: 32px 28px 0px 28px;
+  min-height:100vh;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:32px 28px 0px 28px;
 }
 
-
-
+.dashboardContent{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
 
 /* ===== CARD ===== */
-.catalogCard {
-  background: #efe4d7;                 /* exact beige */
-  border-radius: 5px;
-  padding: 12px 20px 12px 20px;
-   height: 170px;  
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: transform .2s ease, box-shadow .2s ease;
+.catalogCard{
+  background:var(--bg-card);
+  border-radius:5px;
+
+  padding:10px 10px;
+
+  min-height:170px;
+
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  transition:transform .2s ease, box-shadow .2s ease;
 }
+.catalogGrid{
+  display:grid;
 
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 
+  gap:14px;
+
+  max-width:1100px;
+
+  margin:20px auto 0 auto;
+}
 
 .catalogCard:hover {
   transform: translateY(-3px);
@@ -55,8 +74,8 @@
 
 /* ===== IMAGE ===== */
 .catalogImgWrap {
-  width: 55%;
- height: 140px;                     /* ref height */
+  width: 48%;
+ height: 100px;                     /* ref height */
   border-radius: 5px;
   overflow: hidden;
   background: #ddd3c7;
@@ -67,6 +86,8 @@
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: cover; 
+
 }
 
 /* CONTENT */
@@ -97,8 +118,9 @@
 
 /* DESC */
 .catalogDesc {
-  font-size: 11.5px;
-    line-height: 1.35;
+  font-size: 10px;
+  font-style: italic;
+    line-height: 1.20;
   color: #6b5f55;
   margin: 0;
   max-width: 65%;                  /* keeps space for button */

@@ -234,7 +234,7 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 18px 18px 0px;
+  padding: 18px ;
   display: flex;
   flex-direction: column;
   gap: 16px;
