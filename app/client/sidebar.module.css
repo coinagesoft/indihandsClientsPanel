@@ -120,7 +120,7 @@
   overflow: hidden;
   box-shadow: 2px 0 10px rgba(0,0,0,0.08);
    transition: width 0.35s ease;   /* ⭐ ADD THIS */
-  z-index: 1000;
+  z-index: 10001;
 }
 
 .collapsed {

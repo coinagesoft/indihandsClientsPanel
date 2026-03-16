@@ -5,8 +5,6 @@
 
 /* MAIN CONTENT */
 .pageContent {
-  margin-left: 240px;
-  transition: margin-left 0.25s ease;
   width: 100%;
 position: relative;
   z-index: 5;  
@@ -15,5 +13,5 @@ position: relative;
 
 /* WHEN SIDEBAR IS COLLAPSED */
 .collapsedContent {
-  margin-left: 64px;
+  margin-left: 80px;
 }

@@ -11,104 +11,181 @@
 
   background-repeat: no-repeat;
   background-position:
-   top 10px left 0px,
-    bottom -30px right -60px;
+   top 5% right 5%,
+   bottom 0 right 0;
 
   background-size:
-     90px auto,
-    260px auto;
+    15vw auto,
+    25vw auto;
 
-  opacity: 1; 
+  opacity: 1;
+
+  @media (min-width: 768px) {
+    background-size: 70px auto, 200px auto;
+    background-position: top 10px right 15px, bottom -30px right -60px;
+  }
+
+  @media (min-width: 1024px) {
+    background-size: 90px auto, 260px auto;
+    background-position: top 10px right 15px, bottom -30px right -60px;
+  }
 }
 
 /* ================= DASHBOARD WRAPPER ================= */
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-
-  padding: 32px 28px 0px 32px;
-
+  padding: 1rem 1rem 0 1rem;
   display: flex;
   flex-direction: column;
+
+  @media (min-width: 768px) {
+    padding: 2rem 1.75rem 0 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 32px 28px 0px 32px;
+  }
 }
-.link{
+
+.link {
   text-decoration: none;
-  color: black;
+  color: #333;
+  transition: color 0.2s ease;
+  font-weight: 500;
+
+  @media (hover: hover) {
+    &:hover {
+      color: #0066cc;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 15px;
+  }
 }
 
 /* ================= CONTACT SECTION ================= */
 
-.contactContainer{
+.contactContainer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
-  margin-top:120px;
+  @media (min-width: 768px) {
+    margin-top: 7.5rem;
+  }
 
-  display:flex;
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
-
-  text-align:center;
+  @media (min-width: 1024px) {
+    margin-top: 120px;
+  }
 }
 
 /* ================= LOGO + ADDRESS ================= */
 
-.contactRow{
+.contactRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
 
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-
-  margin-bottom:30px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
 }
 
-.contactLogo{
+.contactLogo {
+  width: 60px;
+  height: auto;
 
-  width:120px;
+  @media (min-width: 768px) {
+    width: 100px;
+  }
+
+  @media (min-width: 1024px) {
+    width: 120px;
+  }
 }
 
 /* ================= ADDRESS ================= */
 
-.address{
+.address {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0.5rem;
+  border-left: 2px solid rgb(181, 180, 180);
 
-  text-align:left;
+  @media (min-width: 768px) {
+    text-align: left;
+    padding-left: 20px;
+    font-size: 1.5rem;
+  }
 
-  font-family:var(--font-body);
-padding-left: 20px;
-  font-size:16px;
-font-weight: 500;
-  line-height:1.3;
-border-left:2px rgb(181, 180, 180) solid ;
+  @media (min-width: 1024px) {
+    font-size: 23px;
+    line-height: 1.3;
+  }
 }
 
 /* ================= CONTACT LINE ================= */
 
-.contactLine{
+.contactLine {
+  font-family: var(--font-body);
+  font-size: clamp(0.875rem, 3vw, 1rem);
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 
-  font-family:var(--font-body);
-
-  font-size:15px;
-  
-  margin-top:10px;
+  @media (min-width: 768px) {
+    font-size: 15px;
+    margin-top: 10px;
+    flex-wrap: nowrap;
+    gap: initial;
+  }
 }
 
 /* ================= DECORATIVE LINE ================= */
 
-.decorLine{
-  margin-top:50px;
-  width:200px;
+.decorLine {
+  margin-top: 2rem;
+  width: clamp(120px, 25vw, 150px);
+
+  @media (min-width: 768px) {
+    margin-top: 3rem;
+    width: 180px;
+  }
+
+  @media (min-width: 1024px) {
+    margin-top: 50px;
+    width: 200px;
+  }
 }
 
-.linedesign{
-  width:100%;
-  height:100%;
-  filter: sepia(1) saturate(0.6) brightness(1.1);
+.linedesign {
+  width: 100%;
+  height: auto;
+  /* filter: sepia(1) saturate(0.6) brightness(1.1); */
 }
 
-.line{
-padding-left: 8px;
-margin-left: 8px;
-border-left:2px rgb(53, 52, 52) solid ;
+.line {
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  border-left: 2px solid rgb(53, 52, 52);
+
+  @media (min-width: 768px) {
+    padding-left: 8px;
+    margin-left: 8px;
+  }
 }

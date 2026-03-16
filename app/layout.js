@@ -1,12 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 
-
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-         <head>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* ✅ Remix Icons */}
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
@@ -17,7 +16,7 @@ export default function RootLayout({ children }) {
   rel="stylesheet"
 />
       </head>
-      <body suppressHydrationWarning >
+      <body suppressHydrationWarning>
         {children}
       </body>
     </html>
