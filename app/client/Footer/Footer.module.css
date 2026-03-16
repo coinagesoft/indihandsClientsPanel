@@ -21,7 +21,7 @@
   overflow: hidden;
 }
 
-.productDetails_Footer{
+.proposalDetails_Footer{
   margin-top: 60px;
   display: flex;
   flex-direction: column;
@@ -89,19 +89,17 @@
   padding-bottom: 20px; 
 }
 
-.proposalDetails_Footer{
- 
-   display: flex;
+.productDetails_Footer {
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
 
-  margin-top: auto;
+  margin-top: auto;  /* ⭐ this pushes footer down */
+
   padding-bottom: 20px;
   position: relative;
   z-index: 3;
-  overflow: hidden;
-  padding-bottom: 20px;
 }
 
 .packing_Footer{

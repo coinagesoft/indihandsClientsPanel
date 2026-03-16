@@ -46,7 +46,7 @@
 
   padding:10px 10px;
 
-  min-height:170px;
+  min-height:165px;
 
   width:100%;
 
@@ -74,11 +74,12 @@
 
 /* ===== IMAGE ===== */
 .catalogImgWrap {
-  width: 48%;
- height: 100px;                     /* ref height */
+  width: 44%;
+ height: 85px;                     /* ref height */
   border-radius: 5px;
   overflow: hidden;
   background: #ddd3c7;
+  object-fit: cover;
   
 }
 

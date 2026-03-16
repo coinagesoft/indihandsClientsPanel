@@ -487,7 +487,7 @@ export default function ProposalDetailsPage() {
 </div>
        
    
-                  <footer className={`${css.proposalDetails_Footer} `}>
+        <footer className={`${css.proposalDetails_Footer} `}>
       
       <div className={css.designLayer}></div>
 

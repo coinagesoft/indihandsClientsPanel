@@ -22,3 +22,8 @@
   margin-left: 80px !important;
   width: calc(100% - 80px);
 }
+.sidebar{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}

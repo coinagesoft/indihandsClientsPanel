@@ -277,3 +277,34 @@ padding: 8px 14px;
   margin: auto;
   font-size:18px;
 }
+
+/* move footer slightly up on tall screens */
+
+@media (min-height: 900px){
+  .footerLogo{
+    padding-bottom: 50px;
+  }
+}
+
+@media (min-height: 1100px){
+  .footerLogo{
+    padding-bottom: 50px;
+  }
+}
+
+/* ================= LAYOUT ================= */
+
+.layout {
+  display: flex;
+}
+
+.mainContent {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  transition: margin-left 0.28s ease;
+}
+
+.collapsedLayout .mainContent {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}

@@ -54,7 +54,6 @@
   image-rendering: crisp-edges;
   backface-visibility: hidden;
   border-radius:3px;
-  box-shadow:var(--shadow-card);
 }
 
 /* ARROW */

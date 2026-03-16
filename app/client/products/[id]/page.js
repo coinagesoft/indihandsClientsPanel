@@ -239,7 +239,7 @@ export default function ProductDetailsPage() {
           </div>
 
           {/* CONTENT */}
-          <div className="row mt-0 g-4">
+          <div className="row mt-0 g-4 mb-5">
 
             {/* IMAGES – MIXED HEIGHT MASONRY */}
             <div className="col-lg-6 mt-2 ">
