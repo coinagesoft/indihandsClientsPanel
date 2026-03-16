@@ -104,21 +104,21 @@ export default function RFQHistoryPage() {
                             setExpanded(isOpen ? null : rfq.rfq_id)
                           }
                         >
-                          <td>
+<td data-label="RFQ">
                             <span className={styles.rfqBadge}>
                               {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
                             </span>
                           </td>
-                          <td>
+<td data-label="Date">
                             {new Date(
                               rfq.created_date
                             ).toLocaleDateString("en-IN")}
                           </td>
-                          <td>{rfq.total_items}</td>
-                          <td>
+<td data-label="Items">{rfq.total_items}</td>
+<td data-label="Amount">
                             ₹ {Number(rfq.total_amount).toLocaleString()}
                           </td>
-                          <td>
+<td data-label="Status">
                             <span
                               className={`${styles.status} ${styles[statusKey]}`}
                             >
