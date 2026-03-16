@@ -5,24 +5,21 @@
   z-index: 9999;
   pointer-events: none;
 
-  background-image:
+ background-image:
  url("/images/page3_bottom_right_logo.png"),
-    url("/images/leaf_design.png"),
-   url("/images/page3_bottom_right_logo.png"),
-      url("/images/circle_design.png");
+ /* url("/images/leaf_design.png"), */
+ url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
-  background-position:
-   top 10px left 0px,
-    top 0px right 30px,
-    bottom -30px right -60px,
-      bottom 10px left 10px;
+ background-position:
+ top 10px right 20px,
+ /* top 0px right 30px, */
+ bottom 20px right 20px;
 
-  background-size:
-    90px auto,
-    70px auto,
-    260px auto,
-    90px auto;
+background-size:
+ 80px auto,
+ /* 70px auto, */
+ 180px auto;
 
   opacity: 1; 
 }
@@ -31,7 +28,7 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px 0px 32px;
+padding: 24px 20px 0px 24px;
 
 }
 
@@ -42,12 +39,16 @@
   gap:10px;
   margin-top:30px;
   justify-content:center;
-  max-width:900px; 
+max-width: 100%; 
   margin-left:auto;
   margin-right:auto;
 }
 .wp5{
-  width: 200px !important;
+  width: auto !important;
+}
+
+.cardWide {
+  width: 100%;
 }
 
 /* ================= CARD ================= */
@@ -60,7 +61,7 @@
 
   padding:20px;
 
-  box-shadow:var(--shadow-card);
+  /* box-shadow:var(--shadow-card); */
 
   min-height:140px;
 
@@ -118,6 +119,74 @@ grid-template-columns:repeat(3,1fr);
 
 }
 
+.pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text-heading);
+}
+
+@media(max-width:768px) {
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .dashboardWrapper {
+    padding: 20px 16px 0px 20px;
+  }
+
+  .dashboardCanvas {
+    background-size: 60px auto, 120px auto;
+    background-position: top 8px right 12px, bottom 10px right 10px;
+  }
+
+  .termCard {
+    padding: 16px;
+  }
+
+  .termCard h3 {
+    font-size: 16px;
+  }
+
+  .termCard p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .note {
+    font-size: 12px;
+    margin-top: 24px;
+  }
+
+  .cardGrid {
+    gap: 12px;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width:480px) {
+  .dashboardWrapper {
+    padding: 16px 12px 0px 16px;
+  }
+
+  .termCard {
+    padding: 14px;
+  }
+
+  .termCard h3 {
+    font-size: 15px;
+  }
+
+  .termCard p {
+    font-size: 12px;
+  }
+
+  .dashboardCanvas {
+    background-size: 50px auto, 100px auto;
+  }
+}
+
 @media(max-width:900px){
 
 .cardGrid{
@@ -128,9 +197,15 @@ grid-template-columns:repeat(2,1fr);
 
 @media(max-width:600px){
 
-.cardGrid{
-grid-template-columns:1fr;
-}
+  .cardGrid{
+    grid-template-columns:1fr;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .termCard {
+    min-height: auto;
+  }
 
 }
 
