@@ -108,6 +108,7 @@
   left: 0;
   height: 100vh;
   width: 240px;
+  max-width: 260px;
 
   background: linear-gradient(
     180deg,
@@ -144,8 +145,10 @@
 
 .logoRow{
   position: relative;
-  padding-top: 30px;   /* space from top */
+  padding-top: 20px;   /* reduced space from top */
   padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   display: flex;
   justify-content: center;   /* center logo */
@@ -161,7 +164,8 @@
 
 /* logo size */
 .logoImg{
-  width: 140px;
+  width: 120px;
+  max-width: 100%;
   height: auto;
 }
 
@@ -174,7 +178,7 @@
 
 .collapsed .arrowBtn{
   position: absolute;
-  right: 25px;
+  right: 15px;
   top: 15px;
 }
 
@@ -194,6 +198,50 @@
   border-radius: 3px;
   flex-direction: column;
   justify-content: center;   /* important */
+  margin-bottom: 20px;
+}
+
+.logoutContainer {
+  padding: 0 20px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.logoutBtn {
+  background: linear-gradient(135deg, #A21418, #A21418);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(162, 20, 24, 0.3);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.logoutBtn:hover {
+  background: linear-gradient(135deg, #8c0f12, #A21418);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(162, 20, 24, 0.4);
+}
+
+.logoutBtn:active {
+  transform: translateY(0);
+}
+
+.collapsed .logoutBtn {
+  padding: 10px;
+  border-radius: 50%;
+  justify-content: center;
+}
+
+.collapsed .logoutBtn span {
+  display: none;
 }
 
 /* MENU LINK */
@@ -238,9 +286,9 @@
     135deg,
     #A21418,
    #A21418
-  );
+  ) !important;
    border-radius: 3px;
-  color: #fff;
+  color: #fff !important;
 padding: 8px 14px;
 }
 

@@ -123,9 +123,9 @@ useEffect(() => {
       {/* HEADER */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="pageTitle">Company Profile</h4>
-        <button className={styles.logoutBtn} onClick={handleLogout}>
+        {/* <button className={styles.logoutBtn} onClick={handleLogout}>
           Logout
-        </button>
+        </button> */}
       </div>
 
       <div className={styles.profileBox}>
