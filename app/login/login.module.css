@@ -107,6 +107,7 @@
   color:#c0392b;
   font-size:11px;
   min-height:14px;
+    font-family: var(--font-body);
 }
 
 /* LOGIN BUTTON */
@@ -119,7 +120,7 @@
 
   border:none;
   border-radius:2px;
-
+  font-family: var(--font-body);
   cursor:pointer;
   margin-top:3px;
 }
@@ -156,6 +157,7 @@
 .footer{
   font-size:11px;
   color:#8a7a63;
+    font-family: var(--font-body);
 }
 
 /* RIGHT PANEL */
