@@ -52,7 +52,6 @@
   flex-direction: column;
   justify-content: center;
 
-  box-shadow: var(--shadow-card);
   transition: all 0.3s ease;
 }
 
@@ -102,11 +101,9 @@
   z-index: 5;
   margin-top: 40px;
   margin-bottom: 40px;
-
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: var(--shadow-card);
 }
 
 .recentTitle {

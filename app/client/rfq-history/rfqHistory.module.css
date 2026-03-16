@@ -60,7 +60,7 @@
 .customTable thead th {
   font-family: var(--font-ui);
   font-size: 13px;
-  color: var(--color-secondary);
+  color: black;
   letter-spacing: 0.4px;
   padding-bottom: 14px;
   border-bottom: 1px solid rgba(68, 45, 10, 0.12);

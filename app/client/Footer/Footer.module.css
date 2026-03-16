@@ -48,13 +48,12 @@
 }
 
 .rfqDetails_Footer{
-  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding-bottom: 20px;
-
+ margin-top: auto;
   position: relative;
   z-index: 3;
   overflow: hidden;
@@ -148,6 +147,9 @@
 
   background-size:
     90px auto;
+  margin-top:auto;
+  width:100%;
+      /* padding-bottom: 20px; */
 }
 
 /* ===== DESIGN TYPE 2 ===== */
@@ -214,4 +216,44 @@
   background-size:
     70px auto,
     200px auto;
+}
+
+.terms_Footer{
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: auto;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+.quotecart_Footer{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: auto;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+.profile_Footer{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+padding-bottom: 20px;
+  margin-top: auto;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
 }

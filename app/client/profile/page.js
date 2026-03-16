@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
-import Footer from "../Footer/page";
+import css from "../Footer/Footer.module.css";
 
 export default function ProfilePage() {
    useAuthGuard();
@@ -213,8 +213,22 @@ useEffect(() => {
         </div>
 
       </div>
+   <footer className={`${css.profile_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
     </div>
-    <Footer/>
     </PageWrapper>
   );
 }

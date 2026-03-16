@@ -96,6 +96,14 @@
 
   opacity: 0.18;
 }
+
+.dashboardWrapper {
+  position: relative;
+  min-height: 100vh;
+  padding: 32px 28px 0px 28px;
+  display: flex;
+  flex-direction: column;
+}
 .pageTitle {
   font-family: var(--font-heading);
   font-size: 26px;
@@ -105,8 +113,8 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 26px;
-  box-shadow: var(--shadow-card);
 }
+
 .sectionTitle {
   font-family: var(--font-ui);
   font-size: 15px;
@@ -138,12 +146,7 @@
     box-shadow 0.25s ease;
 }
 
-.profileBox input:focus,
-.profileBox textarea:focus,
-.profileBox select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(220, 102, 30, 0.18);
-}
+
 
 .profileBox input:disabled {
   background: #f5f2ee;
@@ -197,7 +200,7 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 32px 28px;
+  padding: 32px 28px 0px 32px;
 
 }
 .logoutBtn:hover {

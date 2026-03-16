@@ -2,7 +2,7 @@
 import React from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./terms.module.css";
-import Footer from "../Footer/page";
+import css from "../Footer/Footer.module.css";
 
 const Page = () => {
 
@@ -82,7 +82,21 @@ const Page = () => {
         <b>Note:</b> The above terms and prices are subject to change with prior notice.Please review and confirm accordingly.
       </div>
 
-      <Footer/>
+               <footer className={`${css.terms_Footer} `}>
+      
+      <div className={css.designLayer}></div>
+
+      <img
+        src="/images/trilogo.png"
+        alt="IndiHands"
+        className={css.logo}
+      />
+
+      <div className={css.text}>
+        ©2026 | indiHands | www.indihands.com
+      </div>
+
+    </footer>
 
     </div>
   );
