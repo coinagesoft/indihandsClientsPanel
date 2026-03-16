@@ -211,13 +211,13 @@
   background: linear-gradient(135deg, #A21418, #A21418);
   color: #fff;
   border: none;
-  border-radius: 25px;
-  padding: 10px 20px;
+  border-radius: 5px;
+  padding: 5px 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 500;
   box-shadow: 0 4px 12px rgba(162, 20, 24, 0.3);
   transition: all 0.3s ease;
@@ -235,8 +235,8 @@
 }
 
 .collapsed .logoutBtn {
-  padding: 10px;
-  border-radius: 50%;
+  padding: 5px 8px;
+  border-radius: 5px;
   justify-content: center;
 }
 

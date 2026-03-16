@@ -73,7 +73,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
       </ul>
 
       {/* LOGOUT BUTTON - Separate from menu */}
-      <div className={styles.logoutContainer}>
+      {/* <div className={styles.logoutContainer}>
         <button 
           className={styles.logoutBtn} 
           onClick={handleLogout}
@@ -81,7 +81,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
           <i className={`ri ri-logout-box-r-line ${styles.icon}`} />
           {!collapsed && <span>Logout</span>}
         </button>
-      </div>
+      </div> */}
 
       {/* FOOTER */}
       {!collapsed && (

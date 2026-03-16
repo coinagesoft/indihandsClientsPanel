@@ -120,13 +120,14 @@
 }
 
 /* ================= BUTTON BASE ================= */
+/* ================= BUTTON BASE ================= */
 .actionBtn {
   font-family: var(--font-ui);
   font-size: 14px;
   padding: 10px 22px;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  border: none;
+
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -135,43 +136,44 @@
     transform 0.2s ease,
     box-shadow 0.2s ease,
     background 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    border 0.2s ease;
 }
 
-/* DOWNLOAD */
+/* ================= DOWNLOAD ================= */
 .secondaryBtn {
-  background: transparent;
+  background: #ffffff;
+  color: #000;
   border: 1.5px solid var(--color-primary);
-   border-radius: 5px;
-  color: var(--color-primary);
 }
+
 .secondaryBtn:hover {
-  background: rgba(220, 102, 30, 0.08);
+  background: var(--color-primary);
+  color: #fff;
   transform: translateY(-1px);
 }
 
-/* APPROVE */
-.approveBtn {
-   background: #A21418;
-  color: #fff;
-   border-radius: 5px;
-  box-shadow: 0 6px 14px rgba(144, 172, 48, 0.35);
+/* ================= REJECT ================= */
+.rejectBtn {
+  background: #ffffff;
+  color: #000;
+  border: 1.5px solid var(--color-primary);
 }
+
+.rejectBtn:hover {
+  background: rgba(162, 20, 24, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ================= APPROVE ================= */
+.approveBtn {
+  background: var(--color-primary); /* maroon */
+  color: #fff;
+  border: none;
+}
+
 .approveBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(144, 172, 48, 0.45);
-}
-
-/* REJECT */
-.rejectBtn {
-  background: rgba(162, 20, 24, 0.12);
-  color: var(--color-danger);
-  border-radius: 5px;
-  border: 1.5px solid rgba(162, 20, 24, 0.35);
-}
-.rejectBtn:hover {
-  background: rgba(162, 20, 24, 0.18);
-  transform: translateY(-1px);
 }
 
 /* ================= STATUS ================= */
