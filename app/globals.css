@@ -38,8 +38,9 @@
 /* ================= BASE ================= */
 html, body {
   background: var(--bg-page);
-  font-family: var(--font-body);
+  font-family:var(--font-myriad) ;
   color: var(--text-primary);
+  font-weight: 400;
 }
 
 /* ================= TYPOGRAPHY ================= */
