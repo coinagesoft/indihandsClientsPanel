@@ -105,18 +105,7 @@ export default function ClientLoginPage() {
               {loading ? "Logging in..." : "Login"}
             </button>
 
-            <p
-              className={styles.forgotText}
-              onClick={() => router.push("/forgot-password")}
-            >
-              Forgot Password?
-            </p>
 
-            <img
-  src="/images/line_img.png"
-  alt="decorative line"
-  className={styles.lineLogo}
-/>
           </form>
         </div>
 
@@ -128,7 +117,7 @@ export default function ClientLoginPage() {
           />
 
           <p className={styles.footer}>
-            © 2026 IndiHands | www.indihands.com
+            © 2026  | IndiHands | www.indihands.com
           </p>
         </div>
 
