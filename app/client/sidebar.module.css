@@ -110,11 +110,8 @@
   width: 240px;
   max-width: 260px;
 
-  background: linear-gradient(
-    180deg,
-    #fbf1e6 0%,
-    #f7ead8 100%
-  );
+  background: #FAEBDF;
+
 
   display: flex;
   flex-direction: column;
@@ -342,17 +339,3 @@ padding: 8px 14px;
 
 /* ================= LAYOUT ================= */
 
-.layout {
-  display: flex;
-}
-
-.mainContent {
-  margin-left: 240px;
-  width: calc(100% - 240px);
-  transition: margin-left 0.28s ease;
-}
-
-.collapsedLayout .mainContent {
-  margin-left: 80px;
-  width: calc(100% - 80px);
-}

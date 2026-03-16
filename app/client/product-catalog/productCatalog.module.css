@@ -26,7 +26,7 @@
   position:relative;
 
   min-height:100vh;
-
+  font-family: var(--font-body);
   display:flex;
   flex-direction:column;
 
@@ -58,11 +58,11 @@
 .catalogGrid{
   display:grid;
 
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 
-  gap:14px;
+  gap:27px;
 
-  max-width:1100px;
+  max-width:900px;
 
   margin:20px auto 0 auto;
 }
@@ -74,7 +74,7 @@
 
 /* ===== IMAGE ===== */
 .catalogImgWrap {
-  width: 44%;
+  width: 50%;
  height: 85px;                     /* ref height */
   border-radius: 5px;
   overflow: hidden;

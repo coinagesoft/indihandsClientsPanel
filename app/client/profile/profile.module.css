@@ -155,6 +155,7 @@
 .profileBox input:disabled {
   background: #f5f2ee;
   color: #777;
+    font-family: var(--font-body) !important;
 }
 .saveBtn {
   background: linear-gradient(
@@ -165,7 +166,7 @@
   color: #fff;
   border: none;
 
-  font-family: var(--font-ui);
+  font-family: var(--font-body);
   font-size: 14px;
 
   padding: 10px 22px;
