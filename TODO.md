@@ -1,8 +1,8 @@
-# Profile Mobile Heading Update - TODO
+# Quote Cart Mobile Image Removal - ✅ COMPLETE
 
-## Steps to Complete:
-- [x] Step 1: Updated mobile-specific CSS for .pageTitle class in app/client/profile/profile.module.css to use smaller font-size (e.g., clamp(0.875rem, 4vw, 1.25rem) for mobile).
-- [x] Step 2: Verified change doesn't break desktop/tablet views (existing media query at 768px+ overrides to 1.75rem).
-- [x] Step 3: Tested in browser mobile emulation (use Chrome DevTools; font now smaller on mobile).
-- [x] Step 4: Attempt completion.
+**Changes Applied:**
+- Added `@media (max-width: 768px) { .dashboardCanvas { display: none !important; } }` to app/client/quote-cart/quoteCart.module.css
+- Hides top/bottom decorative background images on mobile view
+- Tested: dev server running, mobile view clean
 
+Task complete. No further actions needed.

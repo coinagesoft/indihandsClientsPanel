@@ -26,11 +26,20 @@
 
   opacity: 1; /* decorative only */
 }
+
+/* Hide decorative images on mobile */
+@media (max-width: 768px) {
+  .dashboardCanvas {
+    display: none !important;
+  }
+}
+
 .tableResponsive {
   overflow-x: visible;
   width: 100%;
   -webkit-overflow-scrolling: touch;
 }
+
 
 
 
@@ -479,7 +488,7 @@
 /* ================= MOBILE - Enhanced Card Layout (≤767px) ================= */
 @media (max-width: 767px) {
   .dashboardWrapper {
-    padding: 20px 14px 120px; /* extra footer clearance */
+    padding: 20px 14px 0px 20px; /* extra footer clearance */
   }
 
   /* hide table header */
@@ -568,7 +577,7 @@
 /* Small Mobile refinements */
 @media (max-width:480px) {
   .dashboardWrapper {
-    padding: 16px 12px 0;
+    padding: 16px 12px 0  90px;
   }
   
   .table-custom tbody tr {

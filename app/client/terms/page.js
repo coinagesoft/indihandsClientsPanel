@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 const Page = () => {
 
   useAuthGuard();
+    const router = useRouter();
+  
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });

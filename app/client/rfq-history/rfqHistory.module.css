@@ -266,8 +266,13 @@
 
 /* ================= MOBILE RESPONSIVE ================= */
 @media (max-width: 768px) {
+  .dashboardCanvas {
+    z-index: 1;
+    display: none;
+  }
+
   .dashboardWrapper {
-    padding: 20px 16px 0;
+    padding: 20px 16px 0 89px;
   }
 
   .subtitle {
@@ -309,17 +314,20 @@
   }
 
   .rowClickable td {
-    padding: 8px 12px 8px 50%;
+    padding: 8px 50px 8px 50%;
     text-align: right;
     position: relative;
     border: none;
     min-height: 44px; /* Touch target */
+     overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
   }
 
   .rowClickable td:before {
     content: attr(data-label);
     position: absolute;
-    left: 12px;
+    left: 18px;
     width: 45%;
     font-weight: 600;
     color: var(--text-secondary);
@@ -368,14 +376,19 @@
     height: 8px;
   }
 
-  .expandIcon {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-  }
-
+ .expandIcon {
+  display: flex;
+  justify-content: center;   /* ✅ center horizontally */
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+.rowClickable td:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+}
   /* Expand Row Mobile */
   .expandRow.open .expandBox {
     max-height: 300px;
@@ -407,13 +420,20 @@
 
   /* Canvas mobile adjustments */
   .dashboardCanvas {
-    background: none !important;
+    background-size:
+      60px auto,
+      120px auto,
+      80px auto;
+    background-position:
+      top 8px right 16px,
+      bottom 8px right -20px,
+      bottom 12px left 16px;
   }
 }
 
 @media (max-width: 480px) {
   .dashboardWrapper {
-    padding: 16px 12px 0;
+    padding: 16px 12px 0 89px;
   }
 
   .tableBox {
