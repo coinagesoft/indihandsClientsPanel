@@ -43,14 +43,12 @@ export default function ClientLoginPage() {
 
       /* ✅ REDIRECT */
       router.push("/client/dashboard");
-
     } catch (err) {
       setError("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className={styles.loginWrapper}>
@@ -73,6 +71,7 @@ export default function ClientLoginPage() {
               className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              aria-label="Email Address"
             />
 
             {/* PASSWORD WITH EYE */}
@@ -83,6 +82,7 @@ export default function ClientLoginPage() {
                 className={styles.input}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                aria-label="Password"
               />
 
               <span
@@ -93,9 +93,7 @@ export default function ClientLoginPage() {
               </span>
             </div>
 
-          <p className={styles.errorText}>
-  {error || "\u00A0"}
-</p>
+            <p className={styles.errorText}>{error || "\u00A0"}</p>
 
             <button
               type="submit"
@@ -104,13 +102,12 @@ export default function ClientLoginPage() {
             >
               {loading ? "Logging in..." : "Login"}
             </button>
- 
-          <img
-            src="/images/line_img.png"
-            className={styles.lineLogo}
-            alt="mandala"
-          />
 
+            <img
+              src="/images/line_img.png"
+              className={styles.lineLogo}
+              alt="mandala"
+            />
           </form>
         </div>
 
@@ -122,10 +119,9 @@ export default function ClientLoginPage() {
           />
 
           <p className={styles.footer}>
-            © 2026  | IndiHands | www.indihands.com
+            © 2026 | IndiHands | www.indihands.com
           </p>
         </div>
-
       </div>
 
       {/* RIGHT PANEL */}
