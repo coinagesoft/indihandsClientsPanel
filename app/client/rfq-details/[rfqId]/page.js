@@ -111,11 +111,11 @@ export default function RFQDetailsPage() {
             {/* CLIENT INFO */}
             <dl className={styles.clientInfo}>
               <dt>Client :</dt>
-              <dd>{rfq.client_name}</dd>
+              <dd>{ rfq.client_name}</dd>
               <dt>Phone :</dt>
-              <dd>{rfq.client_phone}</dd>
+              <dd> {rfq.client_phone}</dd>
               <dt>Email :</dt>
-              <dd>{rfq.client_email}</dd>
+              <dd>{ rfq.client_email}</dd>
             </dl>
           </div>
 

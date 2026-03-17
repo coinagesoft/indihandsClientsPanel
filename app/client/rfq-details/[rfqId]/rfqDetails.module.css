@@ -205,6 +205,7 @@
   grid-template-columns: auto 1fr;
   gap: 0.10rem 0.10rem;
   margin-top: 0.75rem;
+  
 }
 
 .clientInfo dt {
@@ -213,10 +214,14 @@
 }
 
 .clientInfo dd {
-  margin: 0;
+  margin: 0 2px;
   color: var(--text-primary);
 }
 
+
+.clientInfo dt::after{
+  content:"";
+}
 .mobileItems {
   display: none;
   margin-top: 1rem;
