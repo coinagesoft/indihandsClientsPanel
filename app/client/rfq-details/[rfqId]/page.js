@@ -87,7 +87,15 @@ export default function RFQDetailsPage() {
     <PageWrapper>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
         <div className={styles.dashboardCanvas} />
+  <div className="d-flex justify-content-end">
+         <div>
+            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+          Logout
+        </button>
 
+         </div>
+
+      </div>
         {/* HEADER */}
         <div className={styles.header}>
           <div>

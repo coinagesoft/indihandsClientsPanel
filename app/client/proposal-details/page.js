@@ -321,26 +321,26 @@ export default function ProposalDetailsPage() {
                         ).toLocaleDateString("en-IN")}
                       </div>
                       <div className={`${styles.clientBlock} row `}>
-                        <div className="col-4"><strong>Client Name:</strong> {proposal.clientName}</div>
-                        <div className="col-5"><strong>Client Email:</strong> {proposal.clientEmail}</div>
-                        <div className="col-3"><strong>Client Phone:</strong> {proposal.clientPhone}</div>
+                        <div className="col-4"><strong>Client Name : </strong> {proposal.clientName}</div>
+                        <div className="col-5"><strong>Client Email : </strong> {proposal.clientEmail}</div>
+                        <div className="col-3"><strong>Client Phone : </strong> {proposal.clientPhone}</div>
                         {/* <div><strong>Company:</strong> {proposal.company}</div> */}
 
                       </div>
                       <br></br>
                       <div className={`${styles.addressBlock} row`}>
                         <div className="col-6">
-                          <strong>Billing: </strong>
+                          <strong>Billing : </strong>
                           {proposal.billing_address}
                         </div>
 
                         <div className="col-6">
-                          <strong>Shipping:  </strong>
+                          <strong>Shipping :  </strong>
                           {proposal.shipping_address}
                         </div>
                       </div>
                       {proposal.gstin && (
-                        <div><strong>GSTIN: </strong> {proposal.gstin}</div>
+                        <div><strong>GSTIN : </strong> {proposal.gstin}</div>
                       )} <br>
                       </br>
 
