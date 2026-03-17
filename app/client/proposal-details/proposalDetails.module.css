@@ -68,7 +68,7 @@
 /* ================= ACCORDION CARD ================= */
 .accordionCard {
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
   margin-bottom: 20px;
   overflow: hidden;
