@@ -6,20 +6,20 @@
   pointer-events: none;
 
   background-image:
-    url("/images/page3_bottom_right_logo.png");
-    /* url("/images/leaf_design.png"),
-    url("/images/circle_design.png"); */
+    url("/images/page3_bottom_right_logo.png"),
+   url("/images/page3_bottom_right_logo.png");
+    /* url("/images/circle_design.png"); */
 
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
-    top 5px right 30px,
-    bottom -30px right -60px,
-    bottom 10px left 10px;
+    top 10px right 15px,
+    bottom -30px right -60px;
+    /* bottom 10px left 10px; */
 
   background-size:
     90px auto,
-    70px auto,
-    90px auto;
+    220px auto;
+    /* 90px auto; */
 
   opacity: 1;
 }
@@ -131,10 +131,10 @@
     margin: 0 4px;
   }
 
-  .dashboardCanvas {
+  /* .dashboardCanvas {
     background-size: 70px auto, 200px auto, 70px auto;
-    background-position: top 5px right 20px, bottom -20px right -40px, bottom 10px left 10px;
-  }
+    background-position: top 5px right 20px, bottom -20px right 40px, bottom 10px left 10px;
+  } */
 }
 
 /* MOBILE RESPONSIVE - VERTICAL STACK */
@@ -195,9 +195,9 @@
     font-size: 40px;
   }
 
-  .dashboardCanvas {
+  /* .dashboardCanvas {
     background-size: 50px auto, 150px auto, 50px auto;
     background-position: top 5px right 10px, bottom -10px right -20px, bottom 10px left 5px;
-  }
+  } */
 }
 
