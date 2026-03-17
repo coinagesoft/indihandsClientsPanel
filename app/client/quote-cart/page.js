@@ -52,10 +52,10 @@ export default function QuoteCartPage() {
       return false;
     }
 
-    if (!/^[6-9]\d{9}$/.test(client.phone.trim())) {
-      showToast("Enter valid 10-digit phone number", "warning");
-      return false;
-    }
+ if (!/^\+?\d{7,12}$/.test(client.phone.trim())) {
+  showToast("Enter valid phone number", "warning");
+  return false;
+}
 
     if (!client.email.trim()) {
       showToast("Please enter email", "warning");
