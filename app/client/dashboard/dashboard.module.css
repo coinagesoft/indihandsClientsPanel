@@ -44,7 +44,7 @@
   z-index: 5;
 
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   padding: 22px 24px;
   height: 130px;
 
@@ -102,7 +102,7 @@
   margin-top: 40px;
   margin-bottom: 40px;
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   padding: 28px;
 }
 
