@@ -35,15 +35,26 @@
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;
-  padding: 1rem 1rem 0 1rem;
+  padding: 26px 16px 0px 86px;
   display: flex;
   flex-direction: column;
+}
 
-  @media (min-width: 768px) {
-    padding: 2rem 1.75rem 0 2rem;
+/* Extra small phones fix */
+@media (max-width: 480px) {
+  .dashboardWrapper {
+    padding: 20px 12px 0px 79px;
   }
+}
 
-  @media (min-width: 1024px) {
+@media (min-width: 768px) {
+  .dashboardWrapper {
+    padding: 26px 16px 0px 86px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboardWrapper {
     padding: 32px 28px 0px 32px;
   }
 }

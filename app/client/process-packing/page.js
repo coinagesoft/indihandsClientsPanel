@@ -21,7 +21,7 @@ const Page = () => {
     <div className={styles.dashboardWrapper}>
       <div className={styles.dashboardCanvas} />
 
-  <div className="d-flex justify-content-between">
+  <div className={styles.topBar}>
       <div className="pageTitle">Process of Packing</div>
          <div>
             <button className='logoutBtn me-5 ' onClick={handleLogout}>
