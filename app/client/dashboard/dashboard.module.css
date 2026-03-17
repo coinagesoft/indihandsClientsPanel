@@ -115,23 +115,36 @@
 
 /* ================= TABLE ================= */
 .tableCustom {
+  width: 100%;
   font-size: 14px;
+  border-collapse: collapse; /* ✅ removes default gaps */
 }
 
+/* HEADER */
 .tableCustom thead th {
   font-family: var(--font-ui);
   color: var(--text-primary);
   font-size: 13px;
-  padding-bottom: 14px;
+  text-align: left;
+  padding: 12px 8px;
   border-bottom: 1px solid rgba(68, 45, 10, 0.12);
 }
 
+/* BODY */
 .tableCustom tbody td {
-  padding: 14px 8px;
+  padding: 12px 8px;
   color: var(--text-primary);
   vertical-align: middle;
+  text-align: left;
 }
 
+/* 🔥 REMOVE LEFT GAP FROM FIRST COLUMN */
+.tableCustom thead th:first-child,
+.tableCustom tbody td:first-child {
+  padding-left: 0;
+}
+
+/* ROW HOVER */
 .tableCustom tbody tr {
   transition: background 0.25s ease;
 }
@@ -190,6 +203,10 @@
     padding: 6px 30px;
 }
 
+.tableCustom th:first-child,
+.tableCustom td:first-child {
+  padding-left: 0 !important;
+}
 /* ================= MOBILE RESPONSIVE ================= */
 @media (max-width: 768px) {
   .dashboardCanvas {
