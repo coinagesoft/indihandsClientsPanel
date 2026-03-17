@@ -54,7 +54,7 @@ export default function ProductCatalogPage() {
     <div className={styles.dashboardContent}>
 
  <div className="d-flex justify-content-between">
-      <h4 className="pageTitle">Product Catalog</h4>
+      <h4 className="pageTitle mt-0">Product Catalog</h4>
          <div>
             <button className='logoutBtn me-5 ' onClick={handleLogout}>
           Logout

@@ -105,7 +105,12 @@ export default function ClientLoginPage() {
           
           </form>
         </div>
-
+             <img
+            src="/images/line_img.png"
+            className={styles.lineLogo}
+            alt="mandala"
+          />
+       
         <div className={styles.bottomSection}>
           <img
             src="/images/MTDS-pvt-ltd.png"
