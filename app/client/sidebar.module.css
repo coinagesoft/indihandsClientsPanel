@@ -78,13 +78,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
 }
 
 .menu li {
   text-align: center;
   margin: 0 16px;
   border-bottom: 1.5px solid #e3c8a6;
+}
+
+/* ACTIVE */
+.active {
+  border-bottom: none;
 }
 
 /* MENU LINK */
@@ -119,7 +123,7 @@
 /* COLLAPSED MENU */
 .collapsed .menuLink {
   justify-content: center;
-  padding: 10px 0;
+ padding: 6px 0px;
 }
 
 .collapsed .menuLink span {
@@ -135,6 +139,7 @@
 .active .menuLink {
   background: linear-gradient(135deg, #A21418, #A21418) !important;
   color: #fff !important;
+  border: 0px 0px;
 }
 
 /* FOOTER */
