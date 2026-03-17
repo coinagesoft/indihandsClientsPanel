@@ -87,6 +87,8 @@ appearance: auto;
 
 .input,.select{
   font-size: 12px;
+      margin-left: 6px;
+  padding-left: 6px;
 }
 
 .select:disabled {
