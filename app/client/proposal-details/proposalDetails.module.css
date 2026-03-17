@@ -22,6 +22,12 @@
 
   opacity: 1; /* decorative only */
 }
+
+@media (max-width: 768px) {
+  .dashboardCanvas {
+    background-image: none;
+  }
+}
 .clientBlock{
   font-size: 14px !important;
 }
@@ -41,6 +47,24 @@
 
   padding: 32px 28px 0px 28px;
 }
+
+@media (max-width: 992px) {
+  .dashboardWrapper {
+    padding: 28px 24px 0 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboardWrapper {
+    padding: 24px 20px 0 89px; /* sidebar offset */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardWrapper {
+    padding: 20px 16px 0 89px;
+  }
+}
 /* ================= ACCORDION CARD ================= */
 .accordionCard {
   background: var(--bg-card);
@@ -57,6 +81,20 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .accordionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 16px;
+  }
+  
+  .headerRight {
+    align-self: flex-end;
+    gap: 8px;
+  }
 }
 
 
@@ -103,6 +141,12 @@
   padding: 20px 24px 24px;
 }
 
+@media (max-width: 768px) {
+  .accordionBody.open {
+    padding: 16px;
+  }
+}
+
 /* ================= META ================= */
 .proposalMeta {
   font-size: 13px;
@@ -117,6 +161,27 @@
   align-items: center;
   gap: 14px;
   margin-top: 22px;
+}
+
+@media (max-width: 768px) {
+  .actionBar {
+    flex-direction: column-reverse;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .actionBtn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionBar {
+    gap: 10px;
+  }
 }
 
 /* ================= BUTTON BASE ================= */
@@ -255,4 +320,89 @@
 .grandTotalRow {
   font-size: 18px;
   border-top: 2px solid #ddd;
+}
+
+/* ================= MOBILE TABLE RESPONSIVE ================= */
+@media (max-width: 768px) {
+  table.customTable,
+  table.customTable tbody,
+  table.customTable tr,
+  table.customTable td {
+    display: block;
+  }
+  
+  table.customTable thead {
+    display: none;
+  }
+  
+  table.customTable tr {
+    border: 1px solid var(--border-light);
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    background: #fff;
+  }
+  
+  table.customTable td {
+    border: none;
+    position: relative;
+    padding: 14px 16px !important;
+    text-align: right !important;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  table.customTable td:before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 16px;
+    font-weight: 600;
+    color: var(--text-strong);
+    text-align: left;
+    width: 50%;
+  }
+  
+  /* Item table labels */
+  table.customTable tbody tr td:nth-child(1):before { content: "Product: "; }
+  table.customTable tbody tr td:nth-child(2):before { content: "Qty: "; }
+  table.customTable tbody tr td:nth-child(3):before { content: "Rate: "; }
+  table.customTable tbody tr td:nth-child(4):before { content: "Amount: "; }
+  
+  /* Charges & Totals adjustments */
+  .totalBox table.customTable tr,
+  .chargesBox table.customTable tr {
+    box-shadow: none;
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+  
+  .totalBox table.customTable td {
+    padding: 10px 16px !important;
+    font-size: 15px;
+  }
+  
+  .grandTotalRow td {
+    font-size: 22px !important;
+    background: rgba(var(--color-primary-rgb), 0.1) !important;
+  }
+  
+  .clientBlock,
+  .addressBlock {
+    font-size: 13px !important;
+  }
+  
+  .clientBlock > div,
+  .addressBlock > div {
+    width: 100% !important;
+    margin-bottom: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  table.customTable td {
+    padding: 12px 14px !important;
+  }
+  
+  table.customTable td:before {
+    font-size: 14px;
+  }
 }
