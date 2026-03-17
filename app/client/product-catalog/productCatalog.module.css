@@ -119,9 +119,9 @@
 
 /* DESC */
 .catalogDesc {
-  font-size: 10px;
+  font-size: 11px;
   font-style: italic;
-    line-height: 1.20;
+    line-height: 1.25;
   color: #6b5f55;
   margin: 0;
   max-width: 65%;                  /* keeps space for button */
@@ -146,3 +146,93 @@
   color: #fff;
 }
 
+
+@media (max-width:1000px){
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+  /* gap: 50px; */
+}
+}
+
+/* Tablet */
+@media (min-width:1366px){
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+  gap: 40px;
+}
+}
+
+
+
+/* Mobile */
+@media (max-width:600px){
+.catalogGrid{
+  grid-template-columns:1fr;
+}
+}
+
+/* Large Desktop */
+@media (min-width:1400px){
+
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+    gap:40px;
+min-width: 1000px;
+}
+
+.catalogCard{
+
+  min-height:185px;
+}
+.catalogImgWrap {
+ height: 110px;                     /* ref height */
+
+  
+}
+
+
+}
+
+@media (min-width:1600px){
+
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+    gap:50px;
+min-width: 1100px;
+}
+
+.catalogCard{
+
+  min-height:185px;
+}
+.catalogImgWrap {
+ height: 110px;                     /* ref height */
+
+  
+}
+
+
+}
+
+/* Ultra Wide Screens */
+@media (min-width:1800px){
+
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+   max-width:1800px;
+    gap:80px;
+}
+.catalogCard{
+
+  min-height:200px;
+}
+
+}
+
+@media (max-width:992px){
+
+.catalogGrid{
+  grid-template-columns:repeat(3,1fr);
+}
+
+}
