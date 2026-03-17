@@ -22,6 +22,12 @@
 
   opacity: 1;
 }
+
+@media (max-width: 768px) {
+  .dashboardCanvas {
+    background: none !important;
+  }
+}
 .dashboardWrapper {
   position: relative;
   min-height: 100vh;

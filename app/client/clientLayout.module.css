@@ -22,6 +22,26 @@
   margin-left: 80px !important;
   width: calc(100% - 80px);
 }
+
+/* ================= MOBILE - SIDEBAR OVERLAY ================= */
+@media (max-width: 768px) {
+  .pageContent,
+  .openContent,
+  .collapsedContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .sidebar {
+    width: 280px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+  }
+
+  .collapsed .sidebar {
+    width: 80px;
+  }
+}
+
 .sidebar{
   display: flex;
   flex-direction: column;

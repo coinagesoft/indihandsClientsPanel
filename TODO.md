@@ -1,8 +1,10 @@
-# Mobile Login Page Compatibility Task
+# Logout Page Mobile Compatibility TODO
 
-## Steps:
-- [x] Step 1: Update app/login/login.module.css with mobile improvements (move lineLogo to bottom, form enhancements).
-- [x] Step 2: Update app/login/page.js with minor accessibility improvements.
-- [x] Step 3: Test responsiveness.
-- [x] Step 4: Complete task.
+## Plan Steps:
+- [x] Step 1: Edit app/login/page.js to remove line_img.png image
+- [x] Step 2: Edit app/login/login.module.css for full mobile view (hide rightPanel, full height leftPanel)
+- [x] Step 3: Test responsiveness
+- [x] Step 4: Complete task
+
+
 

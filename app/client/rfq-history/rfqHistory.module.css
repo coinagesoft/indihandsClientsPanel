@@ -407,14 +407,7 @@
 
   /* Canvas mobile adjustments */
   .dashboardCanvas {
-    background-size:
-      60px auto,
-      120px auto,
-      80px auto;
-    background-position:
-      top 8px right 16px,
-      bottom 8px right -20px,
-      bottom 12px left 16px;
+    background: none !important;
   }
 }
 

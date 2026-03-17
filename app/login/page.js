@@ -102,12 +102,7 @@ export default function ClientLoginPage() {
             >
               {loading ? "Logging in..." : "Login"}
             </button>
-
-            <img
-              src="/images/line_img.png"
-              className={styles.lineLogo}
-              alt="mandala"
-            />
+          
           </form>
         </div>
 

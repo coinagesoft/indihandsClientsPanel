@@ -102,7 +102,8 @@ export default function DashboardPage() {
       </div>
       <div className="row g-4 mt-2">
         {stats.map((item, index) => (
-          <div key={index} className="col-xl-3 col-lg-4 col-md-6">
+          <div key={index} className="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6">
+
             <div className={styles.statWidget}>
               <span className={`${styles.statLabel} text-center`}>{item.label}</span>
               <div className={`${styles.statValue} text-center`}>{item.value}</div>

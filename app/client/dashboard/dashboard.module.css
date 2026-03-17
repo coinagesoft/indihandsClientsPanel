@@ -189,3 +189,69 @@
   color:black ;
     padding: 6px 30px;
 }
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .dashboardCanvas {
+    background: none !important;
+  }
+
+  .dashboardWrapper {
+    padding: 26px 16px 0px 86px;
+  }
+
+  .statWidget {
+    padding: 16px 16px;
+    height: 110px;
+  }
+
+  .statValue {
+    font-size: 28px;
+  }
+
+  .recentBox {
+    padding: 20px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+
+  .recentTitle {
+    font-size: 20px;
+  }
+
+  .tableCustom thead {
+    display: none;
+  }
+
+  .tableCustom tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+  }
+
+  .tableCustom tbody td {
+    display: block;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .tableCustom tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .tableCustom tbody td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
+
+
+
+
+

@@ -167,8 +167,9 @@ font-size: 14px;
 
   .leftPanel{
     width:100%;
+    min-height: 100vh;
     padding:40px 20px 20px;
-    min-height:auto;
+    flex: 1 1 auto;
   }
 
   .loginCard{
@@ -196,26 +197,14 @@ font-size: 14px;
     min-height:44px;
   }
 
-  /* ✅ IMAGE BELOW LOGIN */
- .rightPanel{
-  display:block;
-  width:100%;
-  height:260px;
-  margin-top:0;  
-  padding:0;
-  background:url("/images/login-bg.png") center/cover no-repeat;
-}
-  /* FIX FOOTER */
+  .rightPanel{
+    display: none;
+  }
+
   .bottomSection{
     margin-top:20px;
     margin-bottom:0;
     padding-bottom:0;
-  }
-
-  .lineLogo{
-    position:static;
-    transform:none;
-    margin-top:20px;
   }
 }
 @media (max-width:480px){
