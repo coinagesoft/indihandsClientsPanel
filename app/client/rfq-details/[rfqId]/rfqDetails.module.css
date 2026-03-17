@@ -39,7 +39,7 @@
   padding: 20px 22px;
 
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
 }
 .pageTitle {
@@ -111,7 +111,7 @@
 .card {
   background: var(--bg-card);
   padding: 22px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   margin-top: 22px;
   box-shadow: var(--shadow-card);
 }
@@ -131,7 +131,7 @@
   align-items: center;
 
   background:  rgba(251, 241, 230, 0.95);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
 
   font-family: var(--font-ui);
   color: var(--text-heading);

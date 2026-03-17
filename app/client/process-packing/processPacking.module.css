@@ -53,7 +53,7 @@
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   backface-visibility: hidden;
-  border-radius:3px;
+  border-radius:5px;
 }
 
 /* ARROW */
