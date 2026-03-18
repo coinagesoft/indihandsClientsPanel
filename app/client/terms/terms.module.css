@@ -135,14 +135,12 @@ grid-template-columns:repeat(3,1fr);
   .pageTitle {
     font-size: 24px;
   }
-
-  .dashboardWrapper {
-    padding: 20px 16px 0px 20px;
+  .dashboardCanvas {
+    background: none !important;
   }
 
-  .dashboardCanvas {
-    background-size: 60px auto, 120px auto;
-    background-position: top 8px right 12px, bottom 10px right 10px;
+  .dashboardWrapper {
+    padding: 26px 6px 0px 86px;
   }
 
   .termCard {
