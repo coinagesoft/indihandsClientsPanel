@@ -4,28 +4,23 @@ import { verifyToken } from "../../../../lib/auth";
 
 export async function DELETE(req, { params }) {
   try {
+
     /* ===== AUTH ===== */
     let decoded;
     try {
       decoded = verifyToken(req);
     } catch {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { companyId, branchId } = decoded;
-    const { productId } = await params;
+    const { productId } =await params;
 
     if (!productId) {
-      return NextResponse.json(
-        { error: "Product ID missing" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Product ID missing" }, { status: 400 });
     }
 
-    /* 1️⃣ FIND DRAFT RFQ (company + branch scoped) */
+    /* 1️⃣ FIND DRAFT RFQ */
     const [[rfq]] = await db.query(
       `
       SELECT id
@@ -39,11 +34,10 @@ export async function DELETE(req, { params }) {
     );
 
     if (!rfq) {
-      // cart already empty – safe no-op
       return NextResponse.json({ success: true });
     }
 
-    /* 2️⃣ DELETE PRODUCT FROM CART */
+    /* 2️⃣ DELETE PRODUCT FROM RFQ */
     await db.query(
       `
       DELETE FROM rfq_products
@@ -52,14 +46,31 @@ export async function DELETE(req, { params }) {
       [rfq.id, productId]
     );
 
+    /* 3️⃣ CHECK IF RFQ HAS PRODUCTS LEFT */
+    const [[count]] = await db.query(
+      `
+      SELECT COUNT(*) AS total
+      FROM rfq_products
+      WHERE rfq_id = ?
+      `,
+      [rfq.id]
+    );
+
+    /* 4️⃣ DELETE RFQ IF EMPTY */
+    if (count.total === 0) {
+      await db.query(
+        `
+        DELETE FROM rfqs
+        WHERE id = ?
+        `,
+        [rfq.id]
+      );
+    }
+
     return NextResponse.json({ success: true });
 
   } catch (error) {
     console.error("Delete Cart Item Error:", error);
-    return NextResponse.json(
-      { error: "Failed to remove item" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to remove item" }, { status: 500 });
   }
 }
-
