@@ -178,20 +178,11 @@
 /* MOBILE RESPONSIVE - VERTICAL STACK */
 @media (max-width: 480px) {
   .dashboardWrapper {
-    padding: 16px 12px 0px 90px;
-  }
-.pageTitle{
-    font-size:16px;
-    line-height:1.2;
-    max-width:65%;   /* forces 2 line */
-    word-break:break-word;
+    padding: 26px 12px 0px 90px;
   }
 
-  .logoutBtn{
-    font-size:12px;
-    padding:6px 10px;
-    white-space:nowrap;
-  }
+
+
 
   .imgWrap{
   position:relative;
@@ -237,18 +228,8 @@
     align-items:flex-start;
   }
 
-  .topBar .pageTitle{
-    font-size:16px;
-    line-height:1.2;
-    max-width:65%;   /* 👈 forces 2 line */
-    word-break:break-word;
-  }
 
-  .topBar .logoutBtn{
-    font-size:12px;
-    padding:6px 10px;
-    white-space:nowrap; /* prevents breaking */
-  }
+ 
   .quote {
     font-size: 20px;
 line-height: 0.9;

@@ -603,7 +603,7 @@ text-align: center;
 /* Small Mobile refinements */
 @media (max-width:480px) {
   .dashboardWrapper {
-    padding: 16px 12px 0  90px;
+    padding: 26px 12px 0  90px;
   }
   
   .table-custom tbody tr {

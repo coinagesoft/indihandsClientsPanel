@@ -239,6 +239,7 @@ td strong {
   color: var(--text-heading);
   margin-bottom: 6px;
 }
+
 .logoutBtn {
   background: var(--color-danger);
   color: white;
@@ -258,11 +259,11 @@ td strong {
 @media (max-width: 768px) {
   .logoutBtn {
     position: absolute !important;
-    top: 20px !important;
+    top: 30px !important;
     right: 30px !important;
     z-index: 10000 !important;
-    padding: 8px 20px !important;
-    font-size: 14px !important;
+    padding: 6px 20px !important;
+    font-size: 8px !important;
     margin-right: 0 !important;
   }
 }

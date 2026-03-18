@@ -300,7 +300,7 @@
 @media (max-width:768px){
 
 .dashboardWrapper{
-  padding:20px 16px 20px 86px;
+  padding:26px 16px 20px 86px;
 
   background-size:
     60px auto,
@@ -318,15 +318,13 @@
 @media (max-width:480px){
 
 .dashboardWrapper{
-  padding:16px 12px 20px 90px;
+  padding:26px 12px 20px 90px;
 }
 
 /* remove heavy decorations */
 .dashboardWrapper{
   background-image:none;
 }
-.logoutBtn{
-  display: none;
-}
+
 
 }

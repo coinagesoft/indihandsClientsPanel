@@ -201,7 +201,7 @@ appearance: auto;
 }
 
 .dashboardWrapper{
-  padding:20px 14px 20px 86px;
+  padding:26px 14px 20px 86px;
 }
 
 .pageTitle{
@@ -237,7 +237,7 @@ appearance: auto;
 @media (max-width:480px){
 
 .dashboardWrapper{
-  padding:16px 12px 20px 90px;
+  padding:26px 12px 20px 90px;
 }
 
 .dashboardCanvas{
