@@ -28,3 +28,27 @@
     transform: rotate(360deg);
   }
 }
+
+/* 📱 Tablet */
+@media (max-width: 768px) {
+  .logoSpinner {
+    width: 65px;
+    height: 65px;
+  }
+
+  .loadingText {
+    font-size: 13px;
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .logoSpinner {
+    width: 55px;
+    height: 55px;
+  }
+
+  .loadingText {
+    font-size: 12px;
+  }
+}

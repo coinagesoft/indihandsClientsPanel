@@ -282,7 +282,7 @@
   }
 
   .dashboardWrapper {
-    padding: 26px 16px 0px 86px;
+    padding: 26px 6px 0px 86px;
     
   }
 .clientInfo dt {
@@ -364,13 +364,14 @@
 }
 
 @media (max-width: 480px) {
-  .dashboardWrapper {
-    padding: 16px 12px 0;
+ .dashboardCanvas {
+    background: none !important;
   }
 
-  .dashboardCanvas{
-  background-size:45px auto,100px auto;
-}
+  .dashboardWrapper {
+    padding: 26px 6px 0px 86px;
+    
+  }
 
   .header {
     padding: 14px;
@@ -418,8 +419,13 @@
 }
 
 @media (max-width: 360px) {
+ .dashboardCanvas {
+    background: none !important;
+  }
+
   .dashboardWrapper {
-    padding: 12px 8px 0;
+    padding: 26px 16px 0px 86px;
+    
   }
   
   .card {

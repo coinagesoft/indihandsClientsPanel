@@ -170,13 +170,18 @@
 
 /* ================= STATUS ================= */
 .status {
-  padding: 6px 16px;
+  display: inline-block;
+  min-width: 90px;      /* ensures same width */
+  text-align: center;    /* centers the text */
+  padding: 6px 12px;
   border-radius: 999px;
   font-size: 12px;
   font-family: var(--font-ui);
   letter-spacing: 0.3px;
 }
-
+.tableCustom thead th:last-child {
+padding-left: 30px;
+}
 /* Status Variants */
 .submitted {
   background: rgba(220, 102, 30, 0.2);
@@ -200,7 +205,6 @@
 .draft{
   background-color: aliceblue;
   color:black ;
-    padding: 6px 30px;
 }
 
 .tableCustom th:first-child,

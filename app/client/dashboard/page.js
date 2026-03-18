@@ -124,7 +124,7 @@ export default function DashboardPage() {
                 <th>Branch</th>
                 <th>Date</th>
                 <th>Items</th>
-                <th>Status</th>
+                <th className="pstatus">Status</th>
                 {/* <th>Notes</th> */}
               </tr>
             </thead>
