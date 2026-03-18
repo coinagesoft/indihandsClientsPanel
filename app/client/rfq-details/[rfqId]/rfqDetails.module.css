@@ -228,6 +228,14 @@
 }
 
 @media (max-width: 576px) {
+   .dashboardCanvas {
+    background: none !important;
+  }
+
+  .dashboardWrapper {
+    padding: 26px 16px 0px 86px;
+    
+  }
   .tableResponsive {
     display: none;
   }
@@ -269,8 +277,13 @@
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
+ .dashboardCanvas {
+    background: none !important;
+  }
+
   .dashboardWrapper {
-    padding: 20px 16px 0;
+    padding: 26px 16px 0px 86px;
+    
   }
 .clientInfo dt {
     font-weight: 600;
@@ -283,17 +296,14 @@
     font-size: 13px;
     color: var(--text-muted);
   }
-  .dashboardCanvas {
-    background-size: 60px auto, 140px auto;
-    background-position: top 0 right 20px, bottom 0 left 20px;
-  }
+
 
   .header {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
     padding: 16px;
-    margin-top: 16px;
+    margin-top: 50px;
   }
   .tableResponsive table{
     font-size: 14px;
@@ -318,7 +328,7 @@
 
   .card{
   padding:14px;
-  margin-top:14px;
+  margin-top:20px;
 }
 
   .mobileItems .itemCard:last-child {
@@ -342,6 +352,7 @@
     width: 100%;
     gap: 12px;
     margin-top: 24px;
+    margin-bottom: 20px;
   }
 
   .secondaryBtn,

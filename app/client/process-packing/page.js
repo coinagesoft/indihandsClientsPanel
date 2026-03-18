@@ -38,20 +38,25 @@ const Page = () => {
           <img src="/images/packing4.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
+
 
         <div className={styles.step}>
           <img src="/images/packing3.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
 
         <div className={styles.step}>
           <img src="/images/packing1.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
 
         <div className={styles.step}>
           <img src="/images/packing2.jpeg"/>
         </div>
+          <span className={styles.bottomarrow}></span>
 
       </div>
 
@@ -63,16 +68,19 @@ const Page = () => {
           <img src="/images/packing6.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
 
         <div className={styles.step}>
           <img src="/images/packing7.jpeg"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
 
         <div className={styles.step}>
           <img src="/images/packing7.png"/>
           <span className={styles.arrow}></span>
         </div>
+          <span className={styles.bottomarrow}></span>
 
         <div className={styles.step}>
           <img src="/images/packing8.png"/>
