@@ -5,6 +5,8 @@
   justify-content: center;
   flex-direction: column;
   background: #fff;
+    font-family: var(--font-body);
+
 }
 
 .logoSpinner {
@@ -17,6 +19,7 @@
   margin-top: 12px;
   font-size: 14px;
   color: #6b7280;
+  margin-left: 5px;
 }
 
 /* 🔄 Rotation animation */

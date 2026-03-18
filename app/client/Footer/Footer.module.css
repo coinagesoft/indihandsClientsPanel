@@ -103,7 +103,7 @@
 }
 
 .packing_Footer{
- 
+   margin-top: auto; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -271,7 +271,7 @@ padding: 20px 0px;
   .terms_Footer,
   .quotecart_Footer,
   .profile_Footer{
-    padding: 24px 20px 0 89px; /* sidebar offset */
+    padding: 24px 20px 20 50px; /* sidebar offset */
     gap: 8px;
   }
 

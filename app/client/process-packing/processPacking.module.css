@@ -29,6 +29,8 @@
   position: relative;
   min-height: 100vh;
   padding: 32px 28px 0px 28px;
+    display:flex;
+  flex-direction:column;
 }
 
 /* ROW GRID */
