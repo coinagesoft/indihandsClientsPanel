@@ -233,7 +233,7 @@ export default function ProductDetailsPage() {
                 )}
               </h4>
          <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+            <button className='logoutBtn me-5 d-none d-sm-block ' onClick={handleLogout}>
           Logout
         </button>
 

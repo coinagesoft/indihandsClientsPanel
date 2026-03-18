@@ -296,3 +296,37 @@
     opacity:1;
   }
 }
+
+@media (max-width:768px){
+
+.dashboardWrapper{
+  padding:20px 16px 20px 86px;
+
+  background-size:
+    60px auto,
+    50px auto,
+    120px auto;
+
+  background-position:
+    top 10px right 5px,
+    bottom 20px left 10px,
+    bottom -5px right -10px;
+}
+
+}
+
+@media (max-width:480px){
+
+.dashboardWrapper{
+  padding:16px 12px 20px 90px;
+}
+
+/* remove heavy decorations */
+.dashboardWrapper{
+  background-image:none;
+}
+.logoutBtn{
+  display: none;
+}
+
+}

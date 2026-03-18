@@ -201,11 +201,12 @@
 
   .step img {
     aspect-ratio: 2 / 4;
+    height: 250px;
   }
 
 .step{
   position:relative;
-  margin-bottom:40px;   /* space between images */
+  margin-bottom:10px;   /* space between images */
 }
 
 .row{

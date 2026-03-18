@@ -185,12 +185,84 @@ appearance: auto;
 .addBtn:hover {
   transform: translateY(-2px);
 }
-@media (max-width: 768px) {
-  .filterBar {
-    padding: 4px;
-  }
+/* ================= TABLET ================= */
+@media (max-width: 768px){
 
-  .productImageBox {
-    height: 150px;
-  }
+.dashboardCanvas{
+  background-size:
+    50px auto,
+    50px auto,
+    140px auto;
+
+  background-position:
+    top 10px right 10px,
+    bottom 20px left 10px,
+    bottom 0px right 10px;
+}
+
+.dashboardWrapper{
+  padding:20px 14px 20px 86px;
+}
+
+.pageTitle{
+  font-size:18px;
+}
+
+.filterBar{
+  width:100%;
+  min-width:auto;
+  padding:10px;
+}
+
+.productImageBox{
+  height:150px;
+}
+
+.productName{
+  font-size:14px;
+}
+
+.price{
+  font-size:14px;
+}
+
+.addBtn{
+  font-size:11px;
+  padding:5px 10px;
+}
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:480px){
+
+.dashboardWrapper{
+  padding:16px 12px 20px 90px;
+}
+
+.dashboardCanvas{
+  background:none !important;
+}
+
+.productImageBox{
+  height:130px;
+}
+
+.productName{
+  font-size:13px;
+}
+
+.price{
+  font-size:13px;
+}
+
+.addBtn{
+  font-size:11px;
+  padding:4px 9px;
+}
+
+.filterBar{
+  padding:8px;
+}
+
 }
