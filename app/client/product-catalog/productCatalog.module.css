@@ -244,9 +244,13 @@ min-width: 1100px;
 }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .dashboardCanvas {
     background: none !important;
+  }
+   .dashboardWrapper {
+    padding: 26px 6px 0px 86px;
+    
   }
 }
 
@@ -259,7 +263,7 @@ min-width: 1100px;
   }
 
   .dashboardWrapper {
-    padding: 26px 16px 0px 86px;
+    padding: 26px 6px 0px 86px;
     
   }
 

@@ -32,6 +32,9 @@
   .dashboardCanvas {
     display: none !important;
   }
+      .centerWrapper{
+padding-left: 15%;
+    }
 }
 
 .tableResponsive {
@@ -45,9 +48,7 @@
 
 /* ================= MOBILE-FIRST BASE ================= */
 @media (max-width: 480px) {
-  .dashboardWrapper {
-    padding: 16px 12px 100px 12px; /* footer clearance */
-  }
+ 
   
   .pageTitle {
     font-size: 22px !important;
@@ -58,6 +59,9 @@
     padding: 32px 20px;
     margin: 0 8px;
   }
+    .centerWrapper{
+padding-left: 20%;
+    }
 }
 
 /* ================= WRAPPER ================= */
@@ -368,6 +372,9 @@
   .input {
     font-size: 16px;
   }
+    .centerWrapper{
+text-align: center;
+  }
 }
 
 /* BUTTON */
@@ -435,6 +442,9 @@
   .productImg {
     width: 48px;
     height: 48px;
+  }
+  .centerWrapper{
+text-align: center;
   }
 }
 

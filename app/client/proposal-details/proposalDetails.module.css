@@ -58,6 +58,7 @@
   .dashboardWrapper {
     padding: 24px 20px 0 89px; /* sidebar offset */
   }
+  
 }
 
 @media (max-width: 480px) {
@@ -395,6 +396,16 @@
     width: 100% !important;
     margin-bottom: 6px !important;
   }
+
+  .emptyState,
+.loading {
+  text-align: center;
+  margin-top: 60%;
+  font-size: 14px;
+  color: var(--text-muted);
+    font-family: var(--font-ui);
+ margin-left: 15%;
+}
 }
 
 @media (max-width: 480px) {
@@ -405,4 +416,13 @@
   table.customTable td:before {
     font-size: 14px;
   }
+  .emptyState,
+.loading {
+  text-align: center;
+  margin-top: 60%;
+  font-size: 14px;
+  color: var(--text-muted);
+    font-family: var(--font-ui);
+ margin-left: 20%;
+}
 }

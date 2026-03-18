@@ -31,6 +31,10 @@
 
 /* 📱 Tablet */
 @media (max-width: 768px) {
+  .pageLoader {
+      padding: 16px 12px 0px 90px;
+
+}
   .logoSpinner {
     width: 65px;
     height: 65px;

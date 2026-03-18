@@ -255,3 +255,80 @@ padding: 20px 0px;
   z-index: 3;
   overflow: hidden;
 }
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  .footer,
+  .productListing_Footer,
+  .proposalDetails_Footer,
+  .rfqhistory_Footer,
+  .rfqDetails_Footer,
+  .contactus_Footer,
+  .dashboard_Footer,
+  .productDetails_Footer,
+  .packing_Footer,
+  .terms_Footer,
+  .quotecart_Footer,
+  .profile_Footer{
+    padding: 24px 20px 0 89px; /* sidebar offset */
+    gap: 8px;
+  }
+
+  .logo{
+    width: 200px;
+  }
+
+  .text{
+    font-size: 11px;
+  }
+
+  /* Reduce design graphics size */
+  .type1 .designLayer{
+    background-size: 60px auto;
+    background-position: bottom 20px left 15px;
+  }
+
+  .type2 .designLayer{
+    background-size: 90px auto, 70px auto;
+    background-position:
+      bottom 0px right 10px,
+      bottom 10px left 10px;
+  }
+
+  .type3 .designLayer,
+  .type4 .designLayer,
+  .type5 .designLayer{
+    background-size: 50px auto, 120px auto;
+    background-position:
+      bottom 5px left 10px,
+      bottom 30px right 10px;
+  }
+}
+
+@media (max-width: 480px){
+
+  .logo{
+    width: 160px;
+  }
+
+  .text{
+    font-size: 10px;
+  }
+
+  .footer,
+  .productListing_Footer,
+  .proposalDetails_Footer,
+  .rfqhistory_Footer,
+  .rfqDetails_Footer,
+  .contactus_Footer,
+  .dashboard_Footer,
+  .productDetails_Footer,
+  .packing_Footer,
+  .terms_Footer,
+  .quotecart_Footer,
+  .profile_Footer{
+    padding: 24px 20px 0 89px; /* sidebar offset */
+  }
+
+}

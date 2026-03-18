@@ -419,8 +419,13 @@
   }
 .emptyState,
 .loading {
-margin:60% auto;
-text-align: center;
+  text-align: center;
+  margin-top: 60%;
+  font-size: 14px;
+  color: var(--text-muted);
+    font-family: var(--font-ui);
+    margin-left: 10%;
+
 }
 
 }
@@ -450,4 +455,14 @@ text-align: center;
     padding: 10px 12px;
     font-size: 12px;
   }
+  .emptyState,
+.loading {
+  text-align: center;
+  margin-top: 60%;
+  font-size: 14px;
+  color: var(--text-muted);
+    font-family: var(--font-ui);
+    margin-left: 10%;
+
+}
 }
