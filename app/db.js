@@ -5,10 +5,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const db = mysql.createPool({
-  host: "217.21.74.127",
-  user: "u856729253_indihandsport",
-  password: "oPSOg3#a2P>",
-  database: "u856729253_Indihands",
+host: "46.28.45.124",
+  user: "u144125849_Indicat",   // ✅ FIXED
+  password: "wozvis-fipnez-kyvCe4",
+  database: "u144125849_catalog",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
