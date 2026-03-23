@@ -283,14 +283,7 @@ export default function ProductDetailsPage() {
 
                 <div className={styles.section}>
                   <h6 className={styles.sectionTitle}><b>Description</b></h6>
-                  <p className={styles.descText}>This premium handmade paper diary honours the timeless grandeur of 
-Shaniwar Wada, built in 1732 as the seat of the Peshwas. Once a centre of authority, 
-artistry, and ceremony, its mighty gates and intricate carvings still speak of Maratha 
-power and resilience despite the fire of 1828. Crafted with artisanal care, the diary’s 
-handmade texture reflects the fort’s enduring strength, making it a treasured canvas 
-for your own ideas. Each page turns like a chapter of history, blending heritage with 
-creativity. Let this diary inspire you to record thoughts with the same permanence as 
-Pune’s regal legacy.</p>
+                  <p className={styles.descText}>{product.description}</p>
                 </div>
 
                 <div className={styles.section}>
