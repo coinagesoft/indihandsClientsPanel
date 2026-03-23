@@ -34,6 +34,10 @@ const { id: productId } = await params;
         p.id,
         p.product_name,
         p.description,
+        p.barcode,
+        p.size,
+        p.weight,
+        p.sku,
         p.base_price,
         COALESCE(cpp.custom_price, p.base_price) AS final_price,
         p.featured_image,
@@ -92,11 +96,9 @@ const { id: productId } = await params;
       },
 
       description: product.description || "No description available",
-
-      /* ⭐ THIS IS IMPORTANT ⭐ */
       price: product.final_price,   // company price OR base price
       base_price: product.base_price, // optional (for admin/debug)
-
+      sku:product.sku,
       hsn: product.hsn,
       stock_qty:product.stock_qty,
       images: images.length
@@ -104,9 +106,9 @@ const { id: productId } = await params;
         : [product.featured_image],
 
       details: {
-        code: product.id,
-        size: '6" W × 9" H',
-        weight: "625 GM",
+        code: product.barcode,
+        size: product.size,
+        weight: product.weight,
       }
     });
 
