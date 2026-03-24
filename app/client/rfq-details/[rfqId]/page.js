@@ -86,6 +86,11 @@ export default function RFQDetailsPage() {
   return (
     <PageWrapper>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
+                         <button className={'backFloating mt-3'} onClick={() => router.back()}>
+ <svg width="18" height="18" viewBox="0 0 24 24">
+  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
+</svg>
+</button>
         <div className={styles.dashboardCanvas} />
   <div className="d-flex justify-content-end">
          <div>

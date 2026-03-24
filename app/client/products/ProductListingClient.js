@@ -85,10 +85,15 @@ export default function ProductListingPage() {
     <PageWrapper loading={pageLoading}>
 
       <div className={`${styles.dashboardWrapper} container-fluid   `}>
+                 <button className={'backFloating'} onClick={() => router.back()}>
+ <svg width="18" height="18" viewBox="0 0 24 24">
+  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
+</svg>
+</button>
         <div className={styles.dashboardCanvas} ></div>
 
         {/* HEADER */}
-        <div className="row ">
+        <div className="row mt-3 ">
           <div className="col-12">
              <div className="d-flex justify-content-between">
             <h4 className='pageTitle'>Products</h4>

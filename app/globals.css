@@ -267,3 +267,36 @@ td strong {
     margin-right: 0 !important;
   }
 }
+
+.backFloating{
+  position:absolute;
+  top:10px;
+  left:20px;
+
+  width:32px;
+  height:32px;
+
+  border:none;
+  border-radius:10px;
+
+  background:#FAEBDF;   /* your theme */
+  color:#5a3d1a;
+
+  font-size:20px;
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+  z-index:10;
+
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transition:all 0.2s ease;
+}
+
+.backFloating:hover{
+  background:#e2d2c2;
+  transform:translateX(-3px);
+}

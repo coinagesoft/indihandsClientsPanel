@@ -219,6 +219,11 @@ export default function ProductDetailsPage() {
 
       <PageWrapper loading={loading}>
         <div className={`${styles.dashboardWrapper} container-fluid`}>
+          <button className={'backFloating'} onClick={() => router.back()}>
+ <svg width="18" height="18" viewBox="0 0 24 24">
+  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
+</svg>
+</button>
           <div className={styles.dashboardCanvas}></div>
 
           {/* TITLE */}
@@ -400,12 +405,24 @@ export default function ProductDetailsPage() {
               className={styles.imagePopup}
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className={styles.closeBtn}
-                onClick={() => setPreviewImg(null)}
-              >
-                ×
-              </button>
+<button
+  className={styles.closeBtn}
+  onClick={() => setPreviewImg(null)}
+>
+  <svg viewBox="0 0 100 100" className={styles.closeIcon}>
+    <defs>
+      <mask id="cutX">
+        <rect width="100" height="100" fill="white"/>
+        {/* ❌ cut X shape */}
+        <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="6"/>
+        <line x1="75" y1="25" x2="25" y2="75" stroke="black" strokeWidth="6"/>
+      </mask>
+    </defs>
+
+    {/* white circle with X cut out */}
+    <circle cx="50" cy="50" r="50" fill="white" mask="url(#cutX)" />
+  </svg>
+</button>
 
               <img src={previewImg} alt="Preview" />
             </div>
