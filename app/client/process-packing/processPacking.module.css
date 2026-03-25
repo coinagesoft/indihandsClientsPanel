@@ -6,18 +6,18 @@
   pointer-events: none;
 
   background-image:
-    url("/images/page3_bottom_right_logo.png"),
+    /* url("/images/page3_bottom_right_logo.png"), */
    url("/images/page3_bottom_right_logo.png");
     /* url("/images/circle_design.png"); */
 
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
-    top 10px right 15px,
+    /* top 10px right 15px, */
     bottom -30px right -60px;
     /* bottom 10px left 10px; */
 
   background-size:
-    90px auto,
+    /* 90px auto, */
     220px auto;
     /* 90px auto; */
 

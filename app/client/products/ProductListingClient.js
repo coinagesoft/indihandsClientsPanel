@@ -11,8 +11,8 @@ import css from "../Footer/Footer.module.css";
 import { useRouter } from "next/navigation";
 
 export default function ProductListingPage() {
- useAuthGuard();
-   const router = useRouter();
+  useAuthGuard();
+  const router = useRouter();
   /* ================= STATE ================= */
   const searchParams = useSearchParams();
   const catalogId = searchParams.get("catalogId");
@@ -26,7 +26,7 @@ export default function ProductListingPage() {
   const [pageLoading, setPageLoading] = useState(true);   // initial only
   const [loading, setLoading] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
-
+  const [breadcrumb, setBreadcrumb] = useState({});
 
 
 
@@ -60,7 +60,12 @@ export default function ProductListingPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
-      .then(data => setProducts(Array.isArray(data) ? data : []))
+.then(data => {
+  console.log("API response:", data); // ✅ correct
+
+  setProducts(Array.isArray(data.products) ? data.products : []);
+  setBreadcrumb(data.breadcrumb || {});
+})
       .catch(() => setProducts([]))
       .finally(() => {
         setPageLoading(false);
@@ -68,12 +73,14 @@ export default function ProductListingPage() {
         setHasFetched(true);   // ✅ mark fetch done
       });
 
+      console.log("products list",products)
+
   }, [search, stock, sort, catalogId]);
 
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
@@ -85,163 +92,193 @@ export default function ProductListingPage() {
     <PageWrapper loading={pageLoading}>
 
       <div className={`${styles.dashboardWrapper} container-fluid   `}>
-                 <button className={'backFloating'} onClick={() => router.back()}>
- <svg width="18" height="18" viewBox="0 0 24 24">
-  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
-</svg>
-</button>
+
         <div className={styles.dashboardCanvas} ></div>
 
         {/* HEADER */}
-        <div className="row mt-3 ">
-          <div className="col-12">
-             <div className="d-flex justify-content-between">
-            <h4 className='pageTitle'>Products</h4>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
+    <div className={styles.headerBox}>
 
-         </div>
+  {/* Breadcrumb Row */}
+  <div className="row">
 
-      </div>
-            <p className={styles.pageSubTitle}>
-              Art-led desk essentials for leadership spaces
-            </p>
-          </div>
-        </div>
+  <div className='col-10 breadcrumbBox'>
+
+  <Link href="/client/dashboard" className="crumbLink">
+    {breadcrumb.dashboard}
+  </Link>
+
+  {" > "}
+
+  <Link href="/client/product-catalog" className="crumbLink">
+    {breadcrumb.catalogName}
+  </Link>
+
+  {" > "}
+
+  <span className='activeCrumb'>
+    {breadcrumb.products}
+  </span>
+
+</div>
+<div className="col-2">
+    <button
+      className="logoutBtn d-none d-sm-block ms-auto"
+      onClick={handleLogout}
+    >
+      Logout
+    </button>
+</div>
+
+  </div>
+
+  {/* Title */}
+  <div className="mt-1 ">
+    <h4 className="pageTitle m-0">Products</h4>
+    <p className={styles.pageSubTitle}>
+      Art-led desk essentials for leadership spaces
+    </p>
+  </div>
+
+</div>
 
         {/* FILTER BAR */}
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center ">
 
-        <div className={`${styles.filterBar} row g-3 mt-0 mx-1`}>
+          <div className={`${styles.filterBar} row g-3 mt-0 mx-1 mt-2`}>
 
-          <div className="col-xl-5 col-md-4 mt-0">
-            <label className={styles.label}>Search</label>
-            <input
-              className={`form-control ${styles.input}`}
-              placeholder="Type product name"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
+            <div className="col-xl-5 col-md-4 mt-0">
+              {/* <label className={styles.label}>Search</label> */}
+              <input
+                className={`form-control ${styles.input}`}
+                placeholder="Search by product name"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+            </div>
+
+
+
+            <div className="col-xl-3 col-md-4 mt-0">
+              {/* <label className={styles.label}>Availability</label> */}
+              <select
+                className={`form-select ${styles.select}`}
+                value={stock}
+                onChange={e => setStock(e.target.value)}
+              >
+                <option value="">Availability by stock</option>
+                <option value="in">In Stock</option>
+                <option value="out">Out of Stock</option>
+              </select>
+            </div>
+
+            <div className="col-xl-4 col-md-4 mt-0">
+              {/* <label className={styles.label}>Sort</label> */}
+              <select
+                className={`form-select ${styles.select}`}
+                value={sort}
+                onChange={e => setSort(e.target.value)}
+              >
+                <option value="latest">Sort by price</option>
+                <option value="price_asc">Price: Low → High</option>
+                <option value="price_desc">Price: High → Low</option>
+              </select>
+            </div>
+
           </div>
-
-      
-
-          <div className="col-xl-3 col-md-4 mt-0">
-            <label className={styles.label}>Availability</label>
-            <select
-              className={`form-select ${styles.select}`}
-              value={stock}
-              onChange={e => setStock(e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="in">In Stock</option>
-              <option value="out">Out of Stock</option>
-            </select>
-          </div>
-
-          <div className="col-xl-4 col-md-4 mt-0">
-            <label className={styles.label}>Sort</label>
-            <select
-              className={`form-select ${styles.select}`}
-              value={sort}
-              onChange={e => setSort(e.target.value)}
-            >
-              <option value="latest">Latest</option>
-              <option value="price_asc">Price: Low → High</option>
-              <option value="price_desc">Price: High → Low</option>
-            </select>
-          </div>
-
-        </div>
         </div>
 
         {/* PRODUCTS GRID */}
         <div className={styles.catalogBox}>
 
-        <div className="row g-4 mt-4">
+          <div className="row g-4 mt-4">
 
-          {loading && (
-            <div className="text-center text-muted">
-              Loading products...
-            </div>
-          )}
+            {loading && (
+              <div className="text-center text-muted">
+                Loading products...
+              </div>
+            )}
 
-          {!loading && hasFetched && products.length === 0 && (
-            <div className="text-center text-muted">
-              No products found
-            </div>
-          )}
-
-
-          {!loading && products.map(p => (
-            <div key={p.id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-              <Link href={`/client/products/${p.id}`} className={styles.productLink}>
-                <div className={styles.productCard}>
-
-                  <div className={styles.productImageBox}>
-                    <img
-                      src={p.featured_image}
-                      alt={p.product_name}
-                      className={styles.productImage}
-                      onError={e => (e.target.src = "/images/no-image.png")}
-                    />
-                  </div>
-
-                  <p className={styles.productName}>{p.product_name}</p>
-
-                  <p className={styles.stockText}>
-                    {p.stock_qty > 0 ? (
-                      <span className={styles.inStock}>
-                        In stock ({p.stock_qty})
-                      </span>
-                    ) : (
-                      <span className={styles.outOfStock}>
-                        Out of stock
-                      </span>
-                    )}
-                  </p>
+            {!loading && hasFetched && products.length === 0 && (
+              <div className="text-center text-muted">
+                No products found
+              </div>
+            )}
 
 
-                  <div className={styles.bottomRow}>
+            {!loading && products.map(p => (
+              <div key={p.id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                <Link href={`/client/products/${p.id}`} className={styles.productLink}>
+                  <div className={styles.productCard}>
+
+                    <div className={styles.productImageBox}>
+                      <img
+                        src={p.featured_image}
+                        alt={p.product_name}
+                        className={styles.productImage}
+                        onError={e => (e.target.src = "/images/no-image.png")}
+                      />
+                    </div>
+
+                    <p className={styles.productName}>
+                      {p.product_name
+                        ?.toLowerCase()
+                        .replace(/\b\w/g, char => char.toUpperCase())}
+                    </p>
+
+                    <p className={styles.stockText}>
+                      {p.stock_qty > 0 ? (
+                        <span className={styles.inStock}>
+                          In stock ({p.stock_qty})
+                        </span>
+                      ) : (
+                        <span className={styles.outOfStock}>
+                          Out of stock
+                        </span>
+                      )}
+                    </p>
+
+
+                    <div className={styles.bottomRow}>
                     <span className={styles.price}>
-                      ₹ {Number(p.final_price).toFixed(2)}
-                    </span>
-                    <button
-                      className={styles.addBtn}
+  {new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  }).format(p.final_price)}
+</span>
+                      <button
+                        className={styles.addBtn}
 
-                    >
-                      Details
-                    </button>
+                      >
+                        Description
+                      </button>
+                    </div>
+
                   </div>
+                </Link>
+              </div>
+            ))}
 
-                </div>
-              </Link>
-            </div>
-          ))}
-
+          </div>
         </div>
+
+        <footer className={`${css.productListing_Footer} `}>
+
+          <div className={css.designLayer}></div>
+
+          <img
+            src="/images/trilogo.png"
+            alt="IndiHands"
+            className={css.logo}
+          />
+
+          <div className={css.text}>
+            ©2026 | indiHands | www.indihands.com
           </div>
 
-         <footer className={`${css.productListing_Footer} `}>
-      
-      <div className={css.designLayer}></div>
+        </footer>
 
-      <img
-        src="/images/trilogo.png"
-        alt="IndiHands"
-        className={css.logo}
-      />
-
-      <div className={css.text}>
-        ©2026 | indiHands | www.indihands.com
       </div>
 
-    </footer>
-    
-      </div>
-   
     </PageWrapper>
   );
 }

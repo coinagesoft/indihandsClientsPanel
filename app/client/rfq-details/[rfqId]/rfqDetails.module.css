@@ -5,16 +5,16 @@
   pointer-events: none;
 
   background-image:
-    url("/images/parrot.png"),
+    /* url("/images/parrot.png"), */
     url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
   background-position:
-    top 10px right 40px,
+    /* top 10px right 40px, */
     bottom 0px left 40px;
 
   background-size:
-    80px auto,
+    /* 80px auto, */
     220px auto;
 
   opacity: 1;

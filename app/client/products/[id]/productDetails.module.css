@@ -11,18 +11,18 @@
  display: flex;          /* ⭐ important */
   flex-direction: column;
   background-image:
-  url("/images/parrot.png"),
+  /* url("/images/parrot.png"), */
   url("/images/sun.png"),
     url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
   background-position:
-    top 20px right 13px,
+    /* top 20px right 13px, */
     bottom 30px left 30px,
     bottom -10px right -30px;
 
   background-size:
-    100px auto,
+    /* 100px auto, */
     80px auto,
     200px auto;
 
@@ -42,14 +42,7 @@
   color: var(--text-muted);
 }
 
-.breadcrumbBox {
-  font-size: 13px;
-  color: var(--text-muted);
-  padding: 10px 0;
-  margin-bottom: 18px;
-  border-top: 1px dashed rgba(68, 45, 10, 0.25);
-  border-bottom: 1px dashed rgba(68, 45, 10, 0.25);
-}
+
 
 .rightBox {
   /* position: sticky;
@@ -82,7 +75,9 @@
 
 .descText {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
+  letter-spacing: 0.6;
+  font-family: var(--font-body);
 }
 
 /* ================= MASONRY ================= */
@@ -99,7 +94,7 @@
 .masonryItem {
   position: relative;
   width: 100%;
-  height: 160px;     /* 👈 fixed height like screenshot */
+  height: 160px;  
   overflow: hidden;
   border-radius: 5px;
   cursor: pointer;
@@ -149,7 +144,7 @@
 
 .actionBox {
   display: flex;
-  gap: 60px;
+  gap: 20px;
   align-items: flex-end;
   
 }
@@ -176,6 +171,15 @@
 .addBtn:hover{
    transform: translateY(-2px);
 
+}
+
+/* disabled state */
+.addBtn:disabled,
+.disabledBtn {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+  pointer-events: none;   /* 🔥 removes hover completely */
+  opacity: 0.7;
 }
 /* ================= RESPONSIVE ================= */
 
@@ -279,7 +283,18 @@
   filter: drop-shadow(0 6px 20px rgba(0,0,0,0.25));
 }
 
+.headerBox {
+  margin-bottom: 10px;
+}
 
+
+
+/* Page title */
+.pageTitle {
+  font-size: 20px;   /* slightly bigger than breadcrumb */
+  font-weight: 600;
+  color: var(--color-primary);
+}
 
 
 /* ANIMATION */

@@ -29,8 +29,16 @@ export async function GET(req) {
       return NextResponse.json([], { status: 200 });
     }
 
+   const [catalogRows] = await db.query(
+  `SELECT name FROM catalogs WHERE id = ? LIMIT 1`,
+  [catalogId]
+);
+
+const catalog = catalogRows?.[0] || null;
+
     let where = `WHERE pcm.catalog_id = ?`;
     const values = [catalogId];
+  
 
     if (search) {
       where += ` AND p.product_name LIKE ?`;
@@ -69,7 +77,14 @@ export async function GET(req) {
       [companyId, ...values]
     );
 
-    return NextResponse.json(rows);
+     return NextResponse.json({
+      breadcrumb: {
+        dashboard: "Home",
+        catalogName: catalog?.name || "Catalog",
+        products: "Products"
+      },
+      products: rows
+    });
 
   } catch (error) {
     console.error("Products API Error:", error);

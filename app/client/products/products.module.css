@@ -5,18 +5,18 @@
   pointer-events: none;
  overflow: auto;
   background-image:
-  url("/images/motif-bottom-left.png"),
+  /* url("/images/motif-bottom-left.png"), */
   url("/images/elephant.png"),
-    url("/images/page3_bottom_right_logo.png");
+  url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
   background-position:
-    top 20px right 30px,
+    /* top 20px right 30px, */
     bottom 30px left 30px,
     bottom 0px right 40px;
 
   background-size:
-    70px auto,
+    /* 70px auto, */
     70px auto,
     200px auto;
 
@@ -45,18 +45,18 @@
 .pageSubTitle {
   font-size: 14px;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 2px;
+  font-weight: 600;
 }
 
 
 .filterBar {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: var(--radius-lg);
-padding-top: 5px;
-padding-bottom: 10px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+padding: 10px;
   max-width: 900px !important;
   min-width: 700px;
-  box-shadow: var(--shadow-card);
+  /* box-shadow: var(--shadow-card); */
 }
 
 /* label */
@@ -81,15 +81,13 @@ appearance: auto;
 .select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(220, 102, 30, 0.18);
-     margin-left: 6px;
-  padding-left: 6px;
 }
 
 .input,.select{
   font-size: 12px;
-      margin-left: 6px;
-  padding-left: 6px;
+
 }
+
 
 .select:disabled {
   background: #f1f1f1;
@@ -143,7 +141,7 @@ appearance: auto;
 .productName {
   font-family: var(--font-ui);
   font-size: 16px;
-  color: var(--text-heading);
+  color: var(--text-mute);
   margin-top: 12px;
   line-height: 1.4;
   font-weight: 600;

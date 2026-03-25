@@ -8,12 +8,12 @@ import Toast from "../../../../components/common/Toast";
 import useAuthGuard from "../../hooks/useAuthGuard";
 import css from "../../Footer/Footer.module.css";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 export default function ProductDetailsPage() {
 
   const { id } = useParams();
   useAuthGuard();
-    const router = useRouter();
+  const router = useRouter();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,23 @@ export default function ProductDetailsPage() {
       setToast({ message: "", type: "" });
     }, 3000);
   };
+const formatDescription = (text) => {
+  if (!text) return text;
 
+  return text.split("\n").map((line, index) => {
+    const match = line.match(/^(.+?:)\s*(.*)$/);
+
+    if (match) {
+      return (
+        <div key={index} style={{ marginTop: "10px" }}>
+          <b>{match[1]}</b> {match[2]}
+        </div>
+      );
+    }
+
+    return <div key={index}>{line}</div>;
+  });
+};
 
 
   /* ================= MASONRY DUMMY IMAGES ================= */
@@ -49,7 +65,7 @@ export default function ProductDetailsPage() {
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
@@ -219,54 +235,74 @@ export default function ProductDetailsPage() {
 
       <PageWrapper loading={loading}>
         <div className={`${styles.dashboardWrapper} container-fluid`}>
-          <button className={'backFloating'} onClick={() => router.back()}>
- <svg width="18" height="18" viewBox="0 0 24 24">
-  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
-</svg>
-</button>
+
           <div className={styles.dashboardCanvas}></div>
-
           {/* TITLE */}
-          <div className="row mt-3">
-            <div className="col-12">
-            
-               <div className="d-flex justify-content-between">
-       <h4 className="pageTitle">
-                {product.title}
-                {product.subtitle && (
-                  <span className={styles.subTitle}>{product.subtitle}</span>
-                )}
-              </h4>
-         <div>
-            <button className='logoutBtn me-5 d-none d-sm-block ' onClick={handleLogout}>
-          Logout
-        </button>
+          <div className={styles.headerBox}>
 
-         </div>
+            {/* Breadcrumb Row */}
+            <div className="row">
+              <div className='breadcrumbBox col-10'>
 
-      </div>
-            </div>
-          </div>
+                <Link href="/client/dashboard" className="crumbLink">
+                  {product.breadcrumb.dashboard}
+                </Link>
 
-          {/* BREADCRUMB */}
-          <div className="row mt-2">
-            <div className="col-12">
-              <div className={styles.breadcrumbBox}>
-                {product.breadcrumb.dashboard} &gt;{" "}
-                {product.breadcrumb.catalog} &gt;{" "}
-                {product.breadcrumb.catalogName} &gt;{" "}
-                <span className={styles.activeCrumb}>
-    {product.breadcrumb.productName}
-  </span>
+                {" > "}
+
+                <Link href="/client/product-catalog" className="crumbLink">
+                  {product.breadcrumb.catalogName}
+                </Link>
+
+                {" > "}
+
+                <Link
+                  href={`/client/products?catalogId=${product.catalogId}`}
+                  className="crumbLink"
+                >
+                  {product.breadcrumb.products}
+                </Link>
+
+                {" > "}
+
+                <span className='activeCrumb'>
+                  {product.breadcrumb.productName
+                    ?.toLowerCase()
+                    .replace(/\b\w/g, char => char.toUpperCase())}
+                </span>
+
               </div>
+              <div className="col-2 ">
+                <button
+                  className="logoutBtn d-none d-sm-block ms-auto "
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+
             </div>
+
           </div>
 
+
+          <div className="row mt-1">
+            <div className="col-6">
+              <h4 className="productTitle ">
+                {product.title
+                  ?.toLowerCase()
+                  .replace(/\b\w/g, char => char.toUpperCase())}
+              </h4>
+            </div>
+
+          </div>
           {/* CONTENT */}
           <div className="row mt-0 g-4 mb-5">
 
             {/* IMAGES – MIXED HEIGHT MASONRY */}
             <div className="col-lg-6 mt-2 ">
+
+
               <div className={styles.masonry}>
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
@@ -288,7 +324,9 @@ export default function ProductDetailsPage() {
 
                 <div className={styles.section}>
                   <h6 className={styles.sectionTitle}><b>Description</b></h6>
-                  <p className={styles.descText}>{product.description}</p>
+<div className={styles.descText}>
+  {formatDescription(product.description)}
+</div>
                 </div>
 
                 <div className={styles.section}>
@@ -298,10 +336,18 @@ export default function ProductDetailsPage() {
                     <div className="col-6">
                       <p className="mt-0 mb-0"><b>Code:</b> {product.details.code}</p>
                       <p className="mt-0 mb-0"><b>Size:</b> {product.details.size}</p>
-                      <p className="mt-0 mb-0"><b>Weight:</b> {product.details.weight}</p>
-                    </div>
+<p className="mt-0 mb-0">
+  <b>Weight:</b>{" "}
+  {product.details.weight?.replace(/GM/g, "gm")}
+</p>                    </div>
                     <div className="col-6 ">
-                      <p className="mt-0 mb-0"><b>Price:</b> ₹ {Number(product.price).toFixed(2)}</p>
+                      <p className="mt-0 mb-0">
+                        <b>Price:</b>{" "}
+                        {new Intl.NumberFormat("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                        }).format(product.price)}
+                      </p>
                       <p className="mt-0 mb-0"><b>HSN:</b> {product.hsn || "-"}</p>
                       {/* ✅ STOCK */}
                       <p>
@@ -363,7 +409,8 @@ export default function ProductDetailsPage() {
                   </div>
 
                   <button
-                    className={styles.addBtn}
+                    className={`${styles.addBtn} ${product.stock_qty === 0 ? styles.disabledBtn : ""
+                      }`}
                     disabled={adding || product.stock_qty === 0}
                     onClick={addToQuote}
                   >
@@ -379,22 +426,22 @@ export default function ProductDetailsPage() {
               </div>
             </div>
           </div>
-       
-         <footer className={`${css.productDetails_Footer} `}>
-      
-      <div className={css.designLayer}></div>
 
-      <img
-        src="/images/trilogo.png"
-        alt="IndiHands"
-        className={css.logo}
-      />
+          <footer className={`${css.productDetails_Footer} `}>
 
-      <div className={css.text}>
-        ©2026 | indiHands | www.indihands.com
-      </div>
+            <div className={css.designLayer}></div>
 
-    </footer>
+            <img
+              src="/images/trilogo.png"
+              alt="IndiHands"
+              className={css.logo}
+            />
+
+            <div className={css.text}>
+              ©2026 | indiHands | www.indihands.com
+            </div>
+
+          </footer>
         </div>
         {previewImg && (
           <div
@@ -405,30 +452,30 @@ export default function ProductDetailsPage() {
               className={styles.imagePopup}
               onClick={(e) => e.stopPropagation()}
             >
-<button
-  className={styles.closeBtn}
-  onClick={() => setPreviewImg(null)}
->
-  <svg viewBox="0 0 100 100" className={styles.closeIcon}>
-    <defs>
-      <mask id="cutX">
-        <rect width="100" height="100" fill="white"/>
-        {/* ❌ cut X shape */}
-        <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="6"/>
-        <line x1="75" y1="25" x2="25" y2="75" stroke="black" strokeWidth="6"/>
-      </mask>
-    </defs>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setPreviewImg(null)}
+              >
+                <svg viewBox="0 0 100 100" className={styles.closeIcon}>
+                  <defs>
+                    <mask id="cutX">
+                      <rect width="100" height="100" fill="white" />
+                      {/* ❌ cut X shape */}
+                      <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="6" />
+                      <line x1="75" y1="25" x2="25" y2="75" stroke="black" strokeWidth="6" />
+                    </mask>
+                  </defs>
 
-    {/* white circle with X cut out */}
-    <circle cx="50" cy="50" r="50" fill="white" mask="url(#cutX)" />
-  </svg>
-</button>
+                  {/* white circle with X cut out */}
+                  <circle cx="50" cy="50" r="50" fill="white" mask="url(#cutX)" />
+                </svg>
+              </button>
 
               <img src={previewImg} alt="Preview" />
             </div>
           </div>
         )}
-     
+
       </PageWrapper>
     </>
   );

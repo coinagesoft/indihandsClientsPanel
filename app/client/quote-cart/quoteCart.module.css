@@ -6,20 +6,20 @@
   pointer-events: none;
 
   background-image:
-    url("/images/sun.png"),
+    /* url("/images/sun.png"), */
     url("/images/page3_bottom_right_logo.png"),
     url("/images/page3_bottom_left_logo.png");
     /* url("/images/parrot.png"); */
 
   background-repeat: no-repeat;
   background-position:
-    top 0px right 40px,
+    /* top 0px right 40px, */
     top 40px left 10px,
     bottom 30px right 40px;
     /* bottom -10px left 40px; */
 
   background-size:
-    80px auto,
+    /* 80px auto, */
     90px auto,
     130px auto;
     /* 100px auto; */

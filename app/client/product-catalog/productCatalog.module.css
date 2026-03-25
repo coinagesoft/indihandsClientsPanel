@@ -5,18 +5,18 @@
   z-index:1;
   pointer-events:none;
 
-  background-image:
-    url("/images/motif-top-right.png");
+  /* background-image:
+    url("/images/motif-top-right.png"); */
  
 
   background-repeat:no-repeat;
 
-  background-position:
-    top 15px right 30px;
+  /* background-position:
+    top 15px right 30px; */
  
 
-  background-size:
-    70px auto;
+  /* background-size:
+    70px auto; */
 
 
   opacity:0.7;
@@ -69,10 +69,7 @@
   margin:20px auto 0 auto;
 }
 
-.catalogCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-}
+
 
 /* ===== IMAGE ===== */
 .catalogImgWrap {

@@ -6,28 +6,28 @@
   pointer-events: none;
 
   background-image:
-   url("/images/page3_bottom_right_logo.png"),
+   /* url("/images/page3_bottom_right_logo.png"), */
    url("/images/page3_bottom_right_logo.png");
 
   background-repeat: no-repeat;
   background-position:
-   top 5% right 5%,
+   /* top 5% right 5%, */
    bottom 0 right -20;
 
   background-size:
-    15vw auto,
+    /* 15vw auto, */
     25vw auto;
 
   opacity: 1;
 
   @media (min-width: 768px) {
-    background-size: 70px auto, 200px auto;
-    background-position: top 10px right 15px, bottom -30px right -60px;
+    background-size:  200px auto;
+    background-position: bottom -30px right -60px;
   }
 
   @media (min-width: 1024px) {
-    background-size: 90px auto, 220px auto;
-    background-position: top 10px right 15px, bottom -30px right -60px;
+    background-size:  220px auto;
+    background-position:  bottom -30px right -60px;
   }
 }
 

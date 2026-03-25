@@ -9,15 +9,15 @@ import useAuthGuard from "../hooks/useAuthGuard";
 import Footer from "../Footer/page";
 
 export default function ProductCatalogPage() {
-    useAuthGuard();
-    
+  useAuthGuard();
+
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
- const router = useRouter();
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
@@ -44,69 +44,69 @@ export default function ProductCatalogPage() {
 
 
   return (
-  <PageWrapper loading={loading}>
-  <div className={`${styles.dashboardWrapper} container-fluid`}>
+    <PageWrapper loading={loading}>
+      <div className={`${styles.dashboardWrapper} container-fluid`}>
 
-    {/* BACKGROUND CANVAS */}
-    <div className={styles.dashboardCanvas}></div>
+        {/* BACKGROUND CANVAS */}
+        <div className={styles.dashboardCanvas}></div>
 
-    {/* PAGE CONTENT */}
-    <div className={styles.dashboardContent}>
+        {/* PAGE CONTENT */}
+        <div className={styles.dashboardContent}>
 
- <div className="d-flex justify-content-between">
-      <h4 className="pageTitle mt-0">Product Catalog</h4>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
-
-         </div>
-
-      </div>
-<div className={styles.catalogGrid}>
-          {!loading && categories.length === 0 ? (
-          <div className="col-12 text-center mt-4">
-            No catalogs available
-          </div>
-        ) : (
-          [...categories].reverse().map(cat => (
-<div key={cat.id} className={styles.catalogItem}>
-              <div className={styles.catalogCard}>
-
-                <div className={styles.catalogImgWrap}>
-                  <img
-                    src={cat.image}
-                    alt={cat.title}
-                    className={styles.catalogImg}
-                  />
-                </div>
-
-                <div className={styles.catalogContent}>
-                  <h6 className={styles.catalogTitle}>{cat.title}</h6>
-
-                  <div className={styles.catalogBottom}>
-                    <p className={styles.catalogDesc}>{cat.desc}</p>
-
-                    <Link
-                      href={`/client/products?catalogId=${cat.id}`}
-                      className={styles.catalogBtn}
-                    >
-                      View Products
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
+          <div className="d-flex justify-content-between">
+            <h4 className="pageTitle mt-0">Product Catalog</h4>
+            <div>
+              <button className='logoutBtn  ' onClick={handleLogout}>
+                Logout
+              </button>
 
             </div>
-          ))
-        )}
+
+          </div>
+          <div className={styles.catalogGrid}>
+            {!loading && categories.length === 0 ? (
+              <div className="col-12 text-center mt-4">
+                No catalogs available
+              </div>
+            ) : (
+              [...categories].reverse().map(cat => (
+                <div key={cat.id} className={styles.catalogItem}>
+                  <div className={styles.catalogCard}>
+
+                    <div className={styles.catalogImgWrap}>
+                      <img
+                        src={cat.image}
+                        alt={cat.title}
+                        className={styles.catalogImg}
+                      />
+                    </div>
+
+                    <div className={styles.catalogContent}>
+                      <h6 className={styles.catalogTitle}>{cat.title}</h6>
+
+                      <div className={styles.catalogBottom}>
+                        <p className={styles.catalogDesc}>{cat.desc}</p>
+
+                        <Link
+                          href={`/client/products?catalogId=${cat.id}`}
+                          className={styles.catalogBtn}
+                        >
+                          View Products
+                        </Link>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              ))
+            )}
+          </div>
+
+        </div>
+
+        <Footer variant="type2" />
       </div>
-
-    </div>
-
-  <Footer  variant="type2"/>
-  </div>
-</PageWrapper>
+    </PageWrapper>
   );
 }

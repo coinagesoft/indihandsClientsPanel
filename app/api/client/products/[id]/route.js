@@ -83,14 +83,24 @@ const { id: productId } = await params;
       [productId]
     );
 
+    const [[catalogMap]] = await db.query(
+  `
+  SELECT catalog_id 
+  FROM product_catalog_map 
+  WHERE product_id = ?
+  LIMIT 1
+  `,
+  [productId]
+);
+
     return NextResponse.json({
       id: product.id,
       title: product.product_name,
       subtitle: "",
-
+catalogId: catalogMap?.catalog_id || null,
       breadcrumb: {
-        dashboard: "Dashboard",
-        catalog: "Product Catalog",
+        dashboard: "Home",
+        products: "Products",
         catalogName: catalog?.name || "Catalog",
         productName: product.product_name,
       },

@@ -240,6 +240,13 @@ td strong {
   margin-bottom: 6px;
 }
 
+.productTitle{
+    font-family: var(--font-heading);
+  font-size: 22px;
+  color: var(--text-heading);
+  margin-bottom: 20px;
+}
+
 .logoutBtn {
   background: var(--color-danger);
   color: white;
@@ -253,7 +260,24 @@ td strong {
   transition:
     background 0.2s ease,
     transform 0.2s ease;
-    margin-right:100px !important;
+    margin-right:10px !important;
+}
+.crumbLink{
+  text-decoration: none;
+  color: var(--text-muted);
+}
+.breadcrumbBox {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 8px 0;
+  /* margin-bottom: 18px; */
+  border-top: 1px dashed rgba(68, 45, 10, 0.25);
+  border-bottom: 1px dashed rgba(68, 45, 10, 0.25);
+}
+.activeCrumb {
+  color: black;
+  font-weight: 500;
+  background:#ECE2D8;
 }
 
 @media (max-width: 768px) {
@@ -269,16 +293,14 @@ td strong {
 }
 
 .backFloating{
-  position:absolute;
-  top:10px;
-  left:20px;
+ 
 
   width:32px;
   height:32px;
 
   border:none;
   border-radius:10px;
-
+margin-right: 5px;
   background:#FAEBDF;   /* your theme */
   color:#5a3d1a;
 
@@ -292,7 +314,7 @@ td strong {
   cursor:pointer;
   z-index:10;
 
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  /* box-shadow:0 4px 12px rgba(0,0,0,0.15); */
   transition:all 0.2s ease;
 }
 

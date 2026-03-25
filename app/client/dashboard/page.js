@@ -93,7 +93,7 @@ export default function DashboardPage() {
       <div className="d-flex justify-content-between mt-0">
          <h4 className='pageTitle'>Dashboard</h4>
          <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
+            <button className='logoutBtn  ' onClick={handleLogout}>
           Logout
         </button>
 
