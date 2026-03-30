@@ -3,16 +3,19 @@ import React from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./terms.module.css";
 import css from "../Footer/Footer.module.css";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
+import { useCart } from "../../context/CartContext";
+
 const Page = () => {
 
   useAuthGuard();
-    const router = useRouter();
-  
+  const router = useRouter();
+  const { cartCount, fetchCartCount } = useCart();
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
@@ -21,17 +24,30 @@ const Page = () => {
 
   return (
     <div className={` ${styles.dashboardWrapper} container-fluid`} >
-   <div className={styles.dashboardCanvas} />
-       <div className="d-flex justify-content-between">
-      <div className="pageTitle">
-        Terms & Conditions
-      </div>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
+      <div className={styles.dashboardCanvas} />
+      <div className="d-flex justify-content-between">
+        <div className="pageTitle">
+          Terms & Conditions
+        </div>
+        <div className="d-flex align-items-start gap-1">
 
-         </div>
+          {/* LOGOUT */}
+          <button className="logoutBtn" onClick={handleLogout}>
+            Logout
+          </button>
+
+          <div
+            className="cartIconBox"
+            onClick={() => router.push("/client/quote-cart")}
+          >
+            <HiOutlineShoppingBag size={18} className="cartIcon" />
+
+            {cartCount > 0 && (
+              <span className="cartBadge">{cartCount}</span>
+            )}
+          </div>
+
+        </div>
 
       </div>
 
@@ -102,21 +118,21 @@ const Page = () => {
         <b>Note:</b> The above terms and prices are subject to change with prior notice.Please review and confirm accordingly.
       </div>
 
-               <footer className={`${css.terms_Footer} `}>
-      
-      <div className={css.designLayer}></div>
+      <footer className={`${css.terms_Footer} `}>
 
-      <img
-        src="/images/trilogo.png"
-        alt="IndiHands"
-        className={css.logo}
-      />
+        <div className={css.designLayer}></div>
 
-      <div className={css.text}>
-        ©2026 | indiHands | www.indihands.com
-      </div>
+        <img
+          src="/images/trilogo.png"
+          alt="IndiHands"
+          className={css.logo}
+        />
 
-    </footer>
+        <div className={css.text}>
+          ©2026 | indiHands | www.indihands.com
+        </div>
+
+      </footer>
 
     </div>
   );

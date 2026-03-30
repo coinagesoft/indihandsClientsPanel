@@ -1,13 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./processPacking.module.css";
 import css from "../Footer/Footer.module.css";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
+import { useCart } from "../../context/CartContext";
 const Page = () => {
-
+const { cartCount, fetchCartCount } = useCart();
   useAuthGuard();
   const router = useRouter();
+
     const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
@@ -17,18 +20,36 @@ const Page = () => {
     localStorage.removeItem("client_user");
     router.push("/login");
   };
+
+ useEffect(() => {
+    fetchCartCount();
+  }, []);
+
   return (
     <div className={styles.dashboardWrapper}>
       <div className={styles.dashboardCanvas} />
 
   <div className={styles.topBar}>
       <div className="pageTitle">Process of Packing</div>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
-
-         </div>
+      <div className="d-flex align-items-start gap-1">
+    
+                {/* LOGOUT */}
+                <button className="logoutBtn" onClick={handleLogout}>
+                  Logout
+                </button>
+    
+                <div
+                  className="cartIconBox"
+                  onClick={() => router.push("/client/quote-cart")}
+                >
+                  <HiOutlineShoppingBag size={18} className="cartIcon" />
+    
+                  {cartCount > 0 && (
+                    <span className="cartBadge">{cartCount}</span>
+                  )}
+                </div>
+    
+              </div>
 
       </div>
       {/* FIRST ROW */}

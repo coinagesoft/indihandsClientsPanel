@@ -340,3 +340,47 @@
 
 
 }
+
+
+.arrowLeft,
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: rgba(255,255,255,0.9);
+  color: #000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* positions */
+.arrowLeft {
+  left: -60px;
+}
+
+.arrowRight {
+  right: -60px;
+}
+
+/* hover */
+.arrowLeft:hover,
+.arrowRight:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+
+

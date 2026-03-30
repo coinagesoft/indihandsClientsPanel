@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ClientSidebar from "./ClientSidebar";
 import styles from "./clientLayout.module.css";
-
+import { CartProvider } from "../context/CartContext.js";
 export default function ClientLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,9 @@ export default function ClientLayout({ children }) {
       >
       
           <>
-            {children}
+            <CartProvider>
+      {children}
+    </CartProvider>
           </>
       </main>
     </div>

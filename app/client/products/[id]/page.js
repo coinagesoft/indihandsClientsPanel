@@ -5,10 +5,14 @@ import { useParams } from "next/navigation";
 import styles from "./productDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
 import Toast from "../../../../components/common/Toast";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import useAuthGuard from "../../hooks/useAuthGuard";
 import css from "../../Footer/Footer.module.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { useCart } from "../../../context/CartContext";
+
 export default function ProductDetailsPage() {
 
   const { id } = useParams();
@@ -22,8 +26,9 @@ export default function ProductDetailsPage() {
   const [previewImg, setPreviewImg] = useState(null);
   const [toast, setToast] = useState({ message: "", type: "" });
   const [cartQtyMap, setCartQtyMap] = useState({});
-
+  const { cartCount, fetchCartCount } = useCart();
   const toastTimer = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const showToast = (message, type = "success") => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -34,24 +39,36 @@ export default function ProductDetailsPage() {
       setToast({ message: "", type: "" });
     }, 3000);
   };
-const formatDescription = (text) => {
-  if (!text) return text;
 
-  return text.split("\n").map((line, index) => {
-    const match = line.match(/^(.+?:)\s*(.*)$/);
 
-    if (match) {
+  const formatDescription = (text) => {
+    if (!text) return text;
+
+    const lines = text.split("\n");
+
+    return lines.map((line, index) => {
+      const match = line.match(/^(.+?:)\s*(.*)$/);
+
+      if (match) {
+        return (
+          <div key={index} style={{ marginTop: "12px" }}>
+            <b>{match[1]}</b>
+            <div style={{ whiteSpace: "pre-line" }}>{match[2]}</div>
+          </div>
+        );
+      }
+
       return (
-        <div key={index} style={{ marginTop: "10px" }}>
-          <b>{match[1]}</b> {match[2]}
+        <div key={index} style={{ marginTop: "10px", whiteSpace: "pre-line" }}>
+          {line}
         </div>
       );
-    }
+    });
+  };
 
-    return <div key={index}>{line}</div>;
-  });
-};
-
+  useEffect(() => {
+    fetchCartCount();
+  }, []);
 
   /* ================= MASONRY DUMMY IMAGES ================= */
   const images = [
@@ -203,7 +220,18 @@ const formatDescription = (text) => {
     }
   };
 
+  const handleNext = () => {
+    const nextIndex = (currentIndex + 1) % product.images.length;
+    setCurrentIndex(nextIndex);
+    setPreviewImg(product.images[nextIndex]);
+  };
 
+  const handlePrev = () => {
+    const prevIndex =
+      (currentIndex - 1 + product.images.length) % product.images.length;
+    setCurrentIndex(prevIndex);
+    setPreviewImg(product.images[prevIndex]);
+  };
 
   if (loading) {
     return <PageWrapper loading={true} />;
@@ -273,12 +301,25 @@ const formatDescription = (text) => {
 
               </div>
               <div className="col-2 ">
-                <button
-                  className="logoutBtn d-none d-sm-block ms-auto "
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
+                <div className="d-flex align-items-start gap-1">
+
+                  {/* LOGOUT */}
+                  <button className="logoutBtn" onClick={handleLogout}>
+                    Logout
+                  </button>
+
+                  <div
+                    className="cartIconBox"
+                    onClick={() => router.push("/client/quote-cart")}
+                  >
+                    <HiOutlineShoppingBag size={18} className="cartIcon" />
+
+                    {cartCount > 0 && (
+                      <span className="cartBadge">{cartCount}</span>
+                    )}
+                  </div>
+
+                </div>
               </div>
 
             </div>
@@ -310,7 +351,10 @@ const formatDescription = (text) => {
                       src={img}
                       alt={product.title}
                       loading="lazy"
-                      onClick={() => setPreviewImg(img)}
+                      onClick={() => {
+                        setPreviewImg(img);
+                        setCurrentIndex(index);
+                      }}
                     />
                   </div>
                 ))}
@@ -324,9 +368,9 @@ const formatDescription = (text) => {
 
                 <div className={styles.section}>
                   <h6 className={styles.sectionTitle}><b>Description</b></h6>
-<div className={styles.descText}>
-  {formatDescription(product.description)}
-</div>
+                  <div className={styles.descText}>
+                    {formatDescription(product.description)}
+                  </div>
                 </div>
 
                 <div className={styles.section}>
@@ -336,10 +380,10 @@ const formatDescription = (text) => {
                     <div className="col-6">
                       <p className="mt-0 mb-0"><b>Code:</b> {product.details.code}</p>
                       <p className="mt-0 mb-0"><b>Size:</b> {product.details.size}</p>
-<p className="mt-0 mb-0">
-  <b>Weight:</b>{" "}
-  {product.details.weight?.replace(/GM/g, "gm")}
-</p>                    </div>
+                      <p className="mt-0 mb-0">
+                        <b>Weight:</b>{" "}
+                        {product.details.weight?.replace(/GM/g, "gm")}
+                      </p>                    </div>
                     <div className="col-6 ">
                       <p className="mt-0 mb-0">
                         <b>Price:</b>{" "}
@@ -471,7 +515,24 @@ const formatDescription = (text) => {
                 </svg>
               </button>
 
+              {/* ⬅️ LEFT ARROW */}
+              <button
+                className={styles.arrowLeft}
+                onClick={handlePrev}
+              >
+                <IoChevronBack size={26} />
+              </button>
+
+              {/* IMAGE */}
               <img src={previewImg} alt="Preview" />
+
+              {/* ➡️ RIGHT ARROW */}
+              <button
+                className={styles.arrowRight}
+                onClick={handleNext}
+              >
+                <IoChevronForward size={26} />
+              </button>
             </div>
           </div>
         )}

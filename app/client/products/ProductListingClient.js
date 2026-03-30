@@ -6,9 +6,11 @@ import styles from "./products.module.css";
 import { useSearchParams } from "next/navigation";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Footer from "../Footer/page";
 import css from "../Footer/Footer.module.css";
 import { useRouter } from "next/navigation";
+import { useCart } from "../../context/CartContext";
 
 export default function ProductListingPage() {
   useAuthGuard();
@@ -27,7 +29,7 @@ export default function ProductListingPage() {
   const [loading, setLoading] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [breadcrumb, setBreadcrumb] = useState({});
-
+  const { cartCount, fetchCartCount } = useCart();
 
 
 
@@ -60,12 +62,12 @@ export default function ProductListingPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
-.then(data => {
-  console.log("API response:", data); // ✅ correct
+      .then(data => {
+        console.log("API response:", data); // ✅ correct
 
-  setProducts(Array.isArray(data.products) ? data.products : []);
-  setBreadcrumb(data.breadcrumb || {});
-})
+        setProducts(Array.isArray(data.products) ? data.products : []);
+        setBreadcrumb(data.breadcrumb || {});
+      })
       .catch(() => setProducts([]))
       .finally(() => {
         setPageLoading(false);
@@ -73,7 +75,7 @@ export default function ProductListingPage() {
         setHasFetched(true);   // ✅ mark fetch done
       });
 
-      console.log("products list",products)
+    console.log("products list", products)
 
   }, [search, stock, sort, catalogId]);
 
@@ -87,6 +89,10 @@ export default function ProductListingPage() {
     router.push("/login");
   };
 
+  useEffect(() => {
+    fetchCartCount();
+  }, []);
+
   /* ================= UI ================= */
   return (
     <PageWrapper loading={pageLoading}>
@@ -96,50 +102,63 @@ export default function ProductListingPage() {
         <div className={styles.dashboardCanvas} ></div>
 
         {/* HEADER */}
-    <div className={styles.headerBox}>
+        <div className={styles.headerBox}>
 
-  {/* Breadcrumb Row */}
-  <div className="row">
+          {/* Breadcrumb Row */}
+          <div className="row">
 
-  <div className='col-10 breadcrumbBox'>
+            <div className='col-10 breadcrumbBox'>
 
-  <Link href="/client/dashboard" className="crumbLink">
-    {breadcrumb.dashboard}
-  </Link>
+              <Link href="/client/dashboard" className="crumbLink">
+                {breadcrumb.dashboard}
+              </Link>
 
-  {" > "}
+              {" > "}
 
-  <Link href="/client/product-catalog" className="crumbLink">
-    {breadcrumb.catalogName}
-  </Link>
+              <Link href="/client/product-catalog" className="crumbLink">
+                {breadcrumb.catalogName}
+              </Link>
 
-  {" > "}
+              {" > "}
 
-  <span className='activeCrumb'>
-    {breadcrumb.products}
-  </span>
+              <span className='activeCrumb'>
+                {breadcrumb.products}
+              </span>
 
-</div>
-<div className="col-2">
-    <button
-      className="logoutBtn d-none d-sm-block ms-auto"
-      onClick={handleLogout}
-    >
-      Logout
-    </button>
-</div>
+            </div>
+            <div className="col-2">
+              <div className="d-flex align-items-start gap-1">
 
-  </div>
+                {/* LOGOUT */}
+                <button className="logoutBtn" onClick={handleLogout}>
+                  Logout
+                </button>
 
-  {/* Title */}
-  <div className="mt-1 ">
-    <h4 className="pageTitle m-0">Products</h4>
-    <p className={styles.pageSubTitle}>
-      Art-led desk essentials for leadership spaces
-    </p>
-  </div>
+                <div
+                  className="cartIconBox"
+                  onClick={() => router.push("/client/quote-cart")}
+                >
+                  <HiOutlineShoppingBag size={18} className="cartIcon" />
 
-</div>
+                  {cartCount > 0 && (
+                    <span className="cartBadge">{cartCount}</span>
+                  )}
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          {/* Title */}
+          <div className="mt-1 ">
+            <h4 className="pageTitle m-0">Products</h4>
+            <p className={styles.pageSubTitle}>
+              Art-led desk essentials for leadership spaces
+            </p>
+          </div>
+
+        </div>
 
         {/* FILTER BAR */}
         <div className="d-flex justify-content-center ">
@@ -239,12 +258,12 @@ export default function ProductListingPage() {
 
 
                     <div className={styles.bottomRow}>
-                    <span className={styles.price}>
-  {new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-  }).format(p.final_price)}
-</span>
+                      <span className={styles.price}>
+                        {new Intl.NumberFormat("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                        }).format(p.final_price)}
+                      </span>
                       <button
                         className={styles.addBtn}
 

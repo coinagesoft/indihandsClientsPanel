@@ -7,8 +7,9 @@ import React from "react";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 import css from "../Footer/Footer.module.css";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Footer from "../Footer/page";
-
+import { useCart } from "../../context/CartContext";
 
 export default function RFQHistoryPage() {
     useAuthGuard();
@@ -17,7 +18,7 @@ export default function RFQHistoryPage() {
   const [rfqs, setRfqs] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true); 
-
+   const { cartCount, fetchCartCount } = useCart();
   useEffect(() => {
     const token = localStorage.getItem("client_token");
 
@@ -76,12 +77,25 @@ export default function RFQHistoryPage() {
 
  <div className="d-flex justify-content-between ">
         <h4 className="pageTitle">RFQ History</h4>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
-
-         </div>
+         <div className="d-flex align-items-start gap-1">
+       
+                   {/* LOGOUT */}
+                   <button className="logoutBtn" onClick={handleLogout}>
+                     Logout
+                   </button>
+       
+                   <div
+                     className="cartIconBox"
+                     onClick={() => router.push("/client/quote-cart")}
+                   >
+                     <HiOutlineShoppingBag size={18} className="cartIcon" />
+       
+                     {cartCount > 0 && (
+                       <span className="cartBadge">{cartCount}</span>
+                     )}
+                   </div>
+       
+                 </div>
 
       </div>
         <div className="row ">

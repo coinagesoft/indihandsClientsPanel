@@ -39,6 +39,7 @@ async function formatRFQNumber(companyId) {
   return `RFQ-${short}-${dateStr}-${seq}`;
 }
 
+
 export async function GET(req) {
   try {
     /* ===== AUTH ===== */
@@ -244,9 +245,6 @@ if (!product) {
     );
   }
 }
-
-
-
 
 
 

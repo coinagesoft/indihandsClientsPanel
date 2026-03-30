@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./productCatalog.module.css";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
 import Footer from "../Footer/page";
+import { useCart } from "../../context/CartContext";
 
 export default function ProductCatalogPage() {
   useAuthGuard();
 
+  const { cartCount, fetchCartCount } = useCart();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -41,7 +44,9 @@ export default function ProductCatalogPage() {
       });
   }, []);
 
-
+ useEffect(() => {
+    fetchCartCount();
+  }, []);
 
   return (
     <PageWrapper loading={loading}>
@@ -55,12 +60,25 @@ export default function ProductCatalogPage() {
 
           <div className="d-flex justify-content-between">
             <h4 className="pageTitle mt-0">Product Catalog</h4>
-            <div>
-              <button className='logoutBtn  ' onClick={handleLogout}>
-                Logout
-              </button>
-
-            </div>
+            <div className="d-flex align-items-start gap-1">
+          
+                      {/* LOGOUT */}
+                      <button className="logoutBtn" onClick={handleLogout}>
+                        Logout
+                      </button>
+          
+                      <div
+                        className="cartIconBox"
+                        onClick={() => router.push("/client/quote-cart")}
+                      >
+                        <HiOutlineShoppingBag size={18} className="cartIcon" />
+          
+                        {cartCount > 0 && (
+                          <span className="cartBadge">{cartCount}</span>
+                        )}
+                      </div>
+          
+                    </div>
 
           </div>
           <div className={styles.catalogGrid}>

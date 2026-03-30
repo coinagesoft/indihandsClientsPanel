@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import styles from "./profile.module.css";
 import PageWrapper from "../../../components/common/wrapper";
 import useAuthGuard from "../hooks/useAuthGuard";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import css from "../Footer/Footer.module.css";
+import { useCart } from "../../context/CartContext";
 
 export default function ProfilePage() {
    useAuthGuard();
@@ -13,7 +15,7 @@ export default function ProfilePage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
+  const { cartCount, fetchCartCount } = useCart();
   const [company, setCompany] = useState({
     company_name: "",
     company_email: "",
@@ -41,6 +43,9 @@ export default function ProfilePage() {
     router.push("/login");
   };
 
+   useEffect(() => {
+    fetchCartCount();
+  }, []);
   /* ================= FETCH PROFILE ================= */
 useEffect(() => {
   const token = localStorage.getItem("client_token");
@@ -124,12 +129,25 @@ useEffect(() => {
   
            <div className="d-flex justify-content-between mb-3">
         <h4 className="pageTitle">Company Profile</h4>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
-
-         </div>
+        <div className="d-flex align-items-start gap-1">
+      
+                  {/* LOGOUT */}
+                  <button className="logoutBtn" onClick={handleLogout}>
+                    Logout
+                  </button>
+      
+                  <div
+                    className="cartIconBox"
+                    onClick={() => router.push("/client/quote-cart")}
+                  >
+                    <HiOutlineShoppingBag size={18} className="cartIcon" />
+      
+                    {cartCount > 0 && (
+                      <span className="cartBadge">{cartCount}</span>
+                    )}
+                  </div>
+      
+                </div>
 
       </div>
 

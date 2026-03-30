@@ -7,15 +7,18 @@ import PageWrapper from "../../../components/common/wrapper";
 import Toast from "../../../components/common/Toast";
 import useAuthGuard from "../hooks/useAuthGuard";
 import css from "../Footer/Footer.module.css";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { useCart } from "../../context/CartContext";
 
 export default function QuoteCartPage() {
   useAuthGuard();
-  
+
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
+  const { cartCount, fetchCartCount } = useCart();
   const [client, setClient] = useState({
     name: "",
     phone: "",
@@ -41,6 +44,8 @@ export default function QuoteCartPage() {
       setToast({ message: "", type: "" });
     }, 3000);
   };
+
+
   const validateClient = () => {
     if (!client.name.trim()) {
       showToast("Please enter client name", "warning");
@@ -52,10 +57,10 @@ export default function QuoteCartPage() {
       return false;
     }
 
- if (!/^\+?\d{7,12}$/.test(client.phone.trim())) {
-  showToast("Enter valid phone number", "warning");
-  return false;
-}
+    if (!/^\+?\d{7,12}$/.test(client.phone.trim())) {
+      showToast("Enter valid phone number", "warning");
+      return false;
+    }
 
     if (!client.email.trim()) {
       showToast("Please enter email", "warning");
@@ -69,15 +74,21 @@ export default function QuoteCartPage() {
 
     return true;
   };
-    const handleLogout = async () => {
+
+
+  const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
     router.push("/login");
   };
+
+  useEffect(() => {
+    fetchCartCount();
+  }, []);
 
   /* ================= FETCH CART ================= */
   const fetchCart = async () => {
@@ -291,16 +302,29 @@ export default function QuoteCartPage() {
           <div className={styles.dashboardCanvas}></div>
 
 
- <div className="d-flex justify-content-between ">
-          <h4 className="pageTitle">Quote Cart</h4>
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
+          <div className="d-flex justify-content-between ">
+            <h4 className="pageTitle">Quote Cart</h4>
+            <div className="d-flex align-items-start gap-1">
 
-         </div>
+              {/* LOGOUT */}
+              <button className="logoutBtn" onClick={handleLogout}>
+                Logout
+              </button>
 
-      </div>
+              <div
+                className="cartIconBox"
+                onClick={() => router.push("/client/quote-cart")}
+              >
+                <HiOutlineShoppingBag size={18} className="cartIcon" />
+
+                {cartCount > 0 && (
+                  <span className="cartBadge">{cartCount}</span>
+                )}
+              </div>
+
+            </div>
+
+          </div>
           <div className="row mt-3">
             {/* CART TABLE */}
             <div className="col-lg-9">

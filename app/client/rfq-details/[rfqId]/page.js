@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./rfqDetails.module.css";
 import PageWrapper from "../../../../components/common/wrapper";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import useAuthGuard from "../../hooks/useAuthGuard";
 import css from "../../Footer/Footer.module.css";
+import { useCart } from "../../../context/CartContext";
+
+
 export default function RFQDetailsPage() {
-   useAuthGuard();
+  useAuthGuard();
   const params = useParams();
   const rfqId = Array.isArray(params.rfqId)
     ? params.rfqId[0]
@@ -18,6 +22,8 @@ export default function RFQDetailsPage() {
   const [rfq, setRfq] = useState(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { cartCount, fetchCartCount } = useCart();
+
 
   useEffect(() => {
     const token = localStorage.getItem("client_token");
@@ -51,7 +57,7 @@ export default function RFQDetailsPage() {
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
 
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
@@ -86,21 +92,30 @@ export default function RFQDetailsPage() {
   return (
     <PageWrapper>
       <div className={`${styles.dashboardWrapper} container-fluid`}>
-                         <button className={'backFloating mt-3'} onClick={() => router.back()}>
- <svg width="18" height="18" viewBox="0 0 24 24">
-  <path d="M15 18l-6-6 6-6" stroke="#5a3d1a" strokeWidth="2" fill="none" strokeLinecap="round"/>
-</svg>
-</button>
+
         <div className={styles.dashboardCanvas} />
-  <div className="d-flex justify-content-end">
-         <div>
-            <button className='logoutBtn me-5 ' onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="d-flex justify-content-end">
+          <div className="d-flex align-items-start gap-1">
 
-         </div>
+            {/* LOGOUT */}
+            <button className="logoutBtn" onClick={handleLogout}>
+              Logout
+            </button>
 
-      </div>
+            <div
+              className="cartIconBox"
+              onClick={() => router.push("/client/quote-cart")}
+            >
+              <HiOutlineShoppingBag size={18} className="cartIcon" />
+
+              {cartCount > 0 && (
+                <span className="cartBadge">{cartCount}</span>
+              )}
+            </div>
+
+          </div>
+
+        </div>
         {/* HEADER */}
         <div className={styles.header}>
           <div>
@@ -116,11 +131,11 @@ export default function RFQDetailsPage() {
             {/* CLIENT INFO */}
             <dl className={styles.clientInfo}>
               <dt>Client :</dt>
-              <dd>{ rfq.client_name}</dd>
+              <dd>{rfq.client_name}</dd>
               <dt>Phone :</dt>
               <dd> {rfq.client_phone}</dd>
               <dt>Email :</dt>
-              <dd>{ rfq.client_email}</dd>
+              <dd>{rfq.client_email}</dd>
             </dl>
           </div>
 
@@ -209,21 +224,21 @@ export default function RFQDetailsPage() {
           </button>
         </div>
 
-          <footer className={`${css.rfqDetails_Footer} ${styles.rfqFooter}`}>
-      
-      <div className={css.designLayer}></div>
+        <footer className={`${css.rfqDetails_Footer} ${styles.rfqFooter}`}>
 
-      <img
-        src="/images/trilogo.png"
-        alt="IndiHands"
-        className={css.logo}
-      />
+          <div className={css.designLayer}></div>
 
-      <div className={css.text}>
-        ©2026 | indiHands | www.indihands.com
-      </div>
+          <img
+            src="/images/trilogo.png"
+            alt="IndiHands"
+            className={css.logo}
+          />
 
-    </footer>
+          <div className={css.text}>
+            ©2026 | indiHands | www.indihands.com
+          </div>
+
+        </footer>
       </div>
     </PageWrapper>
   );
