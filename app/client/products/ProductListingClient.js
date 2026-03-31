@@ -127,7 +127,7 @@ export default function ProductListingPage() {
 
             </div>
             <div className="col-2">
-              <div className="d-flex align-items-start gap-1">
+              <div className="d-flex align-items-center justify-content-end gap-1">
 
                 {/* LOGOUT */}
                 <button className="logoutBtn" onClick={handleLogout}>
@@ -238,11 +238,26 @@ export default function ProductListingPage() {
                       />
                     </div>
 
-                    <p className={styles.productName}>
-                      {p.product_name
-                        ?.toLowerCase()
-                        .replace(/\b\w/g, char => char.toUpperCase())}
-                    </p>
+                 <p className={styles.productName}>
+  {(() => {
+    const [name, subName] = (p.product_name || "").split("::");
+
+    const format = (text) =>
+      text
+        ?.trim()
+        ?.toLowerCase()
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
+    return (
+      <>
+        <span className={styles.mainName}>{format(name)}</span><br></br>
+        {subName && (
+          <span className={styles.subName}>{format(subName)}</span>
+        )}
+      </>
+    );
+  })()}
+</p>
 
                     <p className={styles.stockText}>
                       {p.stock_qty > 0 ? (

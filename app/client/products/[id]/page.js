@@ -303,7 +303,7 @@ export default function ProductDetailsPage() {
 
               </div>
               <div className="col-2 ">
-                <div className="d-flex align-items-start gap-1">
+                <div className="d-flex align-items-center justify-content-end gap-1">
 
                   {/* LOGOUT */}
                   <button className="logoutBtn" onClick={handleLogout}>

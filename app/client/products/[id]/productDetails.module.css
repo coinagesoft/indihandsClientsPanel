@@ -88,13 +88,15 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  
 }
 
 /* image box */
 .masonryItem {
   position: relative;
   width: 100%;
-  height: 160px;  
+  
+  height: 100%;  
   overflow: hidden;
   border-radius: 5px;
   cursor: pointer;
@@ -105,6 +107,7 @@
 .masonryItem img {
   width: 100%;
   height: 100%;
+  
   transition: transform .5s ease;
   border-radius: 5px;
   
@@ -384,3 +387,47 @@
 
 
 
+/* ================= REAL RESPONSIVE GALLERY ================= */
+
+.masonry {
+  column-count: 3;
+  column-gap: 12px;
+}
+
+/* tablet */
+@media (max-width: 992px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+/* mobile */
+@media (max-width: 576px) {
+  .masonry {
+    column-count: 1;
+  }
+}
+
+/* item */
+.masonryItem {
+  break-inside: avoid;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* ✅ FULL IMAGE - NO CUT */
+.masonryItem img {
+  width: 100%;
+  height: auto;          /* ⭐ KEY LINE */
+  display: block;
+  border-radius: 6px;
+  object-fit: contain;   /* ⭐ ensures full image visible */
+  background: #fff;      /* optional: avoids empty gaps looking weird */
+}
+
+/* hover */
+.masonryItem:hover img {
+  transform: scale(1.03);
+  transition: 0.3s;
+}
