@@ -114,6 +114,7 @@ export default function QuoteCartPage() {
 
   useEffect(() => {
     fetchCart();
+    
   }, []);
 
   /* ================= UPDATE QTY ================= */
@@ -153,6 +154,7 @@ export default function QuoteCartPage() {
     }
 
     fetchCart();
+    fetchCartCount(); 
   };
 
   /* ================= DELETE ITEM ================= */
@@ -177,6 +179,7 @@ export default function QuoteCartPage() {
 
     showToast("Item removed from quote cart", "success");
     fetchCart();
+    fetchCartCount(); 
   };
 
   /* ================= SUBMIT RFQ ================= */
