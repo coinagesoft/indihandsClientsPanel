@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useCart } from "../../../context/CartContext";
+import Image from "next/image";
+
 
 export default function ProductDetailsPage() {
 
@@ -29,6 +31,7 @@ export default function ProductDetailsPage() {
   const { cartCount, fetchCartCount } = useCart();
   const toastTimer = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imgLoading, setImgLoading] = useState(true);
 
   const showToast = (message, type = "success") => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -215,7 +218,7 @@ export default function ProductDetailsPage() {
         [id]: alreadyInCart + qty,
       }));
 
-      fetchCartCount(); 
+      fetchCartCount();
       showToast("Added to Quote successfully", "success");
     } finally {
       setAdding(false);
@@ -349,13 +352,20 @@ export default function ProductDetailsPage() {
               <div className={styles.masonry}>
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
-                    <img
+                    <Image
                       src={img}
                       alt={product.title}
-                      loading="lazy"
+                      width={500}
+                      height={500}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
                       onClick={() => {
                         setPreviewImg(img);
                         setCurrentIndex(index);
+                        setImgLoading(true);
                       }}
                     />
                   </div>
@@ -489,16 +499,41 @@ export default function ProductDetailsPage() {
 
           </footer>
         </div>
-        {previewImg && (
-          <div
-            className={styles.imageOverlay}
-            onClick={() => setPreviewImg(null)}
-          >
-            <div
-              className={styles.imagePopup}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
+       
+
+{previewImg && (
+  <div
+    className={styles.imageOverlay}
+    onClick={() => setPreviewImg(null)}
+  >
+    <div
+      className={styles.imagePopup}
+      onClick={(e) => e.stopPropagation()}
+    >
+
+      {/* ✅ LOADER */}
+      {imgLoading && <div className={styles.loader}></div>}
+
+      {/* ✅ IMAGE (ALWAYS RENDER) */}
+      <Image
+        src={previewImg}
+        alt="Preview"
+        width={800}
+        height={800}
+        priority
+        onLoadingComplete={() => setImgLoading(false)}
+        style={{
+          width: "auto",
+          height: "100%",
+          opacity: imgLoading ? 0 : 1,
+          transition: "opacity 0.3s ease",
+        }}
+      />
+
+      {/* ✅ CONTROLS ONLY AFTER LOAD */}
+      {!imgLoading && (
+        <>
+          <button
                 className={styles.closeBtn}
                 onClick={() => setPreviewImg(null)}
               >
@@ -517,27 +552,26 @@ export default function ProductDetailsPage() {
                 </svg>
               </button>
 
-              {/* ⬅️ LEFT ARROW */}
-              <button
-                className={styles.arrowLeft}
-                onClick={handlePrev}
-              >
-                <IoChevronBack size={26} />
-              </button>
+          <button
+            className={styles.arrowLeft}
+            onClick={handlePrev}
+          >
+            <IoChevronBack size={26} />
+          </button>
 
-              {/* IMAGE */}
-              <img src={previewImg} alt="Preview" />
+          <button
+            className={styles.arrowRight}
+            onClick={handleNext}
+          >
+            <IoChevronForward size={26} />
+          </button>
+        </>
+      )}
 
-              {/* ➡️ RIGHT ARROW */}
-              <button
-                className={styles.arrowRight}
-                onClick={handleNext}
-              >
-                <IoChevronForward size={26} />
-              </button>
-            </div>
-          </div>
-        )}
+    </div>
+  </div>
+)}
+        
 
       </PageWrapper>
     </>
