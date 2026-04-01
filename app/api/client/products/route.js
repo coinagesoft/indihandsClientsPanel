@@ -50,10 +50,23 @@ const catalog = catalogRows?.[0] || null;
     if (stock === "out") where += ` AND p.stock_qty = 0`;
 
     /* ================= SORT ================= */
-    let orderBy = `ORDER BY p.created_at DESC`;
+  let orderBy = `ORDER BY p.created_at DESC`;
 
-    if (sort === "price_asc") orderBy = `ORDER BY final_price ASC`;
-    if (sort === "price_desc") orderBy = `ORDER BY final_price DESC`;
+if (sort === "price_asc") {
+  orderBy = `
+    ORDER BY CAST(
+      SUBSTRING_INDEX(COALESCE(cpp.custom_price, p.base_price), '-', 1)
+    AS DECIMAL(10,2)) ASC
+  `;
+}
+
+if (sort === "price_desc") {
+  orderBy = `
+    ORDER BY CAST(
+      SUBSTRING_INDEX(COALESCE(cpp.custom_price, p.base_price), '-', 1)
+    AS DECIMAL(10,2)) DESC
+  `;
+}
 
     const [rows] = await db.query(
       `
