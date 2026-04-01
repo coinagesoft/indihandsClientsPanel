@@ -41,7 +41,7 @@ export default function ProductListingPage() {
       setProducts([]);
       setPageLoading(false);
       setLoading(false);
-      setHasFetched(true);   // ✅ important
+      setHasFetched(true);
       return;
     }
 
@@ -72,7 +72,7 @@ export default function ProductListingPage() {
       .finally(() => {
         setPageLoading(false);
         setLoading(false);
-        setHasFetched(true);   // ✅ mark fetch done
+        setHasFetched(true);
       });
 
     console.log("products list", products)
@@ -231,33 +231,33 @@ export default function ProductListingPage() {
 
                     <div className={styles.productImageBox}>
                       <img
-                        src={p.featured_image}
+                        src={p.featured_image }
                         alt={p.product_name}
                         className={styles.productImage}
                         onError={e => (e.target.src = "/images/no-image.png")}
                       />
                     </div>
 
-                 <p className={styles.productName}>
-  {(() => {
-    const [name, subName] = (p.product_name || "").split("::");
+                    <p className={styles.productName}>
+                      {(() => {
+                        const [name, subName] = (p.product_name || "").split("::");
 
-    const format = (text) =>
-      text
-        ?.trim()
-        ?.toLowerCase()
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+                        const format = (text) =>
+                          text
+                            ?.trim()
+                            ?.toLowerCase()
+                            .replace(/\b\w/g, (c) => c.toUpperCase());
 
-    return (
-      <>
-        <span className={styles.mainName}>{format(name)}</span><br></br>
-        {subName && (
-          <span className={styles.subName}>{format(subName)}</span>
-        )}
-      </>
-    );
-  })()}
-</p>
+                        return (
+                          <>
+                            <span className={styles.mainName}>{format(name)}</span><br></br>
+                            {subName && (
+                              <span className={styles.subName}>{format(subName)}</span>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </p>
 
                     <p className={styles.stockText}>
                       {p.stock_qty > 0 ? (
@@ -274,10 +274,24 @@ export default function ProductListingPage() {
 
                     <div className={styles.bottomRow}>
                       <span className={styles.price}>
-                        {new Intl.NumberFormat("en-IN", {
-                          style: "currency",
-                          currency: "INR",
-                        }).format(p.final_price)}
+                        {(() => {
+                          const price = p.final_price;
+
+                          if (!price) return "₹0";
+
+                          // range case
+                          if (typeof price === "string" && price.includes("-")) {
+                            const [min, max] = price.split("-");
+
+                            return `₹${Number(min).toLocaleString("en-IN")} - ₹${Number(max).toLocaleString("en-IN")}`;
+                          }
+
+                          // normal number
+                          return new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                          }).format(Number(price));
+                        })()}
                       </span>
                       <button
                         className={styles.addBtn}

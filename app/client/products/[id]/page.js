@@ -353,7 +353,7 @@ export default function ProductDetailsPage() {
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
                     <Image
-                      src={img}
+                      src={img || "/images/no-image.png"}
                       alt={product.title}
                       width={500}
                       height={500}
@@ -399,10 +399,24 @@ export default function ProductDetailsPage() {
                     <div className="col-6 ">
                       <p className="mt-0 mb-0">
                         <b>Price:</b>{" "}
-                        {new Intl.NumberFormat("en-IN", {
-                          style: "currency",
-                          currency: "INR",
-                        }).format(product.price)}
+                        {(() => {
+                          const price = product.price;
+
+                          if (!price) return "₹0";
+
+                          // range case
+                          if (typeof price === "string" && price.includes("-")) {
+                            const [min, max] = price.split("-");
+
+                            return `₹${Number(min).toLocaleString("en-IN")} - ₹${Number(max).toLocaleString("en-IN")}`;
+                          }
+
+                          // normal number
+                          return new Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                          }).format(Number(price));
+                        })()}
                       </p>
                       <p className="mt-0 mb-0"><b>HSN:</b> {product.hsn || "-"}</p>
                       {/* ✅ STOCK */}
@@ -499,79 +513,79 @@ export default function ProductDetailsPage() {
 
           </footer>
         </div>
-       
 
-{previewImg && (
-  <div
-    className={styles.imageOverlay}
-    onClick={() => setPreviewImg(null)}
-  >
-    <div
-      className={styles.imagePopup}
-      onClick={(e) => e.stopPropagation()}
-    >
 
-      {/* ✅ LOADER */}
-      {imgLoading && <div className={styles.loader}></div>}
-
-      {/* ✅ IMAGE (ALWAYS RENDER) */}
-      <Image
-        src={previewImg}
-        alt="Preview"
-        width={800}
-        height={800}
-        priority
-        onLoadingComplete={() => setImgLoading(false)}
-        style={{
-          width: "auto",
-          height: "100%",
-          opacity: imgLoading ? 0 : 1,
-          transition: "opacity 0.3s ease",
-        }}
-      />
-
-      {/* ✅ CONTROLS ONLY AFTER LOAD */}
-      {!imgLoading && (
-        <>
-          <button
-                className={styles.closeBtn}
-                onClick={() => setPreviewImg(null)}
-              >
-                <svg viewBox="0 0 100 100" className={styles.closeIcon}>
-                  <defs>
-                    <mask id="cutX">
-                      <rect width="100" height="100" fill="white" />
-                      {/* ❌ cut X shape */}
-                      <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="6" />
-                      <line x1="75" y1="25" x2="25" y2="75" stroke="black" strokeWidth="6" />
-                    </mask>
-                  </defs>
-
-                  {/* white circle with X cut out */}
-                  <circle cx="50" cy="50" r="50" fill="white" mask="url(#cutX)" />
-                </svg>
-              </button>
-
-          <button
-            className={styles.arrowLeft}
-            onClick={handlePrev}
+        {previewImg && (
+          <div
+            className={styles.imageOverlay}
+            onClick={() => setPreviewImg(null)}
           >
-            <IoChevronBack size={26} />
-          </button>
+            <div
+              className={styles.imagePopup}
+              onClick={(e) => e.stopPropagation()}
+            >
 
-          <button
-            className={styles.arrowRight}
-            onClick={handleNext}
-          >
-            <IoChevronForward size={26} />
-          </button>
-        </>
-      )}
+              {/* ✅ LOADER */}
+              {imgLoading && <div className={styles.loader}></div>}
 
-    </div>
-  </div>
-)}
-        
+              {/* ✅ IMAGE (ALWAYS RENDER) */}
+              <Image
+                src={previewImg}
+                alt="Preview"
+                width={800}
+                height={800}
+                priority
+                onLoadingComplete={() => setImgLoading(false)}
+                style={{
+                  width: "auto",
+                  height: "100%",
+                  opacity: imgLoading ? 0 : 1,
+                  transition: "opacity 0.3s ease",
+                }}
+              />
+
+              {/* ✅ CONTROLS ONLY AFTER LOAD */}
+              {!imgLoading && (
+                <>
+                  <button
+                    className={styles.closeBtn}
+                    onClick={() => setPreviewImg(null)}
+                  >
+                    <svg viewBox="0 0 100 100" className={styles.closeIcon}>
+                      <defs>
+                        <mask id="cutX">
+                          <rect width="100" height="100" fill="white" />
+                          {/* ❌ cut X shape */}
+                          <line x1="25" y1="25" x2="75" y2="75" stroke="black" strokeWidth="6" />
+                          <line x1="75" y1="25" x2="25" y2="75" stroke="black" strokeWidth="6" />
+                        </mask>
+                      </defs>
+
+                      {/* white circle with X cut out */}
+                      <circle cx="50" cy="50" r="50" fill="white" mask="url(#cutX)" />
+                    </svg>
+                  </button>
+
+                  <button
+                    className={styles.arrowLeft}
+                    onClick={handlePrev}
+                  >
+                    <IoChevronBack size={26} />
+                  </button>
+
+                  <button
+                    className={styles.arrowRight}
+                    onClick={handleNext}
+                  >
+                    <IoChevronForward size={26} />
+                  </button>
+                </>
+              )}
+
+            </div>
+          </div>
+        )}
+
 
       </PageWrapper>
     </>
