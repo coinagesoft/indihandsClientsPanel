@@ -360,7 +360,6 @@ export default function ProductDetailsPage() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       style={{
                         width: "100%",
-                        height: "auto",
                       }}
                       onClick={() => {
                         setPreviewImg(img);

@@ -74,7 +74,7 @@ const Page = () => {
             />
 
             <div className={styles.address}>
-              Manik Trifaley Design Studio,<br />
+              Manik Trifaley Design Studio Pvt Ltd,<br />
               303, Meghana, DSK Ranwara, NDA-Pashan Road,<br />
               Bavdhan, Pune - 411021. India
             </div>
@@ -82,8 +82,12 @@ const Page = () => {
           </div>
 
           <div className={styles.contactLine}>
-            <a href={`tel:${phone}`} className={styles.link}>
-              {phone}
+            <a href="tel:9021631152" className={styles.link}>
+              9021631152
+            </a>
+            <span className={styles.line}></span>
+            <a href="tel:9822513937" className={styles.link}>
+              9822513937
             </a>
 
             <span className={styles.line}></span>

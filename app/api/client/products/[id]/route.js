@@ -4,7 +4,8 @@ import { verifyToken } from "../../../../lib/auth";
 
 export async function GET(req, { params }) {
   try {
-const { id: productId } = await params;
+
+    const { id: productId } = await params;
 
     if (!productId) {
       return NextResponse.json(
@@ -25,7 +26,7 @@ const { id: productId } = await params;
          );
        }
    
-       const { companyId} = decoded; // TODO: get from auth/session
+       const { companyId} = decoded; 
 
     /* ================= PRODUCT (BASE + COMPANY PRICE) ================= */
     const [[product]] = await db.query(

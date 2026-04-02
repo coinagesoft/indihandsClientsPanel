@@ -125,7 +125,20 @@ export default function ClientLoginPage() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className={styles.rightPanel} />
+     {/* RIGHT PANEL */}
+<div className={styles.rightPanel}>
+  <div className={styles.overlayCard}>
+    <h2 className={styles.overlayTitle}>
+      Hands Interlinked: The IndiHands Catalogue Portal
+    </h2>
+
+    <p className={styles.overlayText}>
+      Explore complete product ranges across crafts, regions, and artisan clusters in a single space!
+      Hands Interlinked brings together every IndiHands catalogue within one comprehensive, easy-to-navigate platform.
+      Designed for clarity and efficiency, the portal also reflects the interconnected communities whose labour shapes each collection.
+    </p>
+  </div>
+</div>
     </div>
   );
 }
