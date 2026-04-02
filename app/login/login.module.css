@@ -157,7 +157,35 @@ font-size: 14px;
 /* RIGHT PANEL */
 .rightPanel{
   flex:1;
-  background:url("/images/login-bg.png") center/cover no-repeat;
+  background:url("/images/login-bg.webp") center/cover no-repeat;
+  position: relative; /* 🔑 IMPORTANT */
+
+}
+
+/* OVERLAY CARD */
+.overlayCard{
+  max-width: 360px;
+  padding: 34px 28px;
+  border-radius: 0px 0px 16px 16px;
+  margin-left: 20px;
+  background: rgba(0, 0, 0, 0.594); /* dark glass */
+
+  color: #fbf3ec;
+}
+
+/* TITLE */
+.overlayTitle{
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #f5a623; /* orange like design */
+}
+
+/* TEXT */
+.overlayText{
+  font-size: 14px;
+  line-height: 1.5;
+  color: #f1f1f1;
 }
 
 /* RESPONSIVE */
