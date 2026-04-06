@@ -122,16 +122,20 @@ appearance: auto;
 
 .productImageBox {
   width: 100%;
-  height: 170px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: #f3f3f3;
+height: 150px;
+  display: flex;            /* 🔑 center image */
+  align-items: center;
+  justify-content: center;
+  object-fit: contain;
 }
 
 .productImage {
   width: 100%;
   height: 100%;
-
+  
   transition: transform 0.45s ease;
 }
 

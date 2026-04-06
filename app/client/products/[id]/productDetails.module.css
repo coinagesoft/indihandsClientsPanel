@@ -104,8 +104,8 @@
 /* image */
 .masonryItem img {
   width: 100%;        /* ✅ important */
-   height: 100%;    /* ✅ fill container */
   display: block;
+  height: auto;
   border-radius: 5px;
   transition: transform .5s ease;
 }

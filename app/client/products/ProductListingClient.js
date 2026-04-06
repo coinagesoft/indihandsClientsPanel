@@ -231,10 +231,10 @@ export default function ProductListingPage() {
 
                     <div className={styles.productImageBox}>
                       <img
-                        src={p.featured_image }
+                        src={p.featured_image || "/images/default-product-image.jpg" }
                         alt={p.product_name}
                         className={styles.productImage}
-                        onError={e => (e.target.src = "/images/no-image.png")}
+                        onError={e => (e.target.src = "/images/default-product-image.jpg")}
                       />
                     </div>
 

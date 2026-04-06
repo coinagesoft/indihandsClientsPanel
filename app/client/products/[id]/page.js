@@ -353,10 +353,10 @@ export default function ProductDetailsPage() {
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
                     <Image
-                      src={img || "/images/no-image.png"}
+                      src={img || "/images/default-product-image.jpg"}
                       alt={product.title}
                       width={500}
-                      height={500}
+                      height={170}
                       sizes="(max-width: 768px) 100vw, 50vw"
                       style={{
                         width: "100%",
