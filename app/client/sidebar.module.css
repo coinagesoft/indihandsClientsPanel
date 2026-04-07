@@ -220,3 +220,29 @@
 }
 
 }
+
+.payContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.payBtnSmall {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+ background: linear-gradient(135deg, #A21418, #A21418) !important;
+  color: #fff !important;
+  border: none;
+   padding: 2px 16px;/* ✅ small */
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.payBtnSmall i {
+  font-size: 16px;
+}
+
+.payBtnSmall:hover {
+  background: #218838;
+}

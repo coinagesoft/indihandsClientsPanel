@@ -105,10 +105,8 @@ appearance: auto;
   border-radius: var(--radius-sm);
   padding: 12px;
   height: 100%;
-
   display: flex;
   flex-direction: column;
-
   transition: 
     transform 0.35s ease,
     box-shadow 0.35s ease;   /* ⭐ add this */
@@ -125,11 +123,11 @@ appearance: auto;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: #f3f3f3;
-height: 150px;
-  display: flex;            /* 🔑 center image */
+/* height: 140px; */
+  display: flex;           
   align-items: center;
   justify-content: center;
-  object-fit: contain;
+  /* object-fit: cover; */
 }
 
 .productImage {
