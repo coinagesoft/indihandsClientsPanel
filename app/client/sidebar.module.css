@@ -1,5 +1,4 @@
-/* Client Sidebar Styles - Cleaned & Fixed */
-/* Standardized collapsed width to 80px, proper flex footer, removed duplicates */
+
 
 .sidebar {
   position: fixed;
@@ -77,7 +76,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+ justify-content: flex-start;
 }
 
 .menu li {
@@ -194,6 +193,21 @@
   }
 }
 
+@media (max-height: 600px) {
+  .menu {
+    justify-content: flex-start;
+  }
+
+  .footerLogo {
+    margin-bottom: 10px;
+    padding-top: 0px;
+  }
+
+  .footerLogo img {
+    max-height: 40px;
+  }
+}
+
 @media (max-width:480px){
 
 .sidebar{
@@ -221,28 +235,5 @@
 
 }
 
-.payContainer {
-  display: flex;
-  justify-content: center;
-}
 
-.payBtnSmall {
-  display: flex;
-  align-items: center;
-  gap: 6px;
- background: linear-gradient(135deg, #A21418, #A21418) !important;
-  color: #fff !important;
-  border: none;
-   padding: 2px 16px;/* ✅ small */
-  font-size: 13px;
-  border-radius: 6px;
-  cursor: pointer;
-}
 
-.payBtnSmall i {
-  font-size: 16px;
-}
-
-.payBtnSmall:hover {
-  background: #218838;
-}
