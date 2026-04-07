@@ -28,7 +28,13 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
     { name: "Profile", path: "/client/profile", icon: "ri-user-3-line" },
     { name: "Process of Packing", path: "/client/process-packing", icon: "ri-box-3-line" },
     { name: "Terms & Conditions", path: "/client/terms", icon: "ri-file-shield-2-line" },
-    { name: "Contact Us", path: "/client/contactus", icon: "ri-customer-service-2-line" }
+    { name: "Contact Us", path: "/client/contactus", icon: "ri-customer-service-2-line" },
+      {
+    name: "Pay Here",
+    path: "https://formpayment.getepay.in/forms/survey/WygqPGELe3yrb698jZX1",
+    icon: "ri-secure-payment-line",
+    external: true
+  },
   ];
 
 
@@ -62,12 +68,28 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
               pathname.startsWith("/client/rfq-details"));
 
           return (
-            <li key={item.path} className={active ? styles.active : ""}>
-              <Link href={item.path} className={styles.menuLink}>
-                <i className={`ri ${item.icon} ${styles.icon}`} />
-                {!collapsed && <span>{item.name}</span>}
-              </Link>
-            </li>
+         <li key={item.name} className={active ? styles.active : ""}>
+  
+  {item.external ? (
+    // ✅ ADD HERE (for Pay Now)
+    <a
+      href={item.path}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={styles.menuLink}
+    >
+      <i className={`ri ${item.icon} ${styles.icon}`} />
+      {!collapsed && <span>{item.name}</span>}
+    </a>
+  ) : (
+    // ✅ existing links stay same
+    <Link href={item.path} className={styles.menuLink}>
+      <i className={`ri ${item.icon} ${styles.icon}`} />
+      {!collapsed && <span>{item.name}</span>}
+    </Link>
+  )}
+
+</li>
           );
         })}
       </ul>
@@ -83,18 +105,7 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
         </button>
       </div> */}
 
-{/* PAY NOW BUTTON (above footer) */}
-<div className={styles.payContainer}>
-  <button
-    className={styles.payBtnSmall}
-    onClick={() =>
-      window.open("https://your-payment-link.com", "_blank")
-    }
-  >
-    <i className="ri-secure-payment-line" />
-    {!collapsed && <span>Pay Now</span>}
-  </button>
-</div>
+
 
       {/* FOOTER */}
       
