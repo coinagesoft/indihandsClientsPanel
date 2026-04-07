@@ -105,10 +105,8 @@ appearance: auto;
   border-radius: var(--radius-sm);
   padding: 12px;
   height: 100%;
-
   display: flex;
   flex-direction: column;
-
   transition: 
     transform 0.35s ease,
     box-shadow 0.35s ease;   /* ⭐ add this */
@@ -122,16 +120,20 @@ appearance: auto;
 
 .productImageBox {
   width: 100%;
-  height: 170px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: #f3f3f3;
+/* height: 140px; */
+  display: flex;           
+  align-items: center;
+  justify-content: center;
+  /* object-fit: cover; */
 }
 
 .productImage {
   width: 100%;
   height: 100%;
-
+  
   transition: transform 0.45s ease;
 }
 

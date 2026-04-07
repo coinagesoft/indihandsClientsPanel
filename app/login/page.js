@@ -5,20 +5,21 @@ import { useRouter } from "next/navigation";
 import styles from "./login.module.css";
 
 export default function ClientLoginPage() {
+  
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (!email || !password) {
-      setError("Please enter email and password");
+      setError("Please enter username and password");
       return;
     }
 
@@ -50,6 +51,8 @@ export default function ClientLoginPage() {
     }
   };
 
+
+
   return (
     <div className={styles.loginWrapper}>
       {/* LEFT PANEL */}
@@ -66,8 +69,8 @@ export default function ClientLoginPage() {
           <form onSubmit={handleSubmit} className={styles.form}>
             {/* EMAIL */}
             <input
-              type="email"
-              placeholder="Email Address"
+              type="text"
+              placeholder="Email Address /Username"
               className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}

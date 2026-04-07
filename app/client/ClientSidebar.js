@@ -83,10 +83,25 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
         </button>
       </div> */}
 
+{/* PAY NOW BUTTON (above footer) */}
+<div className={styles.payContainer}>
+  <button
+    className={styles.payBtnSmall}
+    onClick={() =>
+      window.open("https://your-payment-link.com", "_blank")
+    }
+  >
+    <i className="ri-secure-payment-line" />
+    {!collapsed && <span>Pay Now</span>}
+  </button>
+</div>
+
       {/* FOOTER */}
+      
       {!collapsed && (
         <>
           <div className={styles.footerLogo}>
+            
             <img src="/images/MTDS-pvt-ltd.png" alt="trifoley" />
           </div>
         </>

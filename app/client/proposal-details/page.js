@@ -476,6 +476,15 @@ export default function ProposalDetailsPage() {
 
                         {/* ================= ACTION BAR ================= */}
                         <div className={styles.actionBar}>
+
+                                                    <button
+  className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+  onClick={() =>
+    window.open("https://your-payment-link.com", "_blank")
+  }
+>
+  Pay Here
+</button>
                           {proposal?.status !== "Rejected" && (
                             <button
                               className={`${styles.actionBtn} ${styles.secondaryBtn}`}
@@ -485,7 +494,10 @@ export default function ProposalDetailsPage() {
                             >
                               Download PDF
                             </button>
+
+                            
                           )}
+
 
                           {canTakeAction && (
                             <>
