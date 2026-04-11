@@ -64,15 +64,25 @@ export async function GET(req, { params }) {
     const [items] = await db.query(
       `
       SELECT
-        p.product_name,
+          CASE 
+      WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
+      THEN CONCAT(cpp.prefix, ' | ', p.product_name)
+      ELSE p.product_name
+    END AS product_name,
         rp.quantity,
         rp.quoted_price,
         (rp.quantity * rp.quoted_price) AS total
       FROM rfq_products rp
       JOIN products p ON p.id = rp.product_id
+
+       LEFT JOIN company_product_pricing cpp
+    ON cpp.product_id = p.id
+    AND cpp.company_id = ?
+
       WHERE rp.rfq_id = ?
       `,
-      [rfq_id]
+       [companyId, rfq_id]  
+
     );
 
     return NextResponse.json({

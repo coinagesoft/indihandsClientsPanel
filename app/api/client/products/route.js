@@ -72,7 +72,12 @@ if (sort === "price_desc") {
       `
       SELECT
         p.id,
-        p.product_name,
+       
+  CASE 
+    WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
+    THEN CONCAT(cpp.prefix, ' | ', p.product_name)
+    ELSE p.product_name
+  END AS product_name,
         p.base_price,
         COALESCE(cpp.custom_price, p.base_price) AS final_price,
         p.stock_qty,

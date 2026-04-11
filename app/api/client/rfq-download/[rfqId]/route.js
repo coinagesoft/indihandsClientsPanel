@@ -45,12 +45,25 @@ export async function GET(req, { params }) {
     /* ================= ITEMS ================= */
     const [items] = await db.query(
       `
-      SELECT p.product_name, rp.quantity, rp.quoted_price
+      SELECT 
+      CASE 
+      WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
+      THEN CONCAT(cpp.prefix, ' | ', p.product_name)
+      ELSE p.product_name
+    END AS product_name, 
+      rp.quantity, rp.quoted_price
       FROM rfq_products rp
       JOIN products p ON p.id = rp.product_id
+
+  LEFT JOIN company_product_pricing cpp
+    ON cpp.product_id = p.id
+    AND cpp.company_id = (
+      SELECT company_id FROM rfqs WHERE id = ?
+    )
+
       WHERE rp.rfq_id = ?
       `,
-      [rfq_id]
+     [rfq_id, rfq_id]   
     );
 
     /* ================= FONTS ================= */
