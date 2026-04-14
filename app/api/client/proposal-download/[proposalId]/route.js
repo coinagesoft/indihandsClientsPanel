@@ -755,48 +755,63 @@ const igstRate = +i.igst_rate || (cgstRate + sgstRate);
 });
     /* ================= CALCULATE CHARGES ================= */
     let chargeSubtotal = 0;
-  const itemSubtotal = computedItems.reduce((sum, i) => sum + i.baseAmount, 0);
-const subtotal = itemSubtotal + chargeSubtotal;
-let cgstTotal = Number(proposal.cgst_total || 0);
-let sgstTotal = Number(proposal.sgst_total || 0);
-let igstTotal = Number(proposal.igst_total || 0);
+const itemSubtotal = computedItems.reduce((sum, i) => sum + i.baseAmount, 0);
 
-const totalTax = cgstTotal + sgstTotal + igstTotal;
-const grandTotal = Number(proposal.grand_total || 0);
-    const computedCharges = allCharges.map(c => {
+// charges calculate zalyavar
+
+let cgstTotal = 0;
+let sgstTotal = 0;
+let igstTotal = 0;
+
+// ✅ ITEMS totals
+computedItems.forEach(i => {
+  cgstTotal += i.cgst;
+  sgstTotal += i.sgst;
+  igstTotal += i.igst;
+});
+
+
+
+
+
+const computedCharges = allCharges.map(c => {
   const amt = +c.amount || 0;
   const taxRate = +c.taxPercent || 0;
 
   let cg = 0, sg = 0, ig = 0;
 
-   if (isInterState || isSEZ) {
-    ig = taxable * igstRate / 100;
-
-    // ✅ FORCE ZERO
-    cg = 0;
-    sg = 0;
+  if (isInterState || isSEZ) {
+    // ✅ ONLY IGST
+    ig = amt * taxRate / 100;
   } else {
-    cg = taxable * cgstRate / 100;
-    sg = taxable * sgstRate / 100;
-    ig = 0;
+    // ✅ CGST + SGST
+    cg = amt * (taxRate / 2) / 100;
+    sg = amt * (taxRate / 2) / 100;
   }
 
   chargeSubtotal += amt;
-  
 
   return {
     label: c.label,
     amount: amt,
-     taxPercent: taxRate, 
+    taxPercent: taxRate,
     cgst: cg,
     sgst: sg,
     igst: ig,
     total: amt + cg + sg + ig
   };
 });
+// ✅ CHARGES totals ADD kar
+computedCharges.forEach(c => {
+  cgstTotal += c.cgst;
+  sgstTotal += c.sgst;
+  igstTotal += c.igst;
+});
 
+const subtotal = itemSubtotal + chargeSubtotal;
 
-
+const totalTax = cgstTotal + sgstTotal + igstTotal;
+const grandTotal = subtotal + totalTax;
     /* ================= TABLE ROWS ================= */
     const itemRows = computedItems.map((x, i) => `
       <tr>
