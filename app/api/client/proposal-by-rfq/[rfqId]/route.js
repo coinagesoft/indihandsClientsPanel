@@ -32,6 +32,7 @@ export async function GET(req, { params }) {
         r.client_name,
         r.client_phone,
         r.client_email,
+        r.billing_type,
         p.proposal_number,
         p.proposal_date,
         p.billing_address,
@@ -192,6 +193,8 @@ const items = dbItems.map(i => {
         clientName: proposal.client_name || "",
         clientPhone: proposal.client_phone || "",
         clientEmail: proposal.client_email || "",
+        gstin: proposal.billing_type === "self" ? "" : (proposal.gstin || ""),
+
       },
 
       items,

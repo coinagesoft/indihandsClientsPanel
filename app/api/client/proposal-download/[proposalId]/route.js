@@ -76,9 +76,9 @@ function buildHTML(data) {
     "38":"Ladakh"
   };
 
-  const clientStateCode = proposal.gstin
-    ? proposal.gstin.substring(0, 2)
-    : "";
+const clientStateCode = proposal.gstin
+  ? proposal.gstin.substring(0, 2)
+  : senderStateCode;
 
   const senderStateCode = sender.gstin
     ? sender.gstin.substring(0, 2)
@@ -86,7 +86,12 @@ function buildHTML(data) {
 
   const clientStateName = stateMap[clientStateCode] || "";
   const senderStateName = stateMap[senderStateCode] || "";
+const isSelf = proposal.billing_type === "self";
 
+const companyName = proposal.company || "";
+
+const billingAddress = proposal.billing_address || "";
+const shippingAddress = proposal.shipping_address || billingAddress;
 
 const itemRows = computedItems.map((x, i) => {
 const sgstRate = isInterState ? 0 : (x.sgst_rate || 0);
@@ -453,9 +458,9 @@ State: ${senderStateName} | State Code: ${senderStateCode}
 <div class="sec">
 Contact Person: ${proposal.client_name}<br>
 Contact Number: ${proposal.client_phone}<br>
-Company name: ${proposal.company}<br>
-Address: ${proposal.billing_address}<br>
-<b>GSTIN: ${proposal.gstin || ""}</b><br>
+Company name: ${companyName}<br>
+Address: ${billingAddress}<br>
+<b>GSTIN: ${isSelf ? "" : (proposal.gstin || "")}</b><br>
 State: ${clientStateName} | State Code: ${clientStateCode}</div>
 
 <table>
@@ -619,10 +624,15 @@ export async function GET(req, { params }) {
         p.proposal_number,
         p.proposal_date,
         p.billing_address,
-        c.company_name AS company,
+        p.shipping_address,
+       CASE 
+  WHEN r.billing_type = 'self' THEN p.company_name
+  ELSE c.company_name
+END AS company,
         cb.gstin,
         r.client_name,
-        r.client_phone
+        r.client_phone,
+          r.billing_type
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
       JOIN companies c ON c.id = r.company_id
