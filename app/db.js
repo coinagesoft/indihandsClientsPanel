@@ -46,13 +46,4 @@ export const db = mysql.createPool({
 //   queueLimit: 0
 // });
 
-// Test connection
-(async () => {
-  try {
-    const connection = await db.getConnection();
-    console.log('✅ DB Connected Successfully!');
-    connection.release();
-  } catch (err) {
-    console.error('❌ DB Connection Failed:', err.message);
-  }
-})();
+export default db;
