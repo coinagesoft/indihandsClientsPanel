@@ -63,7 +63,7 @@ export async function POST(req) {
 
     const { companyId, branchId } = decoded;
     const body = await req.json();
-    const { clientName, clientPhone, clientEmail } = body;
+    const { clientName, clientPhone, clientEmail, billingType } = body;
 
     if (!clientName?.trim()) {
       return NextResponse.json({ error: "Client name required" }, { status: 400 });
@@ -103,9 +103,10 @@ export async function POST(req) {
            submitted_at=NOW(),
            client_name=?,
            client_phone=?,
-           client_email=?
+           client_email=?,
+            billing_type=?
        WHERE id=?`,
-      [clientName, clientPhone, clientEmail, rfq.id]
+      [clientName, clientPhone, clientEmail,billingType, rfq.id]
     );
 
     const rfqId = rfq.id;

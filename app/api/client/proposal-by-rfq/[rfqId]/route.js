@@ -32,14 +32,18 @@ export async function GET(req, { params }) {
         r.client_name,
         r.client_phone,
         r.client_email,
+        r.billing_type,
         p.proposal_number,
         p.proposal_date,
         p.billing_address,
         p.shipping_address,
         p.place,
-        p.status
+        p.status,
+         cb.gstin
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
+
+        JOIN company_branches cb ON cb.id = r.branch_id 
       WHERE p.rfq_id = ? AND p.company_id = ?
       LIMIT 1
       `,
@@ -54,46 +58,85 @@ export async function GET(req, { params }) {
     const [dbItems] = await db.query(
       `
       SELECT
-        pr.product_name AS description,
+         CASE 
+      WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
+      THEN CONCAT(cpp.prefix, ' | ', pr.product_name)
+      ELSE pr.product_name
+    END AS description,
         pr.sku AS product_code,
         pr.hsn,
         pr.featured_image,
         pi.quantity AS qty,
-        pi.rate
+        pi.rate,
+   pr.cgst_rate,
+  pr.sgst_rate,
+  pr.igst_rate
       FROM proposal_items pi
       JOIN products pr ON pr.id = pi.product_id
+
+        LEFT JOIN company_product_pricing cpp
+    ON cpp.product_id = pr.id
+    AND cpp.company_id = ?
+
       WHERE pi.proposal_id = ?
       ORDER BY pi.id ASC
       `,
-      [proposal.id]
+      [companyId, proposal.id]   
     );
 
+/* ================= GST STATE LOGIC ================= */
+
+    const clientStateCode = proposal.gstin?.substring(0, 2) || "";
+
+    const [[companyRow]] = await db.query(
+      `
+      SELECT gstin 
+      FROM company_branches 
+      WHERE company_id = ?
+      ORDER BY id ASC
+      LIMIT 1
+      `,
+      [companyId]
+    );
+
+    const senderStateCode = companyRow?.gstin?.substring(0, 2) || "";
+
+    const isInterState = senderStateCode !== clientStateCode;
+
     /* ================= CALCULATE ITEMS ================= */
-    let itemsSubtotal = 0;
-    let itemsTax = 0;
+let itemsSubtotal = 0;
+let itemsTax = 0;
 
-    const items = dbItems.map(i => {
-      const qty = Number(i.qty || 0);
-      const rate = Number(i.rate || 0);
+const items = dbItems.map(i => {
+  const qty = Number(i.qty || 0);
+  const rate = Number(i.rate || 0);
 
-      const taxable = qty * rate;
+  const taxable = qty * rate;
 
-      // assume intra-state 18% GST split
-      const cgst = taxable * 0.09;
-      const sgst = taxable * 0.09;
+  const cgstRate = Number(i.cgst_rate || 0);
+  const sgstRate = Number(i.sgst_rate || 0);
+  const igstRate = Number(i.igst_rate || 0);
 
-      const total = taxable + cgst + sgst;
+   // ✅ STATE BASED GST
+      const cgst = isInterState ? 0 : (taxable * cgstRate) / 100;
+      const sgst = isInterState ? 0 : (taxable * sgstRate) / 100;
+      const igst = isInterState ? (taxable * igstRate) / 100 : 0;
 
-      itemsSubtotal += taxable;
-      itemsTax += cgst + sgst;
+  const total = taxable + cgst + sgst + igst;
 
-      return {
-        ...i,
-        qty,
-        rate,
-        total
-      };
-    });
+  itemsSubtotal += taxable;
+  itemsTax += cgst + sgst + igst;
+
+  return {
+    ...i,
+    qty,
+    rate,
+    cgst,
+    sgst,
+    igst,
+    total
+  };
+});
 
     /* ================= CHARGES ================= */
     let [charges] = await db.query(
@@ -150,6 +193,8 @@ export async function GET(req, { params }) {
         clientName: proposal.client_name || "",
         clientPhone: proposal.client_phone || "",
         clientEmail: proposal.client_email || "",
+        gstin: proposal.billing_type === "self" ? "" : (proposal.gstin || ""),
+
       },
 
       items,

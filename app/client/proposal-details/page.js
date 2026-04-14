@@ -27,6 +27,8 @@ export default function ProposalDetailsPage() {
     setToast({ message, type });
     setTimeout(() => setToast({ message: "", type: "" }), 3000);
   };
+
+  
   /* ================= RFQ LIST ================= */
   useEffect(() => {
     const token = localStorage.getItem("client_token");
@@ -427,52 +429,100 @@ export default function ProposalDetailsPage() {
                             </table>
                           </div>
                         )}
-                        {proposal && (
-                          <div className={styles.totalBox}>
-                            <table className={`table ${styles.customTable}`}>
-                              <tbody>
-                                <tr>
-                                  <td>Subtotal</td>
-                                  <td className="text-end">
-                                    ₹ {Number(totals.subtotal || 0).toLocaleString()}
-                                  </td>
-                                </tr>
+                    {proposal && (() => {
+  // ✅ calculate tax totals from items
+  const cgstTotal = (data?.items || []).reduce((sum, i) => sum + (i.cgst || 0), 0);
+  const sgstTotal = (data?.items || []).reduce((sum, i) => sum + (i.sgst || 0), 0);
+  const igstTotal = (data?.items || []).reduce((sum, i) => sum + (i.igst || 0), 0);
 
-                                <tr>
-                                  <td>Item Tax</td>
-                                  <td className="text-end">
-                                    ₹ {Number(totals.itemTax || 0).toLocaleString()}
-                                  </td>
-                                </tr>
+  const itemTaxTotal = cgstTotal + sgstTotal + igstTotal;
 
-                                {totals.chargesAmount > 0 && (
-                                  <tr>
-                                    <td>Charges</td>
-                                    <td className="text-end">
-                                      ₹ {Number(totals.chargesAmount).toLocaleString()}
-                                    </td>
-                                  </tr>
-                                )}
+  return (
+    <div className={styles.totalBox}>
+      <table className={`table ${styles.customTable}`}>
+        <tbody>
 
-                                {totals.chargesTax > 0 && (
-                                  <tr>
-                                    <td>Charges Tax</td>
-                                    <td className="text-end">
-                                      ₹ {Number(totals.chargesTax).toLocaleString()}
-                                    </td>
-                                  </tr>
-                                )}
+          {/* ✅ SUBTOTAL */}
+          <tr>
+            <td>Subtotal</td>
+            <td className="text-end">
+              ₹ {Number(totals.subtotal || 0).toLocaleString()}
+            </td>
+          </tr>
 
-                                <tr className={styles.grandTotalRow}>
-                                  <th>Grand Total</th>
-                                  <th className="text-end">
-                                    ₹ {Number(totals.grandTotal || proposal.grand_total || 0).toLocaleString()}
-                                  </th>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
+          {/* ✅ CGST */}
+          {cgstTotal > 0 && (
+            <tr>
+              <td>CGST</td>
+              <td className="text-end">
+                ₹ {cgstTotal.toFixed(2)}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ SGST */}
+          {sgstTotal > 0 && (
+            <tr>
+              <td>SGST</td>
+              <td className="text-end">
+                ₹ {sgstTotal.toFixed(2)}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ IGST */}
+          {igstTotal > 0 && (
+            <tr>
+              <td>IGST</td>
+              <td className="text-end">
+                ₹ {igstTotal.toFixed(2)}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ TOTAL ITEM TAX */}
+          {itemTaxTotal > 0 && (
+            <tr>
+              <td><strong>Item Tax</strong></td>
+              <td className="text-end">
+                ₹ {itemTaxTotal.toFixed(2)}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ CHARGES */}
+          {totals.chargesAmount > 0 && (
+            <tr>
+              <td>Charges</td>
+              <td className="text-end">
+                ₹ {Number(totals.chargesAmount).toLocaleString()}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ CHARGES TAX */}
+          {totals.chargesTax > 0 && (
+            <tr>
+              <td>Charges Tax</td>
+              <td className="text-end">
+                ₹ {Number(totals.chargesTax).toLocaleString()}
+              </td>
+            </tr>
+          )}
+
+          {/* ✅ GRAND TOTAL */}
+          <tr className={styles.grandTotalRow}>
+            <th>Grand Total</th>
+            <th className="text-end">
+              ₹ {Number(totals.grandTotal || 0).toLocaleString()}
+            </th>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  );
+})()}
 
                         {/* ================= ACTION BAR ================= */}
                         <div className={styles.actionBar}>

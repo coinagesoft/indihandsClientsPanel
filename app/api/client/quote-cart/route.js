@@ -81,16 +81,25 @@ export async function GET(req) {
       `
       SELECT
         p.id AS productId,
-        p.product_name AS name,
+        CASE 
+  WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
+  THEN CONCAT(cpp.prefix, ' | ', p.product_name)
+  ELSE p.product_name
+END AS name,
         p.featured_image,
           p.stock_qty,
         rp.quantity AS qty,
         rp.quoted_price AS price
       FROM rfq_products rp
       JOIN products p ON p.id = rp.product_id
+
+  LEFT JOIN company_product_pricing cpp  
+ON cpp.product_id = p.id
+ AND cpp.company_id = ? 
+
       WHERE rp.rfq_id = ?
       `,
-      [rfq.id]
+      [companyId, rfq.id]
     );
 
     const subtotal = items.reduce(

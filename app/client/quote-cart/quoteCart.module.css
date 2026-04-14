@@ -44,7 +44,31 @@ padding-left: 15%;
 }
 
 
+.billingTypeWrapper {
+  margin-top: 8px;
+}
 
+.radioRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #5c4433; /* theme brown */
+  cursor: pointer;
+}
+
+.radioRow input {
+  accent-color: #c46b2e; /* orange theme */
+  cursor: pointer;
+  margin: 0;
+}
+
+/* optional hover (very light) */
+.radioRow:hover {
+  color: #c46b2e;
+}
 
 /* ================= MOBILE-FIRST BASE ================= */
 @media (max-width: 480px) {
@@ -356,6 +380,14 @@ padding-left: 20%;
   text-transform: uppercase;
  color: var(--text-primary);
   margin-bottom: 2px;
+}
+.sectionLabel2 {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+ color: var(--text-primary);
+  margin-bottom: 8px;
 }
 
 

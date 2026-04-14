@@ -19,6 +19,7 @@ export default function QuoteCartPage() {
   const [loading, setLoading] = useState(true);
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
   const { cartCount, fetchCartCount } = useCart();
+  const [billingType, setBillingType] = useState("company"); 
   const [client, setClient] = useState({
     name: "",
     phone: "",
@@ -204,6 +205,7 @@ export default function QuoteCartPage() {
           clientName: client.name,
           clientPhone: client.phone,
           clientEmail: client.email,
+            billingType,
         }),
       });
 
@@ -473,6 +475,30 @@ export default function QuoteCartPage() {
                     }
                   />
                 </div>
+
+<div className={styles.billingTypeWrapper}>
+  <div className={styles.sectionLabel2}>Billing Type</div>
+
+  <label className={styles.radioRow}>
+    <input
+      type="radio"
+      value="company"
+      checked={billingType === "company"}
+      onChange={() => setBillingType("company")}
+    />
+    <span>Bill to Company</span>
+  </label>
+
+  <label className={styles.radioRow}>
+    <input
+      type="radio"
+      value="self"
+      checked={billingType === "self"}
+      onChange={() => setBillingType("self")}
+    />
+    <span>Bill to Myself</span>
+  </label>
+</div>
 
                 {/* ACTION */}
                 <button
