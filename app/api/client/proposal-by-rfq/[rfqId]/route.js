@@ -255,7 +255,7 @@ export async function GET(req, { params }) {
         p.place,
         p.status,
         cb.gstin,
-        cb.sez_type   -- ✅ ADD
+        cb.sez_type  
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
       JOIN company_branches cb ON cb.id = r.branch_id 
