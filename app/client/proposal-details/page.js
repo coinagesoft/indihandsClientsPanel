@@ -341,9 +341,9 @@ export default function ProposalDetailsPage() {
                           ).toLocaleDateString("en-IN")}
                         </div>
                         <div className={`${styles.clientBlock} row `}>
-                          <div className="col-4"><strong>Client Name : </strong> {proposal.clientName}</div>
-                          <div className="col-5"><strong>Client Email : </strong> {proposal.clientEmail}</div>
-                          <div className="col-3"><strong>Client Phone : </strong> {proposal.clientPhone}</div>
+                          <div className="col-4"><strong>Client Name : </strong> {proposal.client_name}</div>
+                          <div className="col-5"><strong>Client Email : </strong> {proposal.client_email}</div>
+                          <div className="col-3"><strong>Client Phone : </strong> {proposal.client_phone}</div>
                           {/* <div><strong>Company:</strong> {proposal.company}</div> */}
 
                         </div>
