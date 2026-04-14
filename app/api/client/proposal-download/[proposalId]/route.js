@@ -29,7 +29,7 @@ function buildHTML(data) {
   const {
     proposal, sender, computedItems, charges: computedCharges,
     subtotal, cgstTotal, sgstTotal, igstTotal,
-    totalTax, grandTotal, formattedDate,isInterState 
+    totalTax, grandTotal, formattedDate,isInterState ,isSEZ
   } = data;
 
 
@@ -76,13 +76,15 @@ function buildHTML(data) {
     "38":"Ladakh"
   };
 
+    const senderStateCode = sender.gstin
+    ? sender.gstin.substring(0, 2)
+    : "";
+
 const clientStateCode = proposal.gstin
   ? proposal.gstin.substring(0, 2)
   : senderStateCode;
 
-  const senderStateCode = sender.gstin
-    ? sender.gstin.substring(0, 2)
-    : "";
+
 
   const clientStateName = stateMap[clientStateCode] || "";
   const senderStateName = stateMap[senderStateCode] || "";
@@ -94,9 +96,11 @@ const billingAddress = proposal.billing_address || "";
 const shippingAddress = proposal.shipping_address || billingAddress;
 
 const itemRows = computedItems.map((x, i) => {
-const sgstRate = isInterState ? 0 : (x.sgst_rate || 0);
-const cgstRate = isInterState ? 0 : (x.cgst_rate || 0);
-const igstRate = isInterState ? (x.igstRate || 0) : 0;
+const isIGST = isInterState || isSEZ;
+
+const sgstRate = isIGST ? 0 : (x.sgst_rate || 0);
+const cgstRate = isIGST ? 0 : (x.cgst_rate || 0);
+const igstRate = isIGST ? (x.igstRate || 0) : 0;
 
   return `
 <tr>
@@ -110,22 +114,24 @@ const igstRate = isInterState ? (x.igstRate || 0) : 0;
 <td class="tr">${x.baseAmount.toFixed(2)}</td>
 
 <td class="tr">${sgstRate}</td>
-<td class="tr">${x.sgst.toFixed(2)}</td>
+<td class="tr">${isIGST ? '0.00' : x.sgst.toFixed(2)}</td>
 
 <td class="tr">${cgstRate}</td>
-<td class="tr">${x.cgst.toFixed(2)}</td>
+<td class="tr">${isIGST ? '0.00' : x.cgst.toFixed(2)}</td>
 
 <td class="tr">${igstRate}</td>
-<td class="tr">${x.igst.toFixed(2)}</td>
+<td class="tr">${isIGST ? x.igst.toFixed(2) : '0.00'}</td>
 
 <td class="tr">${x.total.toFixed(2)}</td>
 </tr>`;
 }).join("");
 
 const chargeRows = computedCharges.map(c => {
-  const sgstRate = c.igst > 0 ? 0 : c.taxPercent / 2;
-  const cgstRate = c.igst > 0 ? 0 : c.taxPercent / 2;
-  const igstRate = c.igst > 0 ? c.taxPercent : 0;
+const isIGST = isInterState || isSEZ;
+
+const sgstRate = isIGST ? 0 : c.taxPercent / 2;
+const cgstRate = isIGST ? 0 : c.taxPercent / 2;
+const igstRate = isIGST ? c.taxPercent : 0;
 
   return `
 <tr>
@@ -625,11 +631,17 @@ export async function GET(req, { params }) {
         p.proposal_date,
         p.billing_address,
         p.shipping_address,
+        p.subtotal,
+    p.cgst_total,
+    p.sgst_total,
+    p.igst_total,
+    p.grand_total,
        CASE 
   WHEN r.billing_type = 'self' THEN p.company_name
   ELSE c.company_name
 END AS company,
         cb.gstin,
+        cb.sez_type,
         r.client_name,
         r.client_phone,
           r.billing_type
@@ -652,6 +664,7 @@ END AS company,
     const [[sender]] = await db.query(`SELECT * FROM company_info LIMIT 1`);
 
     /* ================= STATE LOGIC ================= */
+    const isSEZ = proposal.sez_type === "SEZ";
     const clientStateCode = proposal.gstin?.substring(0, 2) || "";
     const senderStateCode = sender.gstin?.substring(0, 2) || "";
     const isInterState = clientStateCode !== senderStateCode;
@@ -697,11 +710,7 @@ pr.igst_rate,
 
     const allCharges = proposalCharges.length ? proposalCharges : companyCharges;
 
-    /* ================= CALCULATE ITEMS ================= */
-    let itemSubtotal = 0;
-    let cgstTotal = 0;
-    let sgstTotal = 0;
-    let igstTotal = 0;
+  
 
 const computedItems = items.map(i => {
   const qty = +i.qty || 0;
@@ -717,17 +726,17 @@ const unitDiscount = disc
 const sgstRate = +i.sgst_rate || 0;
 const igstRate = +i.igst_rate || (cgstRate + sgstRate);
 
-if (isInterState) {
-  ig = taxable * igstRate / 100;
-} else {
-  cg = taxable * cgstRate / 100;
-  sg = taxable * sgstRate / 100;
-}
 
-  itemSubtotal += taxable;
-  cgstTotal += cg;
-  sgstTotal += sg;
-  igstTotal += ig;
+  if (isSEZ || isInterState) {
+    // ✅ ONLY IGST
+    ig = taxable * igstRate / 100;
+  } else {
+    // ✅ NORMAL CASE
+    cg = taxable * cgstRate / 100;
+    sg = taxable * sgstRate / 100;
+  }
+
+
 
   return {
     ...i,
@@ -746,24 +755,34 @@ if (isInterState) {
 });
     /* ================= CALCULATE CHARGES ================= */
     let chargeSubtotal = 0;
+  const itemSubtotal = computedItems.reduce((sum, i) => sum + i.baseAmount, 0);
+const subtotal = itemSubtotal + chargeSubtotal;
+let cgstTotal = Number(proposal.cgst_total || 0);
+let sgstTotal = Number(proposal.sgst_total || 0);
+let igstTotal = Number(proposal.igst_total || 0);
 
+const totalTax = cgstTotal + sgstTotal + igstTotal;
+const grandTotal = Number(proposal.grand_total || 0);
     const computedCharges = allCharges.map(c => {
   const amt = +c.amount || 0;
   const taxRate = +c.taxPercent || 0;
 
   let cg = 0, sg = 0, ig = 0;
 
-  if (isInterState) {
-    ig = amt * taxRate / 100;
+   if (isInterState || isSEZ) {
+    ig = taxable * igstRate / 100;
+
+    // ✅ FORCE ZERO
+    cg = 0;
+    sg = 0;
   } else {
-    cg = amt * (taxRate / 2) / 100;
-    sg = amt * (taxRate / 2) / 100;
+    cg = taxable * cgstRate / 100;
+    sg = taxable * sgstRate / 100;
+    ig = 0;
   }
 
   chargeSubtotal += amt;
-  cgstTotal += cg;
-  sgstTotal += sg;
-  igstTotal += ig;
+  
 
   return {
     label: c.label,
@@ -776,9 +795,7 @@ if (isInterState) {
   };
 });
 
-    const subtotal = itemSubtotal + chargeSubtotal;
-    const totalTax = cgstTotal + sgstTotal + igstTotal;
-    const grandTotal = subtotal + totalTax;
+
 
     /* ================= TABLE ROWS ================= */
     const itemRows = computedItems.map((x, i) => `
@@ -826,7 +843,8 @@ if (isInterState) {
       totalTax,
       grandTotal,
       formattedDate,
-       isInterState 
+      isInterState ,
+      isSEZ 
     });
 
     /* ================= PDFSHIFT ================= */

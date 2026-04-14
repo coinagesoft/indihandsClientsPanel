@@ -9,7 +9,7 @@ dotenv.config();
 //   host: "localhost",   // 🔥 IMPORTANT (not live server)
 //   user: "root",
 //   password: "NewPassword123!", // or "" if none
-//   database: "indihand_backup",     // ✅ your imported schema
+//   database: "indihand_backup",    
 //   waitForConnections: true,
 //   connectionLimit: 10,
 //   queueLimit: 0
