@@ -109,7 +109,6 @@ const igstRate = isIGST ? (x.igstRate || 0) : 0;
 <td class="tr">${x.hsn ?? ""}</td>
 <td class="tr">${x.qty}</td>
 <td class="tr">${x.rate.toFixed(2)}</td>
-<td class="tr">${x.discount.toFixed(2)}%</td>
 <td class="tr">${x.unitDiscount.toFixed(2)}</td>
 <td class="tr">${x.baseAmount.toFixed(2)}</td>
 
@@ -137,7 +136,7 @@ const igstRate = isIGST ? c.taxPercent : 0;
 <tr>
 <td></td>
 <td class="tdl">${c.label}</td>
-<td></td><td></td><td></td><td></td><td></td>
+<td></td><td></td><td></td><td></td>
 
 <td class="tr">${c.amount.toFixed(2)}</td>
 
@@ -477,7 +476,6 @@ State: ${clientStateName} | State Code: ${clientStateCode}</div>
 <th>HSN</th>
 <th>Qty</th>
 <th>Cost</th>
-<th>Disc</th>
 <th>Disc Amt</th>
 <th>Amt</th>
 <th>SGST</th>
@@ -493,7 +491,7 @@ State: ${clientStateName} | State Code: ${clientStateCode}</div>
 ${itemRows}
 ${chargeRows}
 <tr class="tbold">
-<td colspan="7">Total</td>
+<td colspan="6">Total</td>
 <td class="tr">${subtotal.toFixed(2)}</td>
 <td></td><td class="tr">${cgstTotal.toFixed(2)}</td>
 <td></td><td class="tr">${sgstTotal.toFixed(2)}</td>
