@@ -44,7 +44,7 @@ const Page = () => {
           </div>
           <div className="d-flex align-items-start gap-1 my-0">
 
-            {/* LOGOuT */}
+            {/* LOGOUT */}
             <button className="logoutBtn" onClick={handleLogout}>
               Logout
             </button>
