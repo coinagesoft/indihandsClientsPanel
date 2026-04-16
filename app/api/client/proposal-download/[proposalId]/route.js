@@ -440,7 +440,7 @@ ${sender.city || ""}, ${sender.state || ""} - ${sender.pincode || ""}<br>
 ${sender.email || ""} | ${sender.phone || ""}<br>
 ${sender.website || ""}
 </div>
-  </div>
+</div>
 
 </div>
 

@@ -44,6 +44,13 @@ const Page = () => {
           </div>
           <div className="d-flex align-items-start gap-1 my-0">
 
+
+ <button
+  className='guideBtn'
+  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+>
+  User Guide
+</button>
             {/* LOGOUT */}
             <button className="logoutBtn" onClick={handleLogout}>
               Logout

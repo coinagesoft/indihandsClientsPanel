@@ -275,7 +275,7 @@ export default function ProductDetailsPage() {
 
             {/* Breadcrumb Row */}
             <div className="row">
-              <div className='breadcrumbBox col-10'>
+              <div className='breadcrumbBox col-8'>
 
                 <Link href="/client/dashboard" className="crumbLink">
                   {product.breadcrumb.dashboard}
@@ -305,9 +305,14 @@ export default function ProductDetailsPage() {
                 </span>
 
               </div>
-              <div className="col-2 ">
+              <div className="col-4 ">
                 <div className="d-flex align-items-center justify-content-end gap-1">
-
+<button
+  className='guideBtn'
+  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+>
+  User Guide
+</button>
                   {/* LOGOUT */}
                   <button className="logoutBtn" onClick={handleLogout}>
                     Logout

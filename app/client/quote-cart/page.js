@@ -310,7 +310,12 @@ export default function QuoteCartPage() {
           <div className="d-flex justify-content-between ">
             <h4 className="pageTitle">Quote Cart</h4>
             <div className="d-flex align-items-start gap-1">
-
+<button
+  className='guideBtn'
+  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+>
+  User Guide
+</button>
               {/* LOGOUT */}
               <button className="logoutBtn" onClick={handleLogout}>
                 Logout
