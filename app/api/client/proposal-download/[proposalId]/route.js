@@ -544,7 +544,7 @@ Contact: ${sender.phone || ""} | ${sender.email || ""}
 
   <div style="text-align:center;">
     <img 
-      src="https://res.cloudinary.com/dxb1whlam/image/upload/v1771567348/stamp_wcltx2.jpg"
+      src="https://res.cloudinary.com/dxb1whlam/image/upload/v1776313892/MTDS_Pvt_Ltd_Stamp_filter_utzqag.png"
       style="width:120px; display:block; margin:0 auto 8px auto;"
     />
   </div>
