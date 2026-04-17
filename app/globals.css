@@ -326,7 +326,7 @@ td strong {
   position: relative;
   width: 36px;
   height: 36px;
-
+ margin-top: -3px;
   border-radius: 50%;
   /* background: var(--bg-card); */
   border: 1px solid rgba(162, 20, 24, 0.15);
@@ -348,24 +348,34 @@ td strong {
 /* Icon color */
 .cartIcon {
   color: var(--color-primary); /* maroon */
+  margin-top: -4px;
 }
 
 /* 🔴 Badge */
-.cartBadge {
+.cartBadge{
   position: absolute;
-  top: -6px;
+  top: -10px;
   right: -6px;
 
   background: var(--color-primary);
   color: #fff;
 
-  border-radius: 50%;
-  padding: 2px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+
+  border-radius: 999px;
 
   font-size: 10px;
   font-weight: 600;
+  line-height: 1;
 
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  white-space: nowrap;
 }
 
 
