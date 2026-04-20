@@ -136,7 +136,8 @@ const igstRate = isIGST ? c.taxPercent : 0;
 <tr>
 <td></td>
 <td class="tdl">${c.label}</td>
-<td></td><td></td><td></td><td></td>
+<td class="tr">${c.hsnCode || ""}</td>
+<td></td><td></td><td></td>
 
 <td class="tr">${c.amount.toFixed(2)}</td>
 
@@ -714,11 +715,15 @@ pr.igst_rate,
       WHERE company_id=?
     `, [proposal.company_id]);
 
-    const [proposalCharges] = await db.query(`
-      SELECT label,amount,tax_percent taxPercent
-      FROM proposal_charges
-      WHERE proposal_id=?
-    `, [proposal.id]);
+  const [proposalCharges] = await db.query(`
+  SELECT
+    label,
+    amount,
+    tax_percent AS taxPercent,
+    hsn_code AS hsnCode
+  FROM proposal_charges
+  WHERE proposal_id=?
+`, [proposal.id]);
 
     const allCharges = proposalCharges.length ? proposalCharges : companyCharges;
 
@@ -805,6 +810,7 @@ const computedCharges = allCharges.map(c => {
 
   return {
     label: c.label,
+      hsnCode: c.hsnCode || "",
     amount: amt,
     taxPercent: taxRate,
     cgst: cg,
@@ -845,7 +851,7 @@ const grandTotal = subtotal + totalTax;
       <tr>
         <td></td>
         <td>${c.label}</td>
-        <td></td>
+     <td>${c.hsnCode || ""}</td>
         <td></td>
         <td></td>
         <td></td>
