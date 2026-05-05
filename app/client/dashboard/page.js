@@ -12,6 +12,8 @@ import css from "../Footer/Footer.module.css";
 export default function DashboardPage() {
   useAuthGuard();
   const router = useRouter();
+  const [search, setSearch] = useState("");
+const [results, setResults] = useState([]);
   const { cartCount, fetchCartCount } = useCart();
   const [stats, setStats] = useState([]);
   const [recentRFQs, setRecentRFQs] = useState([]);
@@ -65,6 +67,33 @@ export default function DashboardPage() {
     loadDashboard();
   }, []);
 
+const handleSearch = async (value) => {
+  setSearch(value);
+
+  if (!value) {
+    setResults([]);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("client_token");
+
+    const res = await fetch(
+      `/api/client/globalFilter?search=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setResults(data.products || []);
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+};
+
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
@@ -95,34 +124,86 @@ export default function DashboardPage() {
         <div className={styles.dashboardCanvas} />
 
         {/* ================= STATS ================= */}
-        <div className="d-flex justify-content-between mt-0">
-          <h4 className='pageTitle'>Dashboard</h4>
-          <div className="d-flex align-items-start gap-1 my-0">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
-            {/* LOGOUT */}
-            <button className="logoutBtn" onClick={handleLogout}>
-              Logout
-            </button>
+        <div className="d-flex align-items-center mt-0">
+  
+  {/* LEFT */}
+  <div style={{ minWidth: "200px" }}>
+    <h4 className='pageTitle'>Dashboard</h4>
+  </div>
 
+  {/* CENTER (SEARCH) */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    <div className="global-search">
+      <input
+        type="text"
+        placeholder="Search products (name / code)..."
+        className="global-search-input"
+        value={search}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+
+      {search && (
+        <span
+          className="global-search-clear"
+          onClick={() => {
+            setSearch("");
+            setResults([]);
+          }}
+        >
+          ×
+        </span>
+      )}
+
+      {results.length > 0 && (
+        <div className="global-search-dropdown">
+          {results.map((item) => (
             <div
-              className="cartIconBox"
-              onClick={() => router.push("/client/quote-cart")}
+              key={item.id}
+              className="global-search-item"
+              onClick={() => {
+                setResults([]);
+                setSearch("");
+                router.push(`/client/products/${item.id}`);
+              }}
             >
-              <HiOutlineShoppingBag size={18} className="cartIcon" />
-
-              {cartCount > 0 && (
-                <span className="cartBadge">{cartCount}</span>
-              )}
+              <div className="global-search-name">
+                {item.product_name}
+              </div>
+              <div className="global-search-code">
+                Code: {item.barcode || "-"}
+              </div>
             </div>
-
-          </div>
-
+          ))}
         </div>
+      )}
+    </div>
+  </div>
+
+  {/* RIGHT */}
+  <div className="d-flex align-items-center gap-2" style={{ minWidth: "250px", justifyContent: "flex-end" }}>
+    <button
+      className='guideBtn'
+      onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+    >
+      User Guide
+    </button>
+
+    <button className="logoutBtn" onClick={handleLogout}>
+      Logout
+    </button>
+
+    <div
+      className="cartIconBox"
+      onClick={() => router.push("/client/quote-cart")}
+    >
+      <HiOutlineShoppingBag size={18} className="cartIcon" />
+      {cartCount > 0 && (
+        <span className="cartBadge">{cartCount}</span>
+      )}
+    </div>
+  </div>
+
+</div>
         <div className="row g-4 mt-2">
           {stats.map((item, index) => (
             <div key={index} className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">

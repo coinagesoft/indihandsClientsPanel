@@ -108,8 +108,9 @@ const igstRate = isIGST ? (x.igstRate || 0) : 0;
 <td class="tdl">${x.description}</td>
 <td class="tr">${x.hsn ?? ""}</td>
 <td class="tr">${x.qty}</td>
-<td class="tr">${x.rate.toFixed(2)}</td>
+       <td class="tr">${x.basePrice.toFixed(2)}</td>
 <td class="tr">${x.unitDiscount.toFixed(2)}</td>
+<td class="tr">${x.rate.toFixed(2)}</td>
 <td class="tr">${x.baseAmount.toFixed(2)}</td>
 
 <td class="tr">${sgstRate}</td>
@@ -137,7 +138,7 @@ const igstRate = isIGST ? c.taxPercent : 0;
 <td></td>
 <td class="tdl">${c.label}</td>
 <td class="tr">${c.hsnCode || ""}</td>
-<td></td><td></td><td></td>
+<td></td><td></td><td></td><td></td>
 
 <td class="tr">${c.amount.toFixed(2)}</td>
 
@@ -491,7 +492,8 @@ State: ${clientStateName} | State Code: ${clientStateCode}</div>
 <th>HSN</th>
 <th>Qty</th>
 <th>Cost</th>
-<th>Disc Amt</th>
+<th>Disc</th>
+<th>Discounted Cost</th>
 <th>Amt</th>
 <th>SGST</th>
 <th>Amt</th>
@@ -507,7 +509,7 @@ ${itemRows}
 ${chargeRows}
 <tr class="tbold">
 <td colspan="6">Total</td>
-<td class="tr">${subtotal.toFixed(2)}</td>
+<td></td><td class="tr">${subtotal.toFixed(2)}</td>
 <td></td><td class="tr">${cgstTotal.toFixed(2)}</td>
 <td></td><td class="tr">${sgstTotal.toFixed(2)}</td>
 <td></td><td class="tr">${igstTotal.toFixed(2)}</td>
@@ -691,6 +693,7 @@ END AS company,
       pr.cgst_rate,
 pr.sgst_rate,
 pr.igst_rate,
+   pr.base_price,
  CASE 
       WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
       THEN CONCAT(cpp.prefix, ' | ', pr.product_name)
@@ -742,8 +745,7 @@ const unitDiscount = disc
     const cgstRate = +i.cgst_rate || 0;
 const sgstRate = +i.sgst_rate || 0;
 const igstRate = +i.igst_rate || (cgstRate + sgstRate);
-
-
+const basePrice = +i.base_price || 0;
   if (isSEZ || isInterState) {
     // ✅ ONLY IGST
     ig = taxable * igstRate / 100;
@@ -762,6 +764,7 @@ const igstRate = +i.igst_rate || (cgstRate + sgstRate);
     discount: disc,
     amount: taxable,
     baseAmount,
+     basePrice,
     unitDiscount,
     cgst: cg,
     sgst: sg,

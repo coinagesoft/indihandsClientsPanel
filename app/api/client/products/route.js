@@ -40,10 +40,15 @@ const catalog = catalogRows?.[0] || null;
     const values = [catalogId];
   
 
-    if (search) {
-      where += ` AND p.product_name LIKE ?`;
-      values.push(`%${search}%`);
-    }
+if (search) {
+  where += `
+    AND (
+      p.product_name LIKE ?
+      OR p.barcode LIKE ?
+    )
+  `;
+  values.push(`%${search}%`, `%${search}%`);
+}
 
 
     if (stock === "in") where += ` AND p.stock_qty > 0`;

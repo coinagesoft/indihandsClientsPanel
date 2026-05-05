@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./contactus.module.css";
 import css from "../Footer/Footer.module.css";
@@ -11,7 +11,35 @@ const Page = () => {
   useAuthGuard();
   const router = useRouter();
   const { cartCount, fetchCartCount } = useCart();
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
 
+  const handleSearch = async (value) => {
+  setSearch(value);
+
+  if (!value) {
+    setResults([]);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("client_token");
+
+    const res = await fetch(
+      `/api/client/globalFilter?search=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setResults(data.products || []);
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+};
 
   const handleLogout = async () => {
     try {
@@ -44,25 +72,30 @@ const Page = () => {
           </div>
           <div className="d-flex align-items-start gap-1 my-0">
 
+
+ <button
+  className='guideBtn'
+  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+>
+  User Guide
+</button>
             {/* LOGOUT */}
             <button className="logoutBtn" onClick={handleLogout}>
               Logout
             </button>
 
-            <div
-              className="cartIconBox"
-              onClick={() => router.push("/client/quote-cart")}
-            >
-              <HiOutlineShoppingBag size={18} className="cartIcon" />
+    <div
+      className="cartIconBox"
+      onClick={() => router.push("/client/quote-cart")}
+    >
+      <HiOutlineShoppingBag size={18} className="cartIcon" />
+      {cartCount > 0 && (
+        <span className="cartBadge">{cartCount}</span>
+      )}
+    </div>
+  </div>
 
-              {cartCount > 0 && (
-                <span className="cartBadge">{cartCount}</span>
-              )}
-            </div>
-
-          </div>
-
-        </div>
+</div>
 
         <div className={styles.contactContainer}>
 
