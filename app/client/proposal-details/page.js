@@ -15,6 +15,8 @@ export default function ProposalDetailsPage() {
   useAuthGuard();
   const router = useRouter();
   const [rfqs, setRfqs] = useState([]);
+const [search, setSearch] = useState("");
+const [results, setResults] = useState([]);
   const [openRfq, setOpenRfq] = useState(null);
   const [proposalData, setProposalData] = useState({});
   const [loadingRfq, setLoadingRfq] = useState(null);
@@ -70,6 +72,33 @@ export default function ProposalDetailsPage() {
         setHasFetched(true);
       });
   }, []);
+
+  const handleSearch = async (value) => {
+  setSearch(value);
+
+  if (!value) {
+    setResults([]);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("client_token");
+
+    const res = await fetch(
+      `/api/client/globalFilter?search=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setResults(data.products || []);
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+};
 
   useEffect(() => {
     fetchCartCount();
@@ -209,34 +238,91 @@ export default function ProposalDetailsPage() {
         <div className={styles.pageContent}>
 
 
-          <div className="d-flex justify-content-between ">
-            <h4 className="pageTitle">Proposal Details</h4>
-            <div className="d-flex align-items-start gap-1">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
-              {/* LOGOUT */}
-              <button className="logoutBtn" onClick={handleLogout}>
-                Logout
-              </button>
+         <div className="d-flex align-items-center">
 
-              <div
-                className="cartIconBox"
-                onClick={() => router.push("/client/quote-cart")}
-              >
-                <HiOutlineShoppingBag size={18} className="cartIcon" />
+  {/* LEFT */}
+  <div style={{ minWidth: "220px" }}>
+    <h4 className="pageTitle">Proposal Details</h4>
+  </div>
 
-                {cartCount > 0 && (
-                  <span className="cartBadge">{cartCount}</span>
-                )}
+  {/* CENTER (SEARCH) */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    <div className="global-search">
+      <input
+        type="text"
+        placeholder="Search products (name / code)..."
+        className="global-search-input"
+        value={search}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+
+      {search && (
+        <span
+          className="global-search-clear"
+          onClick={() => {
+            setSearch("");
+            setResults([]);
+          }}
+        >
+          ×
+        </span>
+      )}
+
+      {results.length > 0 && (
+        <div className="global-search-dropdown">
+          {results.map((item) => (
+            <div
+              key={item.id}
+              className="global-search-item"
+              onClick={() => {
+                setResults([]);
+                setSearch("");
+                router.push(`/client/products/${item.id}`);
+              }}
+            >
+              <div className="global-search-name">
+                {item.product_name}
               </div>
-
+              <div className="global-search-code">
+                Code: {item.barcode || "-"}
+              </div>
             </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
 
-          </div>
+  {/* RIGHT */}
+  <div
+    className="d-flex align-items-center gap-2"
+    style={{ minWidth: "250px", justifyContent: "flex-end" }}
+  >
+    <button
+      className="guideBtn"
+      onClick={() =>
+        window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")
+      }
+    >
+      User Guide
+    </button>
+
+    <button className="logoutBtn" onClick={handleLogout}>
+      Logout
+    </button>
+
+    <div
+      className="cartIconBox"
+      onClick={() => router.push("/client/quote-cart")}
+    >
+      <HiOutlineShoppingBag size={18} className="cartIcon" />
+      {cartCount > 0 && (
+        <span className="cartBadge">{cartCount}</span>
+      )}
+    </div>
+  </div>
+
+</div>
           <div className="mt-4">
             {rfqs.map((rfq) => {
               const isOpen = openRfq === rfq.rfq_id;

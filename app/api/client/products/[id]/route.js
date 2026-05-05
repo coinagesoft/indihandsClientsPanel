@@ -102,12 +102,12 @@ export async function GET(req, { params }) {
       id: product.id,
       title: product.product_name,
       subtitle: "",
-catalogId: catalogMap?.catalog_id || null,
+      catalogId: catalogMap?.catalog_id || null,
       breadcrumb: {
-        dashboard: "Home",
-        products: "Products",
-        catalogName: catalog?.name || "Catalog",
-        productName: product.product_name,
+      dashboard: "Home",
+      products: "Products",
+      catalogName: catalog?.name || "Catalog",
+      productName: product.product_name,
       },
 
       description: product.description || "No description available",

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import useAuthGuard from "../hooks/useAuthGuard";
 import styles from "./terms.module.css";
 import css from "../Footer/Footer.module.css";
@@ -12,6 +12,9 @@ const Page = () => {
   useAuthGuard();
   const router = useRouter();
   const { cartCount, fetchCartCount } = useCart();
+    const [saving, setSaving] = useState(false);
+    const [search, setSearch] = useState("");
+    const [results, setResults] = useState([]);
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
@@ -21,40 +24,122 @@ const Page = () => {
     localStorage.removeItem("client_user");
     router.push("/login");
   };
+  const handleSearch = async (value) => {
+  setSearch(value);
 
+  if (!value) {
+    setResults([]);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("client_token");
+
+    const res = await fetch(
+      `/api/client/globalFilter?search=${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    setResults(data.products || []);
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+};
   return (
     <div className={` ${styles.dashboardWrapper} container-fluid`} >
       <div className={styles.dashboardCanvas} />
-      <div className="d-flex justify-content-between">
-        <div className="pageTitle">
-          Terms & Conditions
+    <div className="d-flex align-items-center">
+
+  {/* LEFT */}
+  <div style={{ minWidth: "220px" }}>
+    <div className="pageTitle">
+      Terms & Conditions
+    </div>
+  </div>
+
+  {/* CENTER (SEARCH) */}
+  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+    <div className="global-search">
+      <input
+        type="text"
+        placeholder="Search products (name / code)..."
+        className="global-search-input"
+        value={search}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+
+      {search && (
+        <span
+          className="global-search-clear"
+          onClick={() => {
+            setSearch("");
+            setResults([]);
+          }}
+        >
+          ×
+        </span>
+      )}
+
+      {results.length > 0 && (
+        <div className="global-search-dropdown">
+          {results.map((item) => (
+            <div
+              key={item.id}
+              className="global-search-item"
+              onClick={() => {
+                setResults([]);
+                setSearch("");
+                router.push(`/client/products/${item.id}`);
+              }}
+            >
+              <div className="global-search-name">
+                {item.product_name}
+              </div>
+              <div className="global-search-code">
+                Code: {item.barcode || "-"}
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="d-flex align-items-start gap-1">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
-          {/* LOGOUT */}
-          <button className="logoutBtn" onClick={handleLogout}>
-            Logout
-          </button>
+      )}
+    </div>
+  </div>
 
-          <div
-            className="cartIconBox"
-            onClick={() => router.push("/client/quote-cart")}
-          >
-            <HiOutlineShoppingBag size={18} className="cartIcon" />
+  {/* RIGHT */}
+  <div
+    className="d-flex align-items-center gap-2"
+    style={{ minWidth: "250px", justifyContent: "flex-end" }}
+  >
+    <button
+      className="guideBtn"
+      onClick={() =>
+        window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")
+      }
+    >
+      User Guide
+    </button>
 
-            {cartCount > 0 && (
-              <span className="cartBadge">{cartCount}</span>
-            )}
-          </div>
+    <button className="logoutBtn" onClick={handleLogout}>
+      Logout
+    </button>
 
-        </div>
+    <div
+      className="cartIconBox"
+      onClick={() => router.push("/client/quote-cart")}
+    >
+      <HiOutlineShoppingBag size={18} className="cartIcon" />
+      {cartCount > 0 && (
+        <span className="cartBadge">{cartCount}</span>
+      )}
+    </div>
+  </div>
 
-      </div>
+</div>
 
       <div className={styles.cardGrid}>
 

@@ -128,12 +128,12 @@ export default function ProductListingPage() {
             </div>
             <div className="col-4">
               <div className="d-flex align-items-center justify-content-end gap-1">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
+                <button
+                  className='guideBtn'
+                  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+                >
+                  User Guide
+                </button>
                 {/* LOGOUT */}
                 <button className="logoutBtn" onClick={handleLogout}>
                   Logout
@@ -174,7 +174,7 @@ export default function ProductListingPage() {
               {/* <label className={styles.label}>Search</label> */}
               <input
                 className={`form-control ${styles.input}`}
-                placeholder="Search by product name"
+                placeholder="Search by product name or code"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
@@ -236,7 +236,7 @@ export default function ProductListingPage() {
 
                     <div className={styles.productImageBox}>
                       <img
-                        src={p.featured_image || "/images/default-product-image.jpg" }
+                        src={p.featured_image || "/images/default-product-image.jpg"}
                         alt={p.product_name}
                         className={styles.productImage}
                         onError={e => (e.target.src = "/images/default-product-image.jpg")}
