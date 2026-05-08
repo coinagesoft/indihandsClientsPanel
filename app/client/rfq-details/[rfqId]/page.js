@@ -22,11 +22,19 @@ export default function RFQDetailsPage() {
   const [rfq, setRfq] = useState(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isB2C, setIsB2C] = useState(false);
   const { cartCount, fetchCartCount } = useCart();
 
 
   useEffect(() => {
     const token = localStorage.getItem("client_token");
+
+      const user = JSON.parse(
+    localStorage.getItem("client_user")
+  );
+
+  setIsB2C(user?.userType === "B2C");
+
     if (!token || !rfqId) {
       setLoading(false);
       return;
@@ -96,12 +104,12 @@ export default function RFQDetailsPage() {
         <div className={styles.dashboardCanvas} />
         <div className="d-flex justify-content-end">
           <div className="d-flex align-items-start gap-1">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
+            <button
+              className='guideBtn'
+              onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+            >
+              User Guide
+            </button>
             {/* LOGOUT */}
             <button className="logoutBtn" onClick={handleLogout}>
               Logout
@@ -133,15 +141,65 @@ export default function RFQDetailsPage() {
               {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}
             </p>
 
-            {/* CLIENT INFO */}
-            <dl className={styles.clientInfo}>
-              <dt>Client :</dt>
-              <dd>{rfq.client_name}</dd>
-              <dt>Phone :</dt>
-              <dd> {rfq.client_phone}</dd>
-              <dt>Email :</dt>
-              <dd>{rfq.client_email}</dd>
-            </dl>
+ {/* CLIENT INFO */}
+
+<div className={styles.clientInfoCompact}>
+
+  <div className={styles.infoRow}>
+    <span className={styles.infoLabel}>
+      Client Name :
+    </span>
+
+    <span>
+      {rfq.client_name || "-"}
+    </span>
+  </div>
+
+  <div className={styles.infoRow}>
+    <span className={styles.infoLabel}>
+      Phone Number :
+    </span>
+
+    <span>
+      {rfq.client_phone || "-"}
+    </span>
+  </div>
+
+  <div className={styles.infoRow}>
+    <span className={styles.infoLabel}>
+      Email Address :
+    </span>
+
+    <span>
+      {rfq.client_email || "-"}
+    </span>
+  </div>
+
+  {isB2C && (
+    <>
+      <div className={styles.infoRow}>
+        <span className={styles.infoLabel}>
+          Shipping Address :
+        </span>
+
+        <span>
+          {rfq.shipping_address || "-"}
+        </span>
+      </div>
+
+      <div className={styles.infoRow}>
+        <span className={styles.infoLabel}>
+          Billing Address :
+        </span>
+
+        <span>
+          {rfq.billing_address || "-"}
+        </span>
+      </div>
+    </>
+  )}
+
+</div>
           </div>
 
           <span className={`${styles.status} ${styles[statusKey]}`}>

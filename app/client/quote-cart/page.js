@@ -20,8 +20,12 @@ export default function QuoteCartPage() {
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
   const { cartCount, fetchCartCount } = useCart();
   const [billingType, setBillingType] = useState("company"); 
-    const [search, setSearch] = useState("");
-const [results, setResults] = useState([]);
+  const [isB2C, setIsB2C] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [billingAddress, setBillingAddress] = useState("");
+  const [sameAsShipping, setSameAsShipping] = useState(true);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
   const [client, setClient] = useState({
     name: "",
     phone: "",
@@ -32,7 +36,13 @@ const [results, setResults] = useState([]);
     phone: "",
     email: "",
   });
+useEffect(() => {
 
+  if (sameAsShipping) {
+    setBillingAddress(shippingAddress);
+  }
+
+}, [shippingAddress, sameAsShipping]);
   // 🔍 image zoom
   const [zoomImg, setZoomImg] = useState(null);
   const [toast, setToast] = useState({ message: "", type: "" });
@@ -74,6 +84,29 @@ const [results, setResults] = useState([]);
       showToast("Enter valid email address", "warning");
       return false;
     }
+    if (isB2C) {
+
+  if (!shippingAddress.trim()) {
+    showToast(
+      "Please enter shipping address",
+      "warning"
+    );
+
+    return false;
+  }
+
+  if (
+    !sameAsShipping &&
+    !billingAddress.trim()
+  ) {
+    showToast(
+      "Please enter billing address",
+      "warning"
+    );
+
+    return false;
+  }
+}
 
     return true;
   };
@@ -113,10 +146,16 @@ const [results, setResults] = useState([]);
     localStorage.removeItem("client_user");
     router.push("/login");
   };
+useEffect(() => {
+  fetchCart();
 
-  useEffect(() => {
-    fetchCartCount();
-  }, []);
+  const user = JSON.parse(
+    localStorage.getItem("client_user")
+  );
+
+  setIsB2C(user?.userType === "B2C");
+
+}, []);
 
   /* ================= FETCH CART ================= */
   const fetchCart = async () => {
@@ -140,10 +179,7 @@ const [results, setResults] = useState([]);
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchCart();
-    
-  }, []);
+
 
   /* ================= UPDATE QTY ================= */
   const updateQty = async (productId, action) => {
@@ -228,12 +264,21 @@ const [results, setResults] = useState([]);
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          clientName: client.name,
-          clientPhone: client.phone,
-          clientEmail: client.email,
-            billingType,
-        }),
+       body: JSON.stringify({
+  clientName: client.name,
+  clientPhone: client.phone,
+  clientEmail: client.email,
+
+  billingType,
+
+  shippingAddress,
+
+  billingAddress: sameAsShipping
+    ? shippingAddress
+    : billingAddress,
+
+  sameAsShipping,
+}),
       });
 
       const data = await res.json();
@@ -564,7 +609,7 @@ const [results, setResults] = useState([]);
                   />
                 </div>
 
-<div className={styles.billingTypeWrapper}>
+{/* <div className={styles.billingTypeWrapper}>
   <div className={styles.sectionLabel2}>Billing Type</div>
 
   <label className={styles.radioRow}>
@@ -586,7 +631,93 @@ const [results, setResults] = useState([]);
     />
     <span>Bill to Myself</span>
   </label>
-</div>
+</div> */}
+
+{!isB2C && (
+  <div className={styles.billingTypeWrapper}>
+    <div className={styles.sectionLabel2}>
+      Billing Type
+    </div>
+
+    <label className={styles.radioRow}>
+      <input
+        type="radio"
+        value="company"
+        checked={billingType === "company"}
+        onChange={() =>
+          setBillingType("company")
+        }
+      />
+
+      <span>Bill to Company</span>
+    </label>
+
+    <label className={styles.radioRow}>
+      <input
+        type="radio"
+        value="self"
+        checked={billingType === "self"}
+        onChange={() =>
+          setBillingType("self")
+        }
+      />
+
+      <span>Bill to Myself</span>
+    </label>
+  </div>
+)}
+
+{isB2C && (
+  <div className={styles.clientSection}>
+
+    <div className={styles.sectionLabel2}>
+      Shipping Address
+    </div>
+
+    <textarea
+      className={`form-control ${styles.input}`}
+      rows={3}
+      placeholder="Enter shipping address"
+      value={shippingAddress}
+      onChange={(e) =>
+        setShippingAddress(e.target.value)
+      }
+    />
+
+    <label
+      className={styles.radioRow}
+      style={{ marginTop: "10px" }}
+    >
+      <input
+        type="checkbox"
+        checked={sameAsShipping}
+        onChange={(e) =>
+          setSameAsShipping(e.target.checked)
+        }
+      />
+
+      <span>Billing same as shipping</span>
+    </label>
+
+    {!sameAsShipping && (
+      <>
+        <div className={styles.sectionLabel2}>
+          Billing Address
+        </div>
+
+        <textarea
+          className={`form-control ${styles.input}`}
+          rows={3}
+          placeholder="Enter billing address"
+          value={billingAddress}
+          onChange={(e) =>
+            setBillingAddress(e.target.value)
+          }
+        />
+      </>
+    )}
+  </div>
+)}
 
                 {/* ACTION */}
                 <button
