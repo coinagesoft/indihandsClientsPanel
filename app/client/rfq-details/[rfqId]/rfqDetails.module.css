@@ -29,7 +29,23 @@
     font-family: var(--font-body);
 
 }
+.clientInfoCompact {
+  margin-top: 18px;
+}
 
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.infoLabel {
+  font-weight: 700;
+  min-width: 150px;
+  color: #111;
+}
 .header {
   display: flex;
   justify-content: space-between;

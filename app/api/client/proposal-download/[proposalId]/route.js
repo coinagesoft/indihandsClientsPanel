@@ -479,9 +479,23 @@ State: ${senderStateName} | State Code: ${senderStateCode}
 <div class="sec">
 Contact Person: ${proposal.client_name}<br>
 Contact Number: ${proposal.client_phone}<br>
-Company name: ${companyName}<br>
+${
+  proposal.rfq_type === "B2C"
+
+    ? `Customer Name: ${proposal.client_name}<br>`
+
+    : `Company Name: ${companyName}<br>`
+}
 Address: ${billingAddress}<br>
-<b>GSTIN: ${isSelf ? "" : (proposal.gstin || "")}</b><br>
+${
+  proposal.rfq_type === "B2B"
+  ? `<b>GSTIN: ${
+      isSelf
+        ? ""
+        : (proposal.gstin || "")
+    }</b><br>`
+  : ""
+}
 State: ${clientStateName} | State Code: ${clientStateCode}</div>
 </div>
 <table>
@@ -626,6 +640,7 @@ Contact: ${sender.phone || ""} | ${sender.email || ""}
 </html>`;
 }
 
+
 /* ================= API ================= */
 export async function GET(req, { params }) {
   try {
@@ -647,23 +662,44 @@ export async function GET(req, { params }) {
         p.billing_address,
         p.shipping_address,
         p.subtotal,
-    p.cgst_total,
-    p.sgst_total,
-    p.igst_total,
-    p.grand_total,
-       CASE 
-  WHEN r.billing_type = 'self' THEN p.company_name
+        p.cgst_total,
+        p.sgst_total,
+        p.igst_total,
+        p.grand_total,
+
+CASE
+
+  WHEN r.rfq_type = 'B2C'
+  THEN r.client_name
+
+  WHEN r.billing_type = 'self'
+  THEN p.company_name
+
   ELSE c.company_name
+
+
 END AS company,
-        cb.gstin,
+        CASE
+  WHEN r.rfq_type = 'B2C'
+  THEN NULL
+  ELSE cb.gstin
+END AS gstin,
         cb.sez_type,
         r.client_name,
         r.client_phone,
-          r.billing_type
+        r.billing_type,
+        r.rfq_type,
+        r.customer_id
       FROM proposals p
       JOIN rfqs r ON r.id = p.rfq_id
-      JOIN companies c ON c.id = r.company_id
-      JOIN company_branches cb ON cb.id = r.branch_id
+  LEFT JOIN companies c
+  ON c.id = r.company_id
+
+LEFT JOIN company_branches cb
+  ON cb.id = r.branch_id
+
+
+
       WHERE p.id = ?
     `, [proposalIdNum]);
 
@@ -682,34 +718,65 @@ END AS company,
     const isSEZ = proposal.sez_type === "SEZ";
     const clientStateCode = proposal.gstin?.substring(0, 2) || "";
     const senderStateCode = sender.gstin?.substring(0, 2) || "";
-    const isInterState = clientStateCode !== senderStateCode;
+const isInterState =
 
+  proposal.rfq_type === "B2C"
+
+    ? false
+
+    : (
+        clientStateCode !==
+        senderStateCode
+      );
     /* ================= ITEMS ================= */
     const [items] = await db.query(`
       SELECT 
         pi.quantity qty,
         pi.rate,
         pi.discount,
-      pr.cgst_rate,
-pr.sgst_rate,
-pr.igst_rate,
-   pr.base_price,
- CASE 
-      WHEN cpp.prefix IS NOT NULL AND cpp.prefix != ''
-      THEN CONCAT(cpp.prefix, ' | ', pr.product_name)
-      ELSE pr.product_name
-    END AS description,
-        pr.hsn
-      FROM proposal_items pi
-      JOIN products pr ON pr.id = pi.product_id
+        pr.cgst_rate,
+        pr.sgst_rate,
+        pr.igst_rate,
+        pr.base_price,
+      CASE
 
-  LEFT JOIN company_product_pricing cpp
-    ON cpp.product_id = pr.id
-    AND cpp.company_id = ?
+  WHEN ? = 'B2B'
+   AND cpp.prefix IS NOT NULL
+   AND cpp.prefix != ''
+
+  THEN CONCAT(
+    cpp.prefix,
+    ' | ',
+    pr.product_name
+  )
+
+  ELSE pr.product_name
+
+END AS description,
+        pr.hsn
+        FROM proposal_items pi
+        JOIN products pr ON pr.id = pi.product_id
+
+LEFT JOIN company_product_pricing cpp
+  ON cpp.product_id = pr.id
+ AND cpp.company_id = ?
+
+LEFT JOIN customer_product_pricing custp
+  ON custp.product_id = pr.id
+ AND custp.customer_id = ?
 
       WHERE pi.proposal_id = ?
       ORDER BY pi.id
-    `, [proposal.company_id, proposal.id]);
+  `, [
+
+  proposal.rfq_type,
+
+  proposal.company_id || 0,
+
+  proposal.customer_id || 0,
+
+  proposal.id
+]);
 
     /* ================= CHARGES ================= */
     const [companyCharges] = await db.query(`

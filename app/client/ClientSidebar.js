@@ -1,14 +1,14 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./sidebar.module.css";
 
 export default function ClientSidebar({ collapsed, setCollapsed }) {
   const pathname = usePathname();
   const router = useRouter();
-
+const [customerType, setCustomerType] = useState("");
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
@@ -19,23 +19,40 @@ export default function ClientSidebar({ collapsed, setCollapsed }) {
     router.push("/login");
   };
 
-  const menu = [
-    { name: "Dashboard", path: "/client/dashboard", icon: "ri-home-4-line" },
-    { name: "Product Catalog", path: "/client/product-catalog", icon: "ri-shopping-bag-3-line" },
-    { name: "Quote Cart", path: "/client/quote-cart", icon: "ri-shopping-cart-line" },
-    { name: "RFQ History", path: "/client/rfq-history", icon: "ri-file-list-3-line" },
-    { name: "Proposal Details", path: "/client/proposal-details", icon: "ri-file-text-line" },
-    { name: "Profile", path: "/client/profile", icon: "ri-user-3-line" },
-    { name: "Process of Packing", path: "/client/process-packing", icon: "ri-box-3-line" },
-    { name: "Terms & Conditions", path: "/client/terms", icon: "ri-file-shield-2-line" },
-    { name: "Contact Us", path: "/client/contactus", icon: "ri-customer-service-2-line" },
-      {
-    name: "Pay Here",
-    path: "https://formpayment.getepay.in/forms/survey/WygqPGELe3yrb698jZX1",
-    icon: "ri-secure-payment-line",
-    external: true
-  },
-  ];
+  useEffect(() => {
+  const user = JSON.parse(
+    localStorage.getItem("client_user") || "{}"
+  );
+
+  setCustomerType(user.userType || "");
+}, []);
+const menu = [
+  { name: "Dashboard", path: "/client/dashboard", icon: "ri-home-4-line" },
+  { name: "Product Catalog", path: "/client/product-catalog", icon: "ri-shopping-bag-3-line" },
+  { name: "Quote Cart", path: "/client/quote-cart", icon: "ri-shopping-cart-line" },
+  { name: "RFQ History", path: "/client/rfq-history", icon: "ri-file-list-3-line" },
+  { name: "Proposal Details", path: "/client/proposal-details", icon: "ri-file-text-line" },
+ ...(customerType !== "B2C"
+  ? [{
+      name: "Profile",
+      path: "/client/profile",
+      icon: "ri-user-3-line"
+    }]
+  : []),
+  { name: "Process of Packing", path: "/client/process-packing", icon: "ri-box-3-line" },
+  { name: "Terms & Conditions", path: "/client/terms", icon: "ri-file-shield-2-line" },
+  { name: "Contact Us", path: "/client/contactus", icon: "ri-customer-service-2-line" },
+
+  /* ✅ ONLY FOR B2B */
+  ...(customerType !== "B2C"
+    ? [{
+        name: "Pay Here",
+        path: "https://formpayment.getepay.in/forms/survey/WygqPGELe3yrb698jZX1",
+        icon: "ri-secure-payment-line",
+        external: true
+      }]
+    : [])
+];
 
 
   return (

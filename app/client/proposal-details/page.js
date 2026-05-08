@@ -25,6 +25,50 @@ const [results, setResults] = useState([]);
   const [hasFetched, setHasFetched] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "" });
   const { cartCount, fetchCartCount } = useCart();
+const [showPaymentModal, setShowPaymentModal] =
+  useState(false);
+
+const [selectedProposal, setSelectedProposal] =
+  useState(null);
+
+const [paymentForm, setPaymentForm] =
+  useState({
+
+    fullName: "",
+
+    email: "",
+
+    phone: "",
+
+    billingAddress: "",
+
+    gstin: "",
+
+    companyName: "",
+  });
+
+const handlePayNow = (proposal) => {
+
+  setSelectedProposal(proposal);
+
+  setPaymentForm({
+
+    fullName: "",
+
+    email: "",
+
+    phone: "",
+
+    billingAddress: "",
+
+    gstin: "",
+
+    companyName: "",
+  });
+
+  setShowPaymentModal(true);
+};
+
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast({ message: "", type: "" }), 3000);
@@ -147,64 +191,222 @@ const [results, setResults] = useState([]);
     router.push("/login");
   };
   /* ================= APPROVE / REJECT ================= */
-  const updateStatus = async (proposalId, status, rfqId) => {
-    if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
+const updateStatus = async (proposalId, status, rfqId) => {
+  if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
 
-    const token = localStorage.getItem("client_token");
-    if (!token) {
-      showToast("Unauthorized", "error");
+  const token = localStorage.getItem("client_token");
+  if (!token) {
+    showToast("Unauthorized", "error");
+    return;
+  }
+
+  const actionKey = `${status.toLowerCase()}-${rfqId}`;
+  setActionLoading(actionKey);
+
+  try {
+    /* 1️⃣ Proposal status update */
+    const res1 = await fetch("/api/client/proposal-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ proposalId, status }),
+    });
+
+    const data1 = await res1.json();
+
+// 🔍 DEBUG
+console.log("=== PROPOSAL STATUS RESPONSE ===", data1);
+console.log("mailSent:", data1.mailSent);
+console.log("res1.ok:", res1.ok);
+    if (!res1.ok) {
+      showToast("Failed to update proposal", "error");
       return;
     }
 
-    const actionKey = `${status.toLowerCase()}-${rfqId}`;
-    setActionLoading(actionKey);
+    /* 2️⃣ RFQ stock update — ✅ Authorization header added */
+    const rfqStatus = status === "Approved" ? "Accepted" : "Rejected";
 
-    try {
-      /* 1️⃣ proposal update */
-      const res1 = await fetch("/api/client/proposal-status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ proposalId, status }),
-      });
+    const res2 = await fetch(`/api/client/rfqs/${rfqId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ was missing
+      },
+      body: JSON.stringify({ status: rfqStatus }),
+    });
 
-      const data1 = await res1.json();
-
-      if (!res1.ok) {
-        showToast("Failed to update proposal", "error");
-        return;
-      }
-
-      /* 2️⃣ RFQ stock */
-      const rfqStatus =
-        status === "Approved" ? "Accepted" : "Rejected";
-
-      await fetch(`/api/client/rfqs/${rfqId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: rfqStatus }),
-      });
-
-      /* 3️⃣ Toast with email info */
-      if (status === "Approved") {
-        showToast(
-          data1.mailSent
-            ? "Proposal approved & email sent ✅"
-            : "Proposal approved (email failed)",
-          data1.mailSent ? "success" : "warning"
-        );
-      } else {
-        showToast("Proposal rejected", "warning");
-      }
-
-      await loadProposal(rfqId, true);
-
-    } finally {
-      setActionLoading(null);
+    if (!res2.ok) {
+      console.error("❌ RFQ PATCH failed:", await res2.json());
     }
+
+    /* 3️⃣ Toast */
+    if (status === "Approved") {
+      showToast(
+        data1.mailSent
+          ? "Proposal approved & email sent ✅"
+          : "Proposal approved (email failed)",
+        data1.mailSent ? "success" : "warning"
+      );
+    } else {
+      showToast("Proposal rejected", "warning");
+    }
+
+    await loadProposal(rfqId, true);
+
+  } finally {
+    setActionLoading(null);
+  }
+};
+
+  const loadRazorpayScript = () => {
+
+  return new Promise((resolve) => {
+
+    const script =
+      document.createElement("script");
+
+    script.src =
+      "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.onload = () => {
+      resolve(true);
+    };
+
+    script.onerror = () => {
+      resolve(false);
+    };
+
+    document.body.appendChild(script);
+  });
+};
+
+const startRazorpayPayment = async () => {
+
+  const loaded =
+    await loadRazorpayScript();
+
+  if (!loaded) {
+    showToast(
+      "Razorpay failed to load",
+      "error"
+    );
+    return;
+  }
+
+  const token =
+    localStorage.getItem("client_token");
+
+  const res = await fetch(
+    "/api/client/payments/create-order",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${token}`
+      },
+
+    body: JSON.stringify({
+
+  proposalId:
+    selectedProposal.id,
+
+  customerData:
+    paymentForm
+})
+    }
+  );
+
+  const order = await res.json();
+console.log(order);
+  const options = {
+
+  key:
+  order.key,
+
+    amount:
+      order.amount,
+
+    currency:
+      "INR",
+
+    name:
+      "IndiHands",
+
+    description:
+      selectedProposal
+        .proposal_number,
+
+    order_id:
+      order.id,
+
+    handler:
+      async function (response) {
+
+        const verifyRes =
+          await fetch(
+            "/api/client/payments/verify",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                Authorization:
+                  `Bearer ${token}`
+              },
+
+              body: JSON.stringify({
+
+                proposalId:
+                  selectedProposal.id,
+
+                razorpay:
+                  response,
+
+                customerData:
+                  paymentForm
+              })
+            }
+          );
+
+        const verifyData =
+          await verifyRes.json();
+
+        if (verifyData.success) {
+
+          showToast(
+            "Payment Successful"
+          );
+
+          setShowPaymentModal(false);
+
+          await loadProposal(
+            selectedProposal.rfq_id,
+            true
+          );
+
+        } else {
+
+          showToast(
+            "Payment verification failed",
+            "error"
+          );
+        }
+      }
   };
+
+  const paymentObject =
+    new window.Razorpay(options);
+
+  paymentObject.open();
+};
 
   /* ================= PAGE-LEVEL LOADER ================= */
   if (pageLoading && !hasFetched) {
@@ -618,7 +820,38 @@ const [results, setResults] = useState([]);
                         {/* ================= ACTION BAR ================= */}
                         <div className={styles.actionBar}>
 
+{
+  proposal.payment_status === "Paid" &&
+  proposal.invoice_id && (
 
+    <a
+      href={`/api/client/invoice/${proposal.invoice_id}`}
+      target="_blank"
+      className="btn btn-success"
+    >
+      Download Invoice
+    </a>
+  )
+}
+
+{proposal.rfq_type === "B2C" &&
+proposal.status === "Approved" &&
+proposal.payment_status !== "Paid" && (
+
+  <button
+    className={`${styles.actionBtn} ${styles.approveBtn}`}
+   onClick={() =>
+  handlePayNow({
+    ...proposal,
+
+    grandTotal:
+      totals.grandTotal
+  })
+}
+  >
+    Pay Now
+  </button>
+)}
                           {proposal?.status !== "Rejected" && (
                             <button
                               className={`${styles.actionBtn} ${styles.secondaryBtn}`}
@@ -626,7 +859,7 @@ const [results, setResults] = useState([]);
                                 window.open(`/api/client/proposal-download/${rfq.proposal_id}`)
                               }
                             >
-                              Download PDF
+                              Download Proposal
                             </button>
 
                             
@@ -674,7 +907,105 @@ const [results, setResults] = useState([]);
           </div>
         </div>
 
+{showPaymentModal && (
 
+  <div className={styles.paymentOverlay}>
+
+    <div className={styles.paymentModal}>
+
+      <h4 className="mb-3">
+        Complete Payment
+      </h4>
+
+      <input
+        className="form-control mb-2"
+        placeholder="Full Name"
+        value={paymentForm.fullName}
+        onChange={(e) =>
+          setPaymentForm({
+            ...paymentForm,
+            fullName: e.target.value
+          })
+        }
+      />
+
+      <input
+        className="form-control mb-2"
+        placeholder="Email"
+        value={paymentForm.email}
+        onChange={(e) =>
+          setPaymentForm({
+            ...paymentForm,
+            email: e.target.value
+          })
+        }
+      />
+
+      <input
+        className="form-control mb-2"
+        placeholder="Phone"
+        value={paymentForm.phone}
+        onChange={(e) =>
+          setPaymentForm({
+            ...paymentForm,
+            phone: e.target.value
+          })
+        }
+      />
+<input
+  className="form-control mb-2"
+  placeholder="Company Name"
+  value={paymentForm.companyName}
+  onChange={(e) =>
+    setPaymentForm({
+      ...paymentForm,
+      companyName: e.target.value
+    })
+  }
+/>
+      <textarea
+        className="form-control mb-2"
+        placeholder="Billing Address"
+        value={paymentForm.billingAddress}
+        onChange={(e) =>
+          setPaymentForm({
+            ...paymentForm,
+            billingAddress: e.target.value
+          })
+        }
+      />
+      <input
+  className="form-control mb-2"
+  placeholder="GSTIN (Optional)"
+  value={paymentForm.gstin}
+  onChange={(e) =>
+    setPaymentForm({
+      ...paymentForm,
+      gstin: e.target.value
+    })
+  }
+/>
+
+      <button
+        className="btn btn-primary w-100"
+        onClick={startRazorpayPayment}
+      >
+        Proceed To Pay
+      </button>
+
+      <button
+        className="btn btn-light w-100 mt-2"
+        onClick={() =>
+          setShowPaymentModal(false)
+        }
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+)}
         <footer className={`${css.proposalDetails_Footer} `}>
 
           <div className={css.designLayer}></div>
