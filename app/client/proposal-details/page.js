@@ -191,20 +191,85 @@ const handlePayNow = (proposal) => {
     router.push("/login");
   };
   /* ================= APPROVE / REJECT ================= */
+// const updateStatus = async (proposalId, status, rfqId) => {
+//   if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
+
+//   const token = localStorage.getItem("client_token");
+//   if (!token) {
+//     showToast("Unauthorized", "error");
+//     return;
+//   }
+
+//   const actionKey = `${status.toLowerCase()}-${rfqId}`;
+//   setActionLoading(actionKey);
+
+//   try {
+//     /* 1️⃣ Proposal status update */
+//     const res1 = await fetch("/api/client/proposal-status", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({ proposalId, status }),
+//     });
+
+//     const data1 = await res1.json();
+
+// // 🔍 DEBUG
+// console.log("=== PROPOSAL STATUS RESPONSE ===", data1);
+// console.log("mailSent:", data1.mailSent);
+// console.log("res1.ok:", res1.ok);
+//     if (!res1.ok) {
+//       showToast("Failed to update proposal", "error");
+//       return;
+//     }
+
+//     /* 2️⃣ RFQ stock update — ✅ Authorization header added */
+//     const rfqStatus = status === "Approved" ? "Accepted" : "Rejected";
+
+//     const res2 = await fetch(`/api/client/rfqs/${rfqId}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`, // ✅ was missing
+//       },
+//       body: JSON.stringify({ status: rfqStatus }),
+//     });
+
+//     if (!res2.ok) {
+//       console.error("❌ RFQ PATCH failed:", await res2.json());
+//     }
+
+//     /* 3️⃣ Toast */
+//     if (status === "Approved") {
+//       showToast(
+//         data1.mailSent
+//           ? "Proposal approved & email sent ✅"
+//           : "Proposal approved (email failed)",
+//         data1.mailSent ? "success" : "warning"
+//       );
+//     } else {
+//       showToast("Proposal rejected", "warning");
+//     }
+
+//     await loadProposal(rfqId, true);
+
+//   } finally {
+//     setActionLoading(null);
+//   }
+// };
+
 const updateStatus = async (proposalId, status, rfqId) => {
   if (!confirm(`Are you sure you want to ${status} this proposal?`)) return;
 
   const token = localStorage.getItem("client_token");
-  if (!token) {
-    showToast("Unauthorized", "error");
-    return;
-  }
+  if (!token) { showToast("Unauthorized", "error"); return; }
 
   const actionKey = `${status.toLowerCase()}-${rfqId}`;
   setActionLoading(actionKey);
 
   try {
-    /* 1️⃣ Proposal status update */
     const res1 = await fetch("/api/client/proposal-status", {
       method: "POST",
       headers: {
@@ -215,34 +280,26 @@ const updateStatus = async (proposalId, status, rfqId) => {
     });
 
     const data1 = await res1.json();
+    if (!res1.ok) { showToast("Failed to update proposal", "error"); return; }
 
-// 🔍 DEBUG
-console.log("=== PROPOSAL STATUS RESPONSE ===", data1);
-console.log("mailSent:", data1.mailSent);
-console.log("res1.ok:", res1.ok);
-    if (!res1.ok) {
-      showToast("Failed to update proposal", "error");
-      return;
-    }
-
-    /* 2️⃣ RFQ stock update — ✅ Authorization header added */
     const rfqStatus = status === "Approved" ? "Accepted" : "Rejected";
-
     const res2 = await fetch(`/api/client/rfqs/${rfqId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // ✅ was missing
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ status: rfqStatus }),
     });
+    if (!res2.ok) console.error("❌ RFQ PATCH failed:", await res2.json());
 
-    if (!res2.ok) {
-      console.error("❌ RFQ PATCH failed:", await res2.json());
-    }
-
-    /* 3️⃣ Toast */
+    // ✅ Auto-download proposal PDF on approve
     if (status === "Approved") {
+      const proposalId_for_download = rfqs.find(r => r.rfq_id === rfqId)?.proposal_id;
+      if (proposalId_for_download) {
+        window.open(`/api/client/proposal-download/${proposalId_for_download}`, "_blank");
+      }
+
       showToast(
         data1.mailSent
           ? "Proposal approved & email sent ✅"
@@ -259,7 +316,6 @@ console.log("res1.ok:", res1.ok);
     setActionLoading(null);
   }
 };
-
   const loadRazorpayScript = () => {
 
   return new Promise((resolve) => {
@@ -407,6 +463,17 @@ key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
   paymentObject.open();
 };
 
+// ✅ Auto-load proposals for B2B RFQs once rfqs list is available
+useEffect(() => {
+  if (rfqs.length === 0) return;
+
+  rfqs.forEach((rfq) => {
+    if (rfq.rfq_type === "B2B" && rfq.proposal_id) {
+      loadProposal(rfq.rfq_id);
+    }
+  });
+}, [rfqs]); // ← runs whenever rfqs updates
+
   /* ================= PAGE-LEVEL LOADER ================= */
   if (pageLoading && !hasFetched) {
     return <PageWrapper loading={true} />;
@@ -539,10 +606,98 @@ key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
               const canTakeAction =
                 proposal && ["Pending", "Sent"].includes(proposal.status);
 
+const isB2B = rfq.rfq_type === "B2B";
+
+
               return (
-                <div key={rfq.rfq_id} className={styles.accordionCard}>
-                  {/* ================= HEADER ================= */}
-                  <div
+  <div key={rfq.rfq_id} className={styles.accordionCard}>
+
+    {/* ================= B2B SIMPLE CARD ================= */}
+{isB2B ? (
+  <div className={styles.accordionHeader} style={{ cursor: "default" }}>
+
+    {/* LEFT */}
+    <div>
+      <div className={styles.rfqTitle}>
+        {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
+      </div>
+      <div className={styles.rfqMeta}>
+        Quotation #{proposal?.proposal_number || "-"}
+      </div>
+    </div>
+
+    {/* RIGHT */}
+    <div className="d-flex align-items-center gap-3 flex-wrap">
+
+      {/* STATUS */}
+{proposal && (
+  <span className={`${styles.status} ${styles[statusKey]}`}>
+    <span className={styles.statusDot} />
+    {/* ✅ Clean label */}
+    {proposal.status === "Sent" || proposal.status === "Pending"
+      ? "Awaiting Response"
+      : proposal.status}
+  </span>
+)}
+
+      {/* DOWNLOAD PROPOSAL */}
+      {/* {proposal?.status !== "Rejected" && (
+        <button
+          className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+          onClick={() =>
+            window.open(`/api/client/proposal-download/${rfq.proposal_id}`)
+          }
+        >
+          Download
+        </button>
+      )} */}
+
+      {/* DOWNLOAD INVOICE */}
+      {proposal?.payment_status === "Paid" && proposal?.invoice_id && (
+        <a href={`/api/client/invoice/${proposal.invoice_id}`}
+          target="_blank"
+          className={`${styles.actionBtn} ${styles.secondaryBtn} text-decoration-none`}
+        >
+          Download Invoice
+        </a>
+      )}
+
+      {/* REJECT */}
+      {canTakeAction && (
+        <button
+          className={`${styles.actionBtn} ${styles.rejectBtn}`}
+          disabled={actionLoading === `rejected-${rfq.rfq_id}`}
+          onClick={() => updateStatus(proposal.id, "Rejected", rfq.rfq_id)}
+        >
+          {actionLoading === `rejected-${rfq.rfq_id}`
+            ? <span className={styles.btnLoader}></span>
+            : "Reject"}
+        </button>
+      )}
+
+      {/* APPROVE */}
+      {canTakeAction && (
+        <button
+          className={`${styles.actionBtn} ${styles.approveBtn}`}
+          disabled={actionLoading === `approved-${rfq.rfq_id}`}
+          onClick={() => updateStatus(proposal.id, "Approved", rfq.rfq_id)}
+        >
+          {actionLoading === `approved-${rfq.rfq_id}`
+            ? <span className={styles.btnLoader}></span>
+            : "Approve"}
+        </button>
+      )}
+
+    </div>
+    </div>
+
+) : (
+
+      <>
+        {/* ================= EXISTING B2C ACCORDION ================= */}
+
+       
+            <div
                     className={styles.accordionHeader}
                     onClick={() => {
                       setOpenRfq(isOpen ? null : rfq.rfq_id);
@@ -607,8 +762,12 @@ key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
 
                   </div>
 
-                  {/* ================= BODY ================= */}
-                  <div
+        <div
+          className={`${styles.accordionBody} ${
+            isOpen ? styles.open : ""
+          }`}
+        >
+            <div
                     className={`${styles.accordionBody} ${isOpen ? styles.open : ""
                       }`}
                   >
@@ -900,8 +1059,12 @@ proposal.payment_status !== "Paid" && (
                       </>
                     )}
                   </div>
-                </div>
-              );
+        </div>
+      </>
+    )}
+
+  </div>
+);
             })}
           </div>
         </div>
@@ -984,13 +1147,13 @@ proposal.payment_status !== "Paid" && (
     })
   }
 />
-
-      <button
-        className="btn btn-primary w-100"
-        onClick={startRazorpayPayment}
-      >
-        Proceed To Pay
-      </button>
+<button
+  className={`${styles.actionBtn} ${styles.secondaryBtn} w-100 text-center`}
+  onClick={startRazorpayPayment}
+  disabled={actionLoading === "payment"}
+>
+  {actionLoading === "payment" ? "Processing..." : "Proceed To Pay"}
+</button>
 
       <button
         className="btn btn-light w-100 mt-2"
