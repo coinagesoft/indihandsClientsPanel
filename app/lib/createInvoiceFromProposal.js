@@ -82,37 +82,61 @@ export async function createInvoiceFromProposal({
 
   const grandTotal = subtotal + cgstTotal + sgstTotal + igstTotal;
 
-  /* ================= INVOICE NUMBER ================= */
-  const invoiceType =
+/* ================= INVOICE NUMBER ================= */
+
+const invoiceType =
   proposal.rfq_type === "B2C"
     ? "B2C"
     : "B2B";
 
 const prefix =
   invoiceType === "B2C"
-    ? "CUS-INV"
+    ? "INV-CUS"
     : "INV";
 
-const [[lastInvoice]] = await connection.query(`
-  SELECT invoice_number
-  FROM invoices
-  WHERE invoice_for = ?
-  ORDER BY id DESC
-  LIMIT 1
-`, [invoiceType]);
+/* DATE PART */
+const now = new Date();
+
+const year = now.getFullYear();
+
+const month = String(
+  now.getMonth() + 1
+).padStart(2, "0");
+
+const day = String(
+  now.getDate()
+).padStart(2, "0");
+
+const datePart =
+  `${year}${month}${day}`;
+
+/* LAST SERIAL */
+const [[lastInvoice]] =
+  await connection.query(`
+    SELECT invoice_number
+    FROM invoices
+    WHERE invoice_for = ?
+    ORDER BY id DESC
+    LIMIT 1
+  `, [invoiceType]);
 
 let nextNumber = 1;
 
 if (lastInvoice?.invoice_number) {
-  const match = lastInvoice.invoice_number.match(/(\d+)$/);
+
+  const match =
+    lastInvoice.invoice_number
+      .match(/(\d+)$/);
 
   if (match) {
-    nextNumber = Number(match[1]) + 1;
+    nextNumber =
+      Number(match[1]) + 1;
   }
 }
 
+/* FINAL NUMBER */
 const invoiceNumber =
-  `${prefix}-${String(nextNumber).padStart(4, "0")}`;
+  `${prefix}-${datePart}-${String(nextNumber).padStart(3, "0")}`;
 
   /* ================= INSERT INVOICE ================= */
   const [invoiceResult] = await connection.query(`

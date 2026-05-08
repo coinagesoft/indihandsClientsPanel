@@ -827,7 +827,7 @@ console.log(order);
     <a
       href={`/api/client/invoice/${proposal.invoice_id}`}
       target="_blank"
-      className="btn btn-success"
+       className={`${styles.actionBtn} ${styles.secondaryBtn} text-decoration-none`}
     >
       Download Invoice
     </a>
@@ -839,7 +839,7 @@ proposal.status === "Approved" &&
 proposal.payment_status !== "Paid" && (
 
   <button
-    className={`${styles.actionBtn} ${styles.approveBtn}`}
+    className={`${styles.actionBtn} ${styles.secondaryBtn}`}
    onClick={() =>
   handlePayNow({
     ...proposal,

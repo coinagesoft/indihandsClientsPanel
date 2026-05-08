@@ -77,7 +77,7 @@ function buildHTML({ invoice, payment, proposal, sender,  customerGSTIN,
 @page { size: A4; margin: 0; }
 body { margin: 0; padding: 10mm; font-family: Segoe UI, Arial, sans-serif; }
 .page { width: 100%; min-height: 277mm; display: flex; flex-direction: column; }
-.hdr { display: flex; justify-content: flex-end; margin-bottom: 14px; min-height: 100px; }
+.hdr{ position:relative; display:flex; justify-content:flex-end; margin-bottom:14px; min-height:200px; width:100%; }
 .hdr img { width: 190px; height: 60px; object-fit: contain; }
 .box { border: 1px solid #8c8c8c; }
 .strip { background: #f2f2f2; text-align: center; font-weight: 700; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #8c8c8c; }
@@ -114,7 +114,7 @@ body { margin: 0; padding: 10mm; font-family: Segoe UI, Arial, sans-serif; }
   </div>
 
   <div class="box">
-    <div class="strip">Tax Invoice</div>
+    <div class="strip">Challan cum Tax Invoice</div>
 
     <table class="meta">
       <tr>
