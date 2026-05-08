@@ -326,8 +326,7 @@ const startRazorpayPayment = async () => {
 console.log(order);
   const options = {
 
-  key:
-  order.key,
+key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
 
     amount:
       order.amount,

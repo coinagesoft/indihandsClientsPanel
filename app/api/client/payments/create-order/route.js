@@ -164,7 +164,7 @@ export async function POST(req) {
         order.currency,
 
       key:
-        process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
+        order.key,
     });
 
   } catch (err) {
