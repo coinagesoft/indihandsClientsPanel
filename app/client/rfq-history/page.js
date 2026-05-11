@@ -222,12 +222,13 @@ export default function RFQHistoryPage() {
                     return (
                       <React.Fragment key={ rfq.rfq_id}>
                         {/* MAIN ROW */}
-                        <tr
-                          className={styles.rowClickable}
-                          onClick={() =>
-                            setExpanded(isOpen ? null : rfq.rfq_id)
-                          }
-                        >
+                     <tr
+  className={styles.rowClickable}
+  onClick={() => {
+    if (rfq.rfq_type === "B2B") return; // ← add this
+    setExpanded(isOpen ? null : rfq.rfq_id);
+  }}
+>
 <td data-label="RFQ">
                             <span className={styles.rfqBadge}>
                               {rfq.rfq_number || `RFQ-${rfq.rfq_id}`}
@@ -238,10 +239,15 @@ export default function RFQHistoryPage() {
                               rfq.created_date
                             ).toLocaleDateString("en-IN")}
                           </td>
-<td data-label="Items">{rfq.total_items}</td>
+<td data-label="Items">
+  {rfq.rfq_type === "B2B" ? "—" : rfq.total_items}
+</td>
 <td data-label="Amount">
-                            ₹ {Number(rfq.total_amount).toLocaleString()}
-                          </td>
+  {rfq.rfq_type === "B2B" 
+    ? "—" 
+    : `₹ ${Number(rfq.total_amount).toLocaleString()}`
+  }
+</td>
 <td data-label="Status">
                             <span
                               className={`${styles.status} ${styles[statusKey]}`}
@@ -250,15 +256,13 @@ export default function RFQHistoryPage() {
                               {rfq.status}
                             </span>
                           </td>
-                          <td className={styles.expandIcon}>
-                            <span
-                              className={`${styles.chevron} ${
-                                isOpen ? styles.open : ""
-                              }`}
-                            >
-                              ❯
-                            </span>
-                          </td>
+                       <td className={styles.expandIcon}>
+  {rfq.rfq_type !== "B2B" && (
+    <span className={`${styles.chevron} ${isOpen ? styles.open : ""}`}>
+      ❯
+    </span>
+  )}
+</td>
                         </tr>
 
                         {/* EXPAND ROW */}
@@ -269,39 +273,67 @@ export default function RFQHistoryPage() {
                         >
                           <td colSpan="6" className={styles.expandCell}>
                             <div className={styles.expandBox}>
-                              <div>
-                                <strong>RFQ Summary</strong>
-                                <p className="mb-0">
-                                  {rfq.total_items} products requested with a
-                                  total quoted value of ₹{" "}
-                                  {Number(
-                                    rfq.total_amount
-                                  ).toLocaleString()}
-                                  .
-                                </p>
-                              </div>
+                             <div>
+  <strong>RFQ Summary</strong>
+  <p className="mb-0">
+    {rfq.rfq_type === "B2B"
+      ? "Your request has been submitted."
+      : `${rfq.total_items} products requested with a total quoted value of ₹ ${Number(rfq.total_amount).toLocaleString()}.`
+    }
+  </p>
+</div>
 
-                              <div className={styles.expandActions}>
-                                <button
-                                  className={`${styles.actionBtn} ${styles.secondaryBtn}`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    router.push(
-                                      `/client/rfq-details/${rfq.rfq_id}`
-                                    );
-                                  }}
-                                >
-                                  View Details
-                                </button>
+                            <div className={styles.expandActions}>
 
-                                <a
-                                  href={`/api/client/rfq-download/${rfq.rfq_id}`}
-                                  className={`${styles.actionBtn} ${styles.primaryBtn}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  Download PDF
-                                </a>
-                              </div>
+  <button
+    className={`${styles.actionBtn} ${styles.secondaryBtn}`}
+    onClick={(e) => {
+      e.stopPropagation();
+      router.push(`/client/rfq-details/${rfq.rfq_id}`);
+    }}
+  >
+    View Details
+  </button>
+
+  {rfq.rfq_type === "B2B" ? (
+    rfq.download_count > 0 ? (
+      <button
+        className={`${styles.actionBtn} ${styles.primaryBtn}`}
+        disabled
+        style={{ opacity: 0.4, cursor: "not-allowed" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        Already Downloaded
+      </button>
+    ) : (
+      <a
+        href={`/api/client/rfq-download/${rfq.rfq_id}`}
+        className={`${styles.actionBtn} ${styles.primaryBtn}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          setRfqs(prev =>
+            prev.map(r =>
+              r.rfq_id === rfq.rfq_id
+                ? { ...r, download_count: 1 }
+                : r
+            )
+          );
+        }}
+      >
+        Download PDF
+      </a>
+    )
+  ) : (
+    <a
+      href={`/api/client/rfq-download/${rfq.rfq_id}`}
+      className={`${styles.actionBtn} ${styles.primaryBtn}`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      Download PDF
+    </a>
+  )}
+
+</div>
                             </div>
                           </td>
                         </tr>
