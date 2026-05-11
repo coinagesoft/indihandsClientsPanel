@@ -21,21 +21,34 @@ export async function GET(req) {
     const {
       companyId,
       branchId,
+      customerId,
       userType
     } = decoded;
 
-    /* ===== USER TYPE FILTER ===== */
+    /* ===== FILTER ===== */
 
-    let rfqTypeFilter = "";
+    let whereClause = "";
+    let params = [];
 
     if (userType === "B2B") {
-      rfqTypeFilter =
-        ` AND r.rfq_type = 'B2B' `;
+
+      whereClause = `
+        WHERE r.company_id = ?
+          AND r.branch_id = ?
+          AND r.rfq_type = 'B2B'
+      `;
+
+      params = [companyId, branchId];
     }
 
     if (userType === "B2C") {
-      rfqTypeFilter =
-        ` AND r.rfq_type = 'B2C' `;
+
+      whereClause = `
+        WHERE r.customer_id = ?
+          AND r.rfq_type = 'B2C'
+      `;
+
+      params = [customerId];
     }
 
     /* ===== RECENT RFQs ===== */
@@ -64,15 +77,13 @@ export async function GET(req) {
 
       FROM rfqs r
 
-      INNER JOIN company_branches b
+      LEFT JOIN company_branches b
         ON r.branch_id = b.id
 
       LEFT JOIN rfq_products rp
         ON rp.rfq_id = r.id
 
-      WHERE r.company_id = ?
-        AND r.branch_id = ?
-        ${rfqTypeFilter}
+      ${whereClause}
 
       GROUP BY
         r.id,
@@ -86,7 +97,7 @@ export async function GET(req) {
       ORDER BY r.submitted_at DESC
       LIMIT 5
       `,
-      [companyId, branchId]
+      params
     );
 
     return NextResponse.json(rows);

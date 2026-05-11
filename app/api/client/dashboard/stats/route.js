@@ -21,21 +21,34 @@ export async function GET(req) {
     const {
       companyId,
       branchId,
+      customerId,
       userType
     } = decoded;
 
-    /* ===== USER TYPE FILTER ===== */
+    /* ===== COMMON FILTER ===== */
 
-    let rfqTypeFilter = "";
+    let rfqWhere = "";
+    let rfqParams = [];
 
     if (userType === "B2B") {
-      rfqTypeFilter =
-        ` AND rfq_type = 'B2B' `;
+
+      rfqWhere = `
+        company_id = ?
+        AND branch_id = ?
+        AND rfq_type = 'B2B'
+      `;
+
+      rfqParams = [companyId, branchId];
     }
 
     if (userType === "B2C") {
-      rfqTypeFilter =
-        ` AND rfq_type = 'B2C' `;
+
+      rfqWhere = `
+        customer_id = ?
+        AND rfq_type = 'B2C'
+      `;
+
+      rfqParams = [customerId];
     }
 
     /* ===== OPEN RFQs ===== */
@@ -44,15 +57,13 @@ export async function GET(req) {
       `
       SELECT COUNT(*) AS count
       FROM rfqs
-      WHERE company_id = ?
-        AND branch_id = ?
-        ${rfqTypeFilter}
+      WHERE ${rfqWhere}
         AND status IN (
           'Submitted',
           'Under Review'
         )
       `,
-      [companyId, branchId]
+      rfqParams
     );
 
     /* ===== ACCEPTED RFQs ===== */
@@ -61,12 +72,10 @@ export async function GET(req) {
       `
       SELECT COUNT(*) AS count
       FROM rfqs
-      WHERE company_id = ?
-        AND branch_id = ?
-        ${rfqTypeFilter}
+      WHERE ${rfqWhere}
         AND status = 'Accepted'
       `,
-      [companyId, branchId]
+      rfqParams
     );
 
     /* ===== REJECTED RFQs ===== */
@@ -75,15 +84,37 @@ export async function GET(req) {
       `
       SELECT COUNT(*) AS count
       FROM rfqs
-      WHERE company_id = ?
-        AND branch_id = ?
-        ${rfqTypeFilter}
+      WHERE ${rfqWhere}
         AND status = 'Rejected'
       `,
-      [companyId, branchId]
+      rfqParams
     );
 
     /* ===== PENDING PROPOSALS ===== */
+
+    let proposalWhere = "";
+    let proposalParams = [];
+
+    if (userType === "B2B") {
+
+      proposalWhere = `
+        p.company_id = ?
+        AND r.branch_id = ?
+        AND r.rfq_type = 'B2B'
+      `;
+
+      proposalParams = [companyId, branchId];
+    }
+
+    if (userType === "B2C") {
+
+      proposalWhere = `
+        r.customer_id = ?
+        AND r.rfq_type = 'B2C'
+      `;
+
+      proposalParams = [customerId];
+    }
 
     const [[pendingProposals]] = await db.query(
       `
@@ -93,19 +124,10 @@ export async function GET(req) {
       JOIN rfqs r
         ON r.id = p.rfq_id
 
-      WHERE p.company_id = ?
-        AND r.branch_id = ?
-        ${userType === "B2B"
-          ? "AND r.rfq_type = 'B2B'"
-          : ""
-        }
-        ${userType === "B2C"
-          ? "AND r.rfq_type = 'B2C'"
-          : ""
-        }
+      WHERE ${proposalWhere}
         AND p.status = 'Pending'
       `,
-      [companyId, branchId]
+      proposalParams
     );
 
     return NextResponse.json({

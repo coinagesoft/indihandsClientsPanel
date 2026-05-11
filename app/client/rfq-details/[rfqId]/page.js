@@ -131,15 +131,28 @@ export default function RFQDetailsPage() {
         </div>
         {/* HEADER */}
         <div className={styles.header}>
-          <div>
-            <h4 className="pageTitle">
-              {rfq.rfq_number || `RFQ-${rfq.id}`}
-            </h4>
+           <div className="w-100">
+           <div className="d-flex justify-content-between align-items-start">
 
-            <p className={styles.subText}>
-              Submitted on{" "}
-              {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}
-            </p>
+  <div>
+    <h4 className="pageTitle">
+      {rfq.rfq_number || `RFQ-${rfq.id}`}
+    </h4>
+
+    <p className={styles.subText}>
+      Submitted on{" "}
+      {new Date(rfq.submitted_at).toLocaleDateString("en-IN")}
+    </p>
+  </div>
+
+  <div>
+    <span className={`${styles.status} ${styles[statusKey]}`}>
+      <span className={styles.statusDot} />
+      {rfq.status}
+    </span>
+  </div>
+
+</div>
 
  {/* CLIENT INFO */}
 
@@ -202,10 +215,7 @@ export default function RFQDetailsPage() {
 </div>
           </div>
 
-          <span className={`${styles.status} ${styles[statusKey]}`}>
-            <span className={styles.statusDot} />
-            {rfq.status}
-          </span>
+         
         </div>
 
         {/* PRODUCTS */}
