@@ -46,6 +46,16 @@
   min-width: 150px;
   color: #111;
 }
+.headerTop{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.status{
+  align-self: flex-start;
+}
 .header {
   display: flex;
   justify-content: space-between;

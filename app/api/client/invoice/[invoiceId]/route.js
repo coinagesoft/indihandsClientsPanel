@@ -68,7 +68,7 @@ function buildHTML({ invoice, payment, proposal, sender,  customerGSTIN,
   <td>${c.total.toFixed(2)}</td>
 </tr>`).join("");
 
-  return `
+ return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,11 +77,46 @@ function buildHTML({ invoice, payment, proposal, sender,  customerGSTIN,
 @page { size: A4; margin: 0; }
 body { margin: 0; padding: 10mm; font-family: Segoe UI, Arial, sans-serif; }
 .page { width: 100%; min-height: 277mm; display: flex; flex-direction: column; }
-.hdr{ position:relative; display:flex; justify-content:flex-end; margin-bottom:14px; min-height:200px; width:100%; }
-.hdr img { width: 190px; height: 60px; object-fit: contain; }
+
+/* ── HEADER ── */
+.hdr {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+  min-height: 140px;
+  width: 100%;
+}
+.hdr-motif {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: auto;
+  z-index: 9999;
+}
+.hdr-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 200px;
+}
+.hdr-right img {
+  width: 190px;
+  height: auto;
+  margin-bottom: 6px;
+  margin-right: 15px;
+}
+.hdr-text {
+  font-size: 10px;
+  line-height: 15px;
+  text-align: left;
+  width: 100%;
+}
+
+/* ── BOX / TABLE (unchanged) ── */
 .box { border: 1px solid #8c8c8c; }
 .strip { background: #f2f2f2; text-align: center; font-weight: 700; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #8c8c8c; }
-.copy-row { text-align: right; font-size: 10px; font-weight: 600; padding: 4px 8px; font-style: italic; border-bottom: 1px solid #8c8c8c; }
 .meta { width: 100%; border-collapse: collapse; font-size: 10px; }
 .meta td { border-bottom: 1px dotted #b7b7b7; padding: 4px 6px; }
 .meta td.label { width: 160px; font-weight: 600; }
@@ -102,137 +137,180 @@ body { margin: 0; padding: 10mm; font-family: Segoe UI, Arial, sans-serif; }
 .totals td { border-bottom: 1px dotted #b7b7b7; padding: 4px 6px; text-align: right; }
 .totals td:first-child { text-align: left; }
 .bank { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px dotted #b7b7b7; }
-.bank-left { padding: 8px; border-right: 1px dotted #b7b7b7; font-size: 10px; line-height: 16px; }
-.bank-right { padding: 8px; text-align: center; font-size: 10px; position: relative; min-height: 80px; }
+.bank-left { padding: 8px; border-right: 1px dotted #b7b7b7; font-size: 9.5px; line-height: 15px; }
+.bank-right { padding: 8px; font-size: 9.5px; text-align: center; line-height: 15px; }
+
+/* ── FOOTER ── */
+.footer-wrap { margin-top: auto; }
+.thankyou { text-align: center; margin: 10px 0 4px 0; font-size: 10px; font-weight: bold; }
+.footer {
+  background: #cfd84e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 12px;
+  font-size: 10px;
+  margin-left: -10mm;
+  margin-right: -10mm;
+  margin-bottom: -10mm;
+}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="hdr">
-    ${sender.logo ? `<img src="${sender.logo}">` : `<div style="height:60px;"></div>`}
+<!-- ── HEADER (matches proposal) ── -->
+<div class="hdr">
+  <img
+    class="hdr-motif"
+    width="140"
+    src="https://res.cloudinary.com/dxb1whlam/image/upload/v1771496761/motif_300x400_hahbf7.png"
+  >
+  <div class="hdr-right">
+    <img src="https://res.cloudinary.com/dxb1whlam/image/upload/v1771752355/manik_trifaley_logo_white_bgdbsp.png">
+    <div class="hdr-text">
+      <b>Registered Office</b><br>
+      ${sender.address_line1 || ""}<br>
+      ${sender.city || ""}, ${sender.state || ""} - ${sender.pincode || ""}<br>
+      ${sender.email || ""} | ${sender.phone || ""}<br>
+      ${sender.website || ""}
+    </div>
   </div>
+</div>
 
-  <div class="box">
-    <div class="strip">Challan cum Tax Invoice</div>
+<!-- ── MAIN BOX (unchanged layout) ── -->
+<div class="box">
+  <div class="strip">Challan cum Tax Invoice</div>
 
-    <table class="meta">
-      <tr>
-        <td class="label">Invoice No:</td>
-        <td class="value">${invoice.invoice_number}</td>
-        <td class="label">Contact Person:</td>
-        <td class="value">${payment.payer_name || ""}</td>
-      </tr>
-      <tr>
-        <td class="label">Invoice Date:</td>
-        <td class="value">${formatDate(invoice.invoice_date)}</td>
-        <td class="label">Contact Number:</td>
-        <td class="value">${payment.payer_phone || ""}</td>
-      </tr>
-      <tr>
-        <td class="label">Seller GSTIN:</td>
-        <td class="value">${sender.gstin || ""}</td>
-        <td class="label">Payment ID:</td>
-        <td class="value">${payment.razorpay_payment_id || ""}</td>
-      </tr>
-    </table>
+  <table class="meta">
+    <tr>
+      <td class="label">Invoice No:</td>
+      <td class="value">${invoice.invoice_number}</td>
+      <td class="label">Contact Person:</td>
+      <td class="value">${payment.payer_name || ""}</td>
+    </tr>
+    <tr>
+      <td class="label">Invoice Date:</td>
+      <td class="value">${formatDate(invoice.invoice_date)}</td>
+      <td class="label">Contact Number:</td>
+      <td class="value">${payment.payer_phone || ""}</td>
+    </tr>
+    <tr>
+      <td class="label">Seller GSTIN:</td>
+      <td class="value">${sender.gstin || ""}</td>
+      <td class="label">Payment ID:</td>
+      <td class="value">${payment.razorpay_payment_id || ""}</td>
+    </tr>
+  </table>
 
   <table class="party">
-  <tr>
-    <td style="width:50%;">
-      <div class="title">Bill to Party</div>
+    <tr>
+      <td style="width:50%;">
+        <div class="title">Bill to Party</div>
+        Name: ${payment.payer_name || ""}<br>
+        Address: ${proposal.billing_address || payment.billing_address || ""}<br>
+        GSTIN: ${customerGSTIN || "-"}<br>
+        State: ${clientState} | Code: ${clientStateCode}
+      </td>
+      <td style="width:50%;">
+        <div class="title">Ship to Party</div>
+        Name: ${payment.payer_name || ""}<br>
+        Address: ${proposal.shipping_address || payment.billing_address || ""}<br>
+        GSTIN: ${customerGSTIN || "-"}<br>
+        State: ${clientState} | Code: ${clientStateCode}
+      </td>
+    </tr>
+  </table>
 
-      Name: ${payment.payer_name || ""}<br>
-      Address: ${proposal.billing_address || payment.billing_address || ""}<br>
-      GSTIN: ${customerGSTIN || "-"}<br>
-      State: ${clientState} | Code: ${clientStateCode}<br>
-  
-    </td>
+  <table class="items">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th class="left">Product Description</th>
+        <th>HSN</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Amount</th>
+        <th>Taxable</th>
+        <th>CGST%</th>
+        <th>CGST Amt</th>
+        <th>SGST%</th>
+        <th>SGST Amt</th>
+        <th>IGST%</th>
+        <th>IGST Amt</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${itemRows}
+      ${chargeRows}
+      <tr class="total">
+        <td colspan="5">Total</td>
+        <td>${subtotal.toFixed(2)}</td>
+        <td>${subtotal.toFixed(2)}</td>
+        <td></td><td>${cgstTotal.toFixed(2)}</td>
+        <td></td><td>${sgstTotal.toFixed(2)}</td>
+        <td></td><td>${igstTotal.toFixed(2)}</td>
+        <td>${grandTotal.toFixed(2)}</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <td style="width:50%;">
-      <div class="title">Ship to Party</div>
-
-      Name: ${payment.payer_name || ""}<br>
-      Address: ${proposal.shipping_address || payment.billing_address || ""}<br>
-      GSTIN: ${customerGSTIN || "-"}<br>
-      State: ${clientState} | Code: ${clientStateCode}<br>
-     
-    </td>
-  </tr>
-</table>
-
-    <table class="items">
-      <thead>
-        <tr>
-          <th>S.No</th>
-          <th class="left">Product Description</th>
-          <th>HSN</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <th>Taxable</th>
-          <th>CGST%</th>
-          <th>CGST Amt</th>
-          <th>SGST%</th>
-          <th>SGST Amt</th>
-          <th>IGST%</th>
-          <th>IGST Amt</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${itemRows}
-        ${chargeRows}
-        <tr class="total">
-          <td colspan="5">Total</td>
-          <td>${subtotal.toFixed(2)}</td>
-          <td>${subtotal.toFixed(2)}</td>
-          <td></td><td>${cgstTotal.toFixed(2)}</td>
-          <td></td><td>${sgstTotal.toFixed(2)}</td>
-          <td></td><td>${igstTotal.toFixed(2)}</td>
-          <td>${grandTotal.toFixed(2)}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="amt">
-      <div class="amt-words">
-        Total invoice amount in words<br><br>
-        <b>${numberToWords(grandTotal)}</b>
-      </div>
-      <div class="totals">
-        <table>
-          <tr><td>Total Amount before Tax</td><td>${subtotal.toFixed(2)}</td></tr>
-          <tr><td>Add CGST</td><td>${cgstTotal.toFixed(2)}</td></tr>
-          <tr><td>Add SGST</td><td>${sgstTotal.toFixed(2)}</td></tr>
-          <tr><td>Add IGST</td><td>${igstTotal.toFixed(2)}</td></tr>
-          <tr><td>Total Tax</td><td>${totalTax.toFixed(2)}</td></tr>
-          <tr><td><b>Total after Tax</b></td><td><b>${grandTotal.toFixed(2)}</b></td></tr>
-        </table>
-      </div>
+  <div class="amt">
+    <div class="amt-words">
+      Total invoice amount in words<br><br>
+      <b>${numberToWords(grandTotal)}</b>
     </div>
-
-    <div class="bank">
-      <div class="bank-left">
-        <b>Bank Details</b><br>
-        Bank Name: ${sender.bank_name || "-"}<br>
-        A/C No: ${sender.bank_account || "-"}<br>
-        IFSC: ${sender.bank_ifsc || "-"}<br>
-        Branch: ${sender.bank_branch || "-"}<br><br>
-        Contact: ${sender.phone || ""} | ${sender.email || ""}
-      </div>
-      <div class="bank-right">
-        <div style="font-weight:600;">For Manik Trifaley Design Studio Pvt Ltd</div>
-        <div style="position:absolute; bottom:10px; width:100%; text-align:center;">
-          Authorised Signatory &amp; Stamp
-        </div>
-      </div>
+    <div class="totals">
+      <table>
+        <tr><td>Total Amount before Tax</td><td>${subtotal.toFixed(2)}</td></tr>
+        <tr><td>Add CGST</td><td>${cgstTotal.toFixed(2)}</td></tr>
+        <tr><td>Add SGST</td><td>${sgstTotal.toFixed(2)}</td></tr>
+        <tr><td>Add IGST</td><td>${igstTotal.toFixed(2)}</td></tr>
+        <tr><td>Total Tax</td><td>${totalTax.toFixed(2)}</td></tr>
+        <tr><td><b>Total after Tax</b></td><td><b>${grandTotal.toFixed(2)}</b></td></tr>
+      </table>
     </div>
   </div>
 
-  <div style="text-align:center; font-size:10px; margin-top:6px;">
+  <!-- ── BANK + STAMP (matches proposal) ── -->
+  <div class="bank">
+    <div class="bank-left">
+      <b>Bank Details</b><br>
+      Bank Name: ${sender.bank_name || "-"}<br>
+      A/C No: ${sender.bank_account || "-"}<br>
+      IFSC: ${sender.bank_ifsc || "-"}<br>
+      Branch: ${sender.bank_branch || "-"}<br>
+      Contact: ${sender.phone || ""} | ${sender.email || ""}
+    </div>
+    <div class="bank-right">
+      <div style="font-weight:600; margin-bottom:15px;">
+        For Manik Trifaley Design Studio Pvt Ltd
+      </div>
+      <div style="text-align:center;">
+        <img
+          src="https://res.cloudinary.com/dxb1whlam/image/upload/v1776402154/MTDS_Stamp_NoBG_ywlept.png"
+          style="width:120px; display:block; margin:0 auto 8px auto;"
+        />
+      </div>
+      <div style="text-align:center;">
+        Authorised Signatory &amp; Stamp
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER (matches proposal) ── -->
+<div class="footer-wrap">
+  <div class="thankyou">
     This is a computer-generated invoice.
   </div>
+  <div class="footer">
+    <span>CIN: U47735PN2025PTC244212</span>
+    <span>Wonders by Hands</span>
+  </div>
+</div>
+
 </div>
 </body>
 </html>`;
