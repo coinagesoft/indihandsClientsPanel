@@ -101,6 +101,7 @@ export async function GET(req) {
 
           r.id AS rfq_id,
           r.rfq_number,
+           r.rfq_type,
           r.status,
 
           r.submitted_at AS created_date,
@@ -133,6 +134,7 @@ export async function GET(req) {
         GROUP BY
           r.id,
           r.rfq_number,
+          r.rfq_type,        
           r.status,
           r.submitted_at,
           r.client_name,
@@ -154,6 +156,7 @@ export async function GET(req) {
 
           r.id AS rfq_id,
           r.rfq_number,
+           r.rfq_type,
           r.status,
 
           r.submitted_at AS created_date,
@@ -185,6 +188,7 @@ export async function GET(req) {
         GROUP BY
           r.id,
           r.rfq_number,
+          r.rfq_type,          
           r.status,
           r.submitted_at,
           r.client_name,
