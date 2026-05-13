@@ -275,13 +275,25 @@ body { margin: 0; padding: 10mm; font-family: Segoe UI, Arial, sans-serif; }
 
   <!-- ── BANK + STAMP (matches proposal) ── -->
   <div class="bank">
-    <div class="bank-left">
-      <b>Bank Details</b><br>
-      Bank Name: ${sender.bank_name || "-"}<br>
-      A/C No: ${sender.bank_account || "-"}<br>
-      IFSC: ${sender.bank_ifsc || "-"}<br>
-      Branch: ${sender.bank_branch || "-"}<br>
-      Contact: ${sender.phone || ""} | ${sender.email || ""}
+   <div class="bank-left">
+      <div style="display:flex; gap:10px; align-items:flex-start;">
+        <div>
+          <b>Bank Details</b><br>
+          Bank Name: ${sender.bank_name || "-"}<br>
+          A/C No: ${sender.bank_account || "-"}<br>
+          IFSC: ${sender.bank_ifsc || "-"}<br>
+          Branch: ${sender.bank_branch || "-"}<br>
+          Contact: ${sender.phone || ""} | ${sender.email || ""}<br>
+          Interest @24% Per Annum will be charged on overdue bills<br>
+        </div>
+       <div style="text-align:center; flex-shrink:0;">
+      <img 
+        src="https://res.cloudinary.com/dxb1whlam/image/upload/v1778664822/MTDS_QR_Code_g0cy25.jpg"
+        style="width:85px; height:85px; object-fit:contain; display:block;"
+        alt="Payment QR"
+      />
+        </div>
+      </div>
     </div>
     <div class="bank-right">
       <div style="font-weight:600; margin-bottom:15px;">
