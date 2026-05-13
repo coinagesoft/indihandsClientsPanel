@@ -293,22 +293,33 @@ const updateStatus = async (proposalId, status, rfqId) => {
     });
     if (!res2.ok) console.error("❌ RFQ PATCH failed:", await res2.json());
 
-    // ✅ Auto-download proposal PDF on approve
-    if (status === "Approved") {
-      const proposalId_for_download = rfqs.find(r => r.rfq_id === rfqId)?.proposal_id;
-      if (proposalId_for_download) {
-        window.open(`/api/client/proposal-download/${proposalId_for_download}`, "_blank");
-      }
+    const currentRfq = rfqs.find(
+  (r) => r.rfq_id === rfqId
+);
+if (status === "Approved") {
 
-      showToast(
-        data1.mailSent
-          ? "Proposal approved & email sent ✅"
-          : "Proposal approved (email failed)",
-        data1.mailSent ? "success" : "warning"
-      );
-    } else {
-      showToast("Proposal rejected", "warning");
-    }
+  // ✅ Download only for B2B
+  if (currentRfq?.rfq_type === "B2B") {
+
+    window.open(
+      `/api/client/proposal-download/${proposalId}`,
+      "_blank"
+    );
+
+  }
+
+  showToast(
+    data1.mailSent
+      ? "Proposal approved & email sent ✅"
+      : "Proposal approved (email failed)",
+    data1.mailSent ? "success" : "warning"
+  );
+
+} else {
+
+  showToast("Proposal rejected", "warning");
+
+}
 
     await loadProposal(rfqId, true);
 
@@ -1074,6 +1085,12 @@ proposal.payment_status !== "Paid" && (
   <div className={styles.paymentOverlay}>
 
     <div className={styles.paymentModal}>
+ <button
+    className={styles.closeBtn}
+    onClick={() => setShowPaymentModal(false)}
+  >
+    ×
+  </button>
 
       <h4 className="mb-3">
         Complete Payment
@@ -1148,7 +1165,7 @@ proposal.payment_status !== "Paid" && (
   }
 />
 <button
-  className={`${styles.actionBtn} ${styles.secondaryBtn} w-100 text-center`}
+  className={` ${styles.secondaryBtn} w-100 text-center`}
   onClick={startRazorpayPayment}
   disabled={actionLoading === "payment"}
 >
