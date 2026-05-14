@@ -15,64 +15,49 @@ export default function ProductCatalogPage() {
 
   const { cartCount, fetchCartCount } = useCart();
   const [categories, setCategories] = useState([]);
-    const [search, setSearch] = useState("");
-const [results, setResults] = useState([]);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch { }
-
+    } catch {}
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
     router.push("/login");
   };
+
   const handleSearch = async (value) => {
-  setSearch(value);
-
-  if (!value) {
-    setResults([]);
-    return;
-  }
-
-  try {
-    const token = localStorage.getItem("client_token");
-
-    const res = await fetch(
-      `/api/client/globalFilter?search=${value}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await res.json();
-    setResults(data.products || []);
-  } catch (err) {
-    console.error("Search error:", err);
-  }
-};
+    setSearch(value);
+    if (!value) { setResults([]); return; }
+    try {
+      const token = localStorage.getItem("client_token");
+      const res = await fetch(`/api/client/globalFilter?search=${value}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setResults(data.products || []);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/client/catalogs")
-      .then(res => res.json())
-      .then(data => {
-        // 🔐 always normalize to array
+      .then((res) => res.json())
+      .then((data) => {
         setCategories(Array.isArray(data) ? data : data.data || []);
-        console.log("data", data)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Catalog fetch error:", err);
         setCategories([]);
       })
-      .finally(() => {
-        setLoading(false); // ✅ stop loader
-      });
+      .finally(() => setLoading(false));
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     fetchCartCount();
   }, []);
 
@@ -86,126 +71,100 @@ const [results, setResults] = useState([]);
         {/* PAGE CONTENT */}
         <div className={styles.dashboardContent}>
 
-        <div className="d-flex align-items-center">
+          {/* ── TOP BAR ── */}
+          <div className="d-flex align-items-center">
 
-  {/* LEFT */}
-  <div style={{ minWidth: "220px" }}>
-    <h4 className="pageTitle mt-0">Product Catalog</h4>
-  </div>
+            {/* LEFT */}
+            <div style={{ minWidth: "220px" }}>
+              <h4 className="pageTitle mt-0">Product Catalog</h4>
+            </div>
 
-  {/* CENTER (SEARCH) */}
-  <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-    <div className="global-search">
-      <input
-        type="text"
-        placeholder="Search products (name / code)..."
-        className="global-search-input"
-        value={search}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
-
-      {search && (
-        <span
-          className="global-search-clear"
-          onClick={() => {
-            setSearch("");
-            setResults([]);
-          }}
-        >
-          ×
-        </span>
-      )}
-
-      {results.length > 0 && (
-        <div className="global-search-dropdown">
-          {results.map((item) => (
-            <div
-              key={item.id}
-              className="global-search-item"
-              onClick={() => {
-                setResults([]);
-                setSearch("");
-                router.push(`/client/products/${item.id}`);
-              }}
-            >
-              <div className="global-search-name">
-                {item.product_name}
-              </div>
-              <div className="global-search-code">
-                Code: {item.barcode || "-"}
+            {/* CENTER — search */}
+            <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+              <div className="global-search">
+                <input
+                  type="text"
+                  placeholder="Search products (name / code)..."
+                  className="global-search-input"
+                  value={search}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+                {search && (
+                  <span
+                    className="global-search-clear"
+                    onClick={() => { setSearch(""); setResults([]); }}
+                  >
+                    ×
+                  </span>
+                )}
+                {results.length > 0 && (
+                  <div className="global-search-dropdown">
+                    {results.map((item) => (
+                      <div
+                        key={item.id}
+                        className="global-search-item"
+                        onClick={() => {
+                          setResults([]);
+                          setSearch("");
+                          router.push(`/client/products/${item.id}`);
+                        }}
+                      >
+                        <div className="global-search-name">{item.product_name}</div>
+                        <div className="global-search-code">Code: {item.barcode || "-"}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  </div>
 
-  {/* RIGHT */}
-  <div
-    className="d-flex align-items-center gap-2"
-    style={{ minWidth: "250px", justifyContent: "flex-end" }}
-  >
-    <button
-      className="guideBtn"
-      onClick={() =>
-        window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")
-      }
-    >
-      User Guide
-    </button>
+            {/* RIGHT — actions */}
+            <div
+              className="d-flex align-items-center gap-2"
+              style={{ minWidth: "250px", justifyContent: "flex-end" }}
+            >
+              <button
+                className="guideBtn"
+                onClick={() =>
+                  window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")
+                }
+              >
+                User Guide
+              </button>
+              <button className="logoutBtn" onClick={handleLogout}>
+                Logout
+              </button>
+              <div
+                className="cartIconBox"
+                onClick={() => router.push("/client/quote-cart")}
+              >
+                <HiOutlineShoppingBag size={18} className="cartIcon" />
+                {cartCount > 0 && <span className="cartBadge">{cartCount}</span>}
+              </div>
+            </div>
+          </div>
 
-    <button className="logoutBtn" onClick={handleLogout}>
-      Logout
-    </button>
-
-    <div
-      className="cartIconBox"
-      onClick={() => router.push("/client/quote-cart")}
-    >
-      <HiOutlineShoppingBag size={18} className="cartIcon" />
-      {cartCount > 0 && (
-        <span className="cartBadge">{cartCount}</span>
-      )}
-    </div>
-  </div>
-
-</div>
+          {/* ── CATALOG GRID ── */}
           <div className={styles.catalogGrid}>
             {!loading && categories.length === 0 ? (
-              <div className="col-12 text-center mt-4">
-                No catalogs available
-              </div>
+              <div className="col-12 text-center mt-4">No catalogs available</div>
             ) : (
-              [...categories].reverse().map(cat => (
+              [...categories].reverse().map((cat) => (
                 <div key={cat.id} className={styles.catalogItem}>
-                  <div className={styles.catalogCard}>
-
-                    <div className={styles.catalogImgWrap}>
-                      <img
-                        src={cat.image}
-                        alt={cat.title}
-                        className={styles.catalogImg}
-                      />
-                    </div>
-
+                  <Link
+                    href={`/client/products?catalogId=${cat.id}`}
+                    className={styles.catalogCard}
+                    style={{ backgroundImage: `url(${cat.image})` }}
+                  >
+                    {/* Text — bottom-left, avoids right decorative border strip */}
                     <div className={styles.catalogContent}>
                       <h6 className={styles.catalogTitle}>{cat.title}</h6>
-
                       <div className={styles.catalogBottom}>
                         <p className={styles.catalogDesc}>{cat.desc}</p>
-
-                        <Link
-                          href={`/client/products?catalogId=${cat.id}`}
-                          className={styles.catalogBtn}
-                        >
-                          View Products
-                        </Link>
+                        <span className={styles.catalogBtn}>View Products</span>
                       </div>
                     </div>
-
-                  </div>
-
+                  </Link>
                 </div>
               ))
             )}
