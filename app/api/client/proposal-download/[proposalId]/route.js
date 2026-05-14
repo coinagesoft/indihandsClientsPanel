@@ -108,7 +108,7 @@ const igstRate = isIGST ? (x.igstRate || 0) : 0;
 <td class="tdl">${x.description}</td>
 <td class="tr">${x.hsn ?? ""}</td>
 <td class="tr">${x.qty}</td>
-       <td class="tr">${x.basePrice.toFixed(2)}</td>
+<td class="tr">${x.basePrice.toFixed(2)}</td>
 <td class="tr">${x.unitDiscount.toFixed(2)}</td>
 <td class="tr">${x.rate.toFixed(2)}</td>
 <td class="tr">${x.baseAmount.toFixed(2)}</td>
@@ -180,7 +180,6 @@ body{
   flex-direction:column;
 }
 
-/* HEADER */
 /* HEADER */
 .hdr{
   position:relative;
@@ -450,7 +449,7 @@ th{
 
   <div class="hdr-text">
   <b>Registered Office</b><br>
-  ${sender.address_line1 || ""}<br>
+${sender.address_line1 || ""}<br>
 ${sender.city || ""}, ${sender.state || ""} - ${sender.pincode || ""}<br>
 ${sender.email || ""} | ${sender.phone || ""}<br>
 ${sender.website || ""}
