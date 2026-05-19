@@ -110,7 +110,11 @@ const igstRate = isIGST ? (x.igstRate || 0) : 0;
 <td class="tr">${x.qty}</td>
 <td class="tr">${x.basePrice.toFixed(2)}</td>
 <td class="tr">${x.unitDiscount.toFixed(2)}</td>
-<td class="tr">${x.rate.toFixed(2)}</td>
+<td class="tr">
+  ${x.basePrice !== x.rate
+    ? x.rate.toFixed(2)
+    : "0.00"}
+</td>
 <td class="tr">${x.baseAmount.toFixed(2)}</td>
 
 <td class="tr">${sgstRate}</td>
