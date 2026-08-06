@@ -18,7 +18,12 @@ export async function GET() {
         c.name,
         c.featured_image,
         c.description
-      ORDER BY c.id ASC
+       ORDER BY
+        CASE
+          WHEN c.name = 'Popular Products' THEN 1
+          ELSE 0
+        END,
+        c.id DESC
     `);
 
     const data = rows.map(row => ({
