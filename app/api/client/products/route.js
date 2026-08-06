@@ -180,6 +180,9 @@ export async function GET(req) {
     const catalog =
       catalogRows?.[0] || null;
 
+    const isPopularCatalog =
+  catalog?.name === "Popular Products";
+
     /* ================= FILTERS ================= */
 
     let where = `
@@ -287,81 +290,155 @@ export async function GET(req) {
       `;
     }
 
-    /* ================= PRODUCTS ================= */
+let rows = [];
 
-    const [rows] = await db.query(
-      `
-      SELECT
+if (isPopularCatalog) {
 
-        p.id,
+  const [popularRows] = await db.query(
+    `
+    SELECT
+      p.id,
 
-        CASE
+      CASE
+        WHEN cpp.prefix IS NOT NULL
+         AND cpp.prefix != ''
+        THEN CONCAT(cpp.prefix, ' | ', p.product_name)
+        ELSE p.product_name
+      END AS product_name,
 
-          WHEN cpp.prefix IS NOT NULL
-           AND cpp.prefix != ''
+      p.base_price,
 
-          THEN CONCAT(
-            cpp.prefix,
-            ' | ',
-            p.product_name
-          )
+      CASE
+        WHEN ? = 'B2B'
+        THEN COALESCE(cpp.custom_price, p.base_price)
 
-          ELSE p.product_name
+        WHEN ? = 'B2C'
+        THEN COALESCE(custp.custom_price, p.base_price)
 
-        END AS product_name,
+        ELSE p.base_price
+      END AS final_price,
 
-        p.base_price,
+      p.stock_qty,
+      p.featured_image,
 
-        CASE
+      SUM(ii.quantity) AS totalSold
 
-          WHEN ? = 'B2B'
+    FROM invoice_items ii
 
-          THEN COALESCE(
-            cpp.custom_price,
-            p.base_price
-          )
+    INNER JOIN products p
+      ON p.id = ii.product_id
 
-          WHEN ? = 'B2C'
+    LEFT JOIN company_product_pricing cpp
+      ON cpp.product_id = p.id
+     AND cpp.company_id = ?
 
-          THEN COALESCE(
-            custp.custom_price,
-            p.base_price
-          )
+    LEFT JOIN customer_product_pricing custp
+      ON custp.product_id = p.id
+     AND custp.customer_id = ?
 
-          ELSE p.base_price
+    WHERE ii.is_charge = 0
 
-        END AS final_price,
+    GROUP BY
+      p.id,
+      p.product_name,
+      cpp.prefix,
+      p.base_price,
+      p.stock_qty,
+      p.featured_image
 
-        p.stock_qty,
-        p.featured_image
+    ORDER BY totalSold DESC
+    `
+    ,
+    [
+      userType,
+      userType,
+      companyId || 0,
+      customerId || 0,
+    ]
+  );
 
-      FROM product_catalog_map pcm
+  rows = popularRows;
 
-      INNER JOIN products p
-        ON p.id = pcm.product_id
+} else {
 
-      LEFT JOIN company_product_pricing cpp
-        ON cpp.product_id = p.id
-       AND cpp.company_id = ?
+  const [manualRows] = await db.query(
+    `
+    SELECT
 
-      LEFT JOIN customer_product_pricing custp
-        ON custp.product_id = p.id
-       AND custp.customer_id = ?
+      p.id,
 
-      ${where}
+      CASE
 
-      GROUP BY p.id
+        WHEN cpp.prefix IS NOT NULL
+         AND cpp.prefix != ''
 
-      ${orderBy}
-      `,
-      [
-        userType,
-        userType,
-        companyId || 0,
-        customerId || 0,
-        ...values,
-      ]
-    );
+        THEN CONCAT(
+          cpp.prefix,
+          ' | ',
+          p.product_name
+        )
+
+        ELSE p.product_name
+
+      END AS product_name,
+
+      p.base_price,
+
+      CASE
+
+        WHEN ? = 'B2B'
+
+        THEN COALESCE(
+          cpp.custom_price,
+          p.base_price
+        )
+
+        WHEN ? = 'B2C'
+
+        THEN COALESCE(
+          custp.custom_price,
+          p.base_price
+        )
+
+        ELSE p.base_price
+
+      END AS final_price,
+
+      p.stock_qty,
+      p.featured_image
+
+    FROM product_catalog_map pcm
+
+    INNER JOIN products p
+      ON p.id = pcm.product_id
+
+    LEFT JOIN company_product_pricing cpp
+      ON cpp.product_id = p.id
+     AND cpp.company_id = ?
+
+    LEFT JOIN customer_product_pricing custp
+      ON custp.product_id = p.id
+     AND custp.customer_id = ?
+
+    ${where}
+
+    GROUP BY p.id
+
+    ${orderBy}
+    `,
+    [
+      userType,
+      userType,
+      companyId || 0,
+      customerId || 0,
+      ...values,
+    ]
+  );
+
+  rows = manualRows;
+}
+
+ 
 
     /* ================= RESPONSE ================= */
 

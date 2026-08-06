@@ -149,7 +149,7 @@ export default function ProductCatalogPage() {
             {!loading && categories.length === 0 ? (
               <div className="col-12 text-center mt-4">No catalogs available</div>
             ) : (
-              [...categories].reverse().map((cat) => (
+             categories.map((cat) => (
                 <div key={cat.id} className={styles.catalogItem}>
                   <Link
                     href={`/client/products?catalogId=${cat.id}`}
