@@ -29,7 +29,7 @@ function buildHTML(data) {
   const {
     proposal, sender, computedItems, charges: computedCharges,
     subtotal, cgstTotal, sgstTotal, igstTotal,
-    totalTax, grandTotal, formattedDate,isInterState ,isSEZ
+    totalTax, grandTotal, formattedDate,isInterState ,isSEZ,isNoneWithoutGSTIN
   } = data;
 
 
@@ -96,7 +96,7 @@ const billingAddress = proposal.billing_address || "";
 const shippingAddress = proposal.shipping_address || billingAddress;
 
 const itemRows = computedItems.map((x, i) => {
-const isIGST = isInterState || isSEZ;
+const isIGST = isInterState || isSEZ || isNoneWithoutGSTIN;
 
 const sgstRate = isIGST ? 0 : (x.sgst_rate || 0);
 const cgstRate = isIGST ? 0 : (x.cgst_rate || 0);
@@ -131,7 +131,7 @@ const igstRate = isIGST ? (x.igstRate || 0) : 0;
 }).join("");
 
 const chargeRows = computedCharges.map(c => {
-const isIGST = isInterState || isSEZ;
+const isIGST = isInterState || isSEZ || isNoneWithoutGSTIN;
 
 const sgstRate = isIGST ? 0 : c.taxPercent / 2;
 const cgstRate = isIGST ? 0 : c.taxPercent / 2;
@@ -719,6 +719,16 @@ LEFT JOIN company_branches cb
 
     /* ================= STATE LOGIC ================= */
     const isSEZ = proposal.sez_type === "SEZ";
+const gstin = proposal.gstin?.trim() || "";
+
+const hasGSTIN =
+  gstin !== "" &&
+  gstin.toUpperCase() !== "NA";
+
+const isNoneWithoutGSTIN =
+  !hasGSTIN &&
+  (proposal.sez_type || "NONE").toUpperCase() === "NONE";
+
     const clientStateCode = proposal.gstin?.substring(0, 2) || "";
     const senderStateCode = sender.gstin?.substring(0, 2) || "";
 const isInterState =
@@ -816,7 +826,7 @@ const unitDiscount = disc
 const sgstRate = +i.sgst_rate || 0;
 const igstRate = +i.igst_rate || (cgstRate + sgstRate);
 const basePrice = +i.base_price || 0;
-  if (isSEZ || isInterState) {
+  if (isSEZ || isInterState  || isNoneWithoutGSTIN) {
     // ✅ ONLY IGST
     ig = taxable * igstRate / 100;
   } else {
@@ -870,7 +880,7 @@ const computedCharges = allCharges.map(c => {
 
   let cg = 0, sg = 0, ig = 0;
 
-  if (isInterState || isSEZ) {
+  if (isInterState || isSEZ  || isNoneWithoutGSTIN) {
     // ✅ ONLY IGST
     ig = amt * taxRate / 100;
   } else {
@@ -950,7 +960,8 @@ const grandTotal = subtotal + totalTax;
       grandTotal,
       formattedDate,
       isInterState ,
-      isSEZ 
+      isSEZ, 
+      isNoneWithoutGSTIN
     });
 
     /* ================= PDFSHIFT ================= */
