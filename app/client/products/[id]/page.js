@@ -307,12 +307,12 @@ export default function ProductDetailsPage() {
               </div>
               <div className="col-4 ">
                 <div className="d-flex align-items-center justify-content-end gap-1">
-<button
-  className='guideBtn'
-  onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
->
-  User Guide
-</button>
+                  <button
+                    className='guideBtn'
+                    onClick={() => window.open("/indiHands_Client_Portal – User_Guide.pdf", "_blank")}
+                  >
+                    User Guide
+                  </button>
                   {/* LOGOUT */}
                   <button className="logoutBtn" onClick={handleLogout}>
                     Logout
@@ -357,7 +357,7 @@ export default function ProductDetailsPage() {
               <div className={styles.masonry}>
                 {product.images.map((img, index) => (
                   <div key={index} className={styles.masonryItem}>
-                    <Image
+                    <img
                       src={img || "/images/default-product-image.jpg"}
                       alt={product.title}
                       width={500}
@@ -533,16 +533,16 @@ export default function ProductDetailsPage() {
               {imgLoading && <div className={styles.loader}></div>}
 
               {/* ✅ IMAGE (ALWAYS RENDER) */}
-              <Image
+              <img
                 src={previewImg}
                 alt="Preview"
-                width={800}
-                height={800}
-                priority
-                onLoadingComplete={() => setImgLoading(false)}
+                onLoad={() => setImgLoading(false)}
+                onError={() => setImgLoading(false)}
                 style={{
+                  maxWidth: "100%",
                   width: "auto",
-                  height: "100%",
+                  height: "auto",
+                  objectFit: "contain",
                   opacity: imgLoading ? 0 : 1,
                   transition: "opacity 0.3s ease",
                 }}

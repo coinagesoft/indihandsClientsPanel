@@ -23,7 +23,7 @@ export default function ProductCatalogPage() {
   const handleLogout = async () => {
     try {
       await fetch("/api/client/auth/logout", { method: "POST" });
-    } catch {}
+    } catch { }
     localStorage.removeItem("client_token");
     localStorage.removeItem("client_user");
     router.push("/login");
@@ -149,12 +149,14 @@ export default function ProductCatalogPage() {
             {!loading && categories.length === 0 ? (
               <div className="col-12 text-center mt-4">No catalogs available</div>
             ) : (
-             categories.map((cat) => (
+              categories.map((cat) => (
                 <div key={cat.id} className={styles.catalogItem}>
                   <Link
                     href={`/client/products?catalogId=${cat.id}`}
                     className={styles.catalogCard}
-                    style={{ backgroundImage: `url(${cat.image})` }}
+                    style={{
+                      backgroundImage: `url("${encodeURI(cat.image)}")`,
+                    }}
                   >
                     {/* Text — bottom-left, avoids right decorative border strip */}
                     <div className={styles.catalogContent}>
