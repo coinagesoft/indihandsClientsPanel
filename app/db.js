@@ -9,7 +9,7 @@ dotenv.config();
 //   host: "localhost",   // 🔥 IMPORTANT (not live server)
 //   user: "root",
 //   password: "NewPassword123!", // or "" if none
-//   database: "indihand_backup",    
+//   database: "indihand__test_local_backup",    
 //   waitForConnections: true,
 //   connectionLimit: 10,
 //   queueLimit: 0
@@ -25,6 +25,26 @@ dotenv.config();
 //   queueLimit: 0
 // });
 
+// export const db = mysql.createPool({
+//   host: "localhost",  
+//   user: "root",
+//   password: "NewPassword123!", 
+//   database: "indihand__test_local_backup",    
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0
+// });
+
+// export const db = mysql.createPool({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0
+// });
 
 // export const db = mysql.createPool({
 //   host: "217.21.74.127",

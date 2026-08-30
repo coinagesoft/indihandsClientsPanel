@@ -30,7 +30,7 @@ export async function GET() {
       id: row.id,
       title: row.title,
       image: row.featured_image,
-      desc: row.description,          // ✅ FROM DB
+      desc: row.description,         
       productCount: row.productCount,
     }));
 
